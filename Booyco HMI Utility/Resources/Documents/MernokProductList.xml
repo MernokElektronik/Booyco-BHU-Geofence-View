@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MernokProductFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <mernokProductList>
+    <MernokProduct>
+      <Product>0</Product>
+      <ProductName>None</ProductName>
+    </MernokProduct>
+    <MernokProduct>
+      <Product>1</Product>
+      <ProductName>VMS</ProductName>
+    </MernokProduct>
+    <MernokProduct>
+      <Product>2</Product>
+      <ProductName>Maxus</ProductName>
+    </MernokProduct>
+    <MernokProduct>
+      <Product>3</Product>
+      <ProductName>Commander1XX</ProductName>
+    </MernokProduct>
+    <MernokProduct>
+      <Product>4</Product>
+      <ProductName>Commander2XX</ProductName>
+    </MernokProduct>
+    <MernokProduct>
+      <Product>5</Product>
+      <ProductName>MAXUSX</ProductName>
+    </MernokProduct>
+    <MernokProduct>
+      <Product>6</Product>
+      <ProductName>Booyco HMI</ProductName>
+    </MernokProduct>
+  </mernokProductList>
+  <version>1</version>
+  <dateCreated>2019-01-29T00:26:46.293181+02:00</dateCreated>
+  <createdBy>Neil P</createdBy>
+</MernokProductFile>

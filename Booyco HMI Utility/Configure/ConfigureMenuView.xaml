@@ -1,0 +1,99 @@
+﻿<UserControl x:Class="Booyco_HMI_Utility.ConfigureMenuView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Booyco_HMI_Utility"
+             mc:Ignorable="d" 
+              d:DesignHeight="800" d:DesignWidth="1200" Background="White" IsVisibleChanged="UserControl_IsVisibleChanged">
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Booyco HMI Utility;component/Styles/Buttons/ButtonStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Booyco HMI Utility;component/Styles/Font/GeneralFontStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+        <Viewbox Grid.Column="1" Grid.Row="1">
+            <StackPanel>
+                <Label Content="Configure Menu" HorizontalContentAlignment="Center" Foreground="Black" FontSize="15"/>
+            </StackPanel>
+        </Viewbox>
+
+        <Button x:Name="Button_Parameters" Grid.Column="1" Grid.Row="2" Margin="5" Click="ButtonParameters_Click">
+            <StackPanel Orientation="Horizontal">
+                <Grid Width="500">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Parameters" IsEnabled="{Binding GlobalSharedData.ActiveDevice}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2" HorizontalAlignment="Right" Width="500"/>
+                </Grid>
+
+            </StackPanel>
+        </Button>
+        <Button x:Name="Button_ImagesFiles" Grid.Column="1" Grid.Row="3" Margin="5" Click="ButtonImages_Click">
+            <StackPanel Orientation="Horizontal">
+                <Grid Width="500">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Image Files" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2"/>
+                </Grid>
+            </StackPanel>
+        </Button>
+        <Button x:Name="Button_AudioFiles" Grid.Column="1" Grid.Row="4" Margin="5" Click="ButtonAudio_Click">
+            <StackPanel Orientation="Horizontal">
+                <Grid Width="500">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Audio Files" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2"/>
+                </Grid>
+            </StackPanel>
+        </Button>
+        <Button x:Name="ButtonBack" Grid.Column="1" Grid.Row="6" Margin="5" Click="ButtonBack_Click">
+            <StackPanel Orientation="Horizontal">
+                <Grid Width="500">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Back" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2"/>
+                </Grid>
+            </StackPanel>
+        </Button>
+
+    </Grid>
+</UserControl>

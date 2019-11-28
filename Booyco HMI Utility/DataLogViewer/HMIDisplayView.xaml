@@ -1,0 +1,215 @@
+﻿<UserControl x:Class="Booyco_HMI_Utility.HMIDisplayView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Booyco_HMI_Utility"
+             mc:Ignorable="d" 
+            d:DesignHeight="710" d:DesignWidth="1280" Background="White" IsVisibleChanged="UserControl_IsVisibleChanged">
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Booyco HMI Utility;component/Styles/Buttons/ButtonStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Booyco HMI Utility;component/Styles/Font/GeneralFontStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="5"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5"/>
+        </Grid.ColumnDefinitions>
+
+        <Viewbox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="5" HorizontalAlignment="Center">
+            <Label Content="BHU Display" Foreground="Black" VerticalAlignment="Top" FontSize="12" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+        </Viewbox>
+        <Viewbox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="4" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="624"/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="130"/>
+                    <RowDefinition Height="170"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+
+                <Rectangle x:Name="Rectangle_Background" Fill="black" Grid.RowSpan="7" Grid.ColumnSpan="4" Margin="0,0,0,-0.001"></Rectangle>
+
+                <TextBlock x:Name="TextBlock_Title" Text="TITLE" FontSize="24" Foreground="#FF808080" Grid.Column="2" Grid.Row="0" Grid.ColumnSpan="2" Margin="7.333,7,192.667,40.416" Grid.RowSpan="2"></TextBlock>
+
+                <TextBlock x:Name="TextBlock_Time" Grid.Column="2" Grid.Row="6" Text="13:48:52" TextAlignment="Right" VerticalAlignment="Center" Foreground="#FF808080" FontSize="24" Margin="504,0,10,0"/>
+                <TextBlock x:Name="TextBlock_Date" Grid.Column="2" Grid.Row="6" Text="2019/01/01" TextAlignment="Right" VerticalAlignment="Center" Foreground="#FF808080" FontSize="24" Margin="352,7.747,132,7.746"/>
+
+                <Viewbox  Margin="2,0,26,10" Grid.RowSpan="5" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" >
+                    <Grid Grid.Column="2" Grid.Row="2" >
+
+                        <Ellipse x:Name="EllipsePresence" Fill="#00000000" HorizontalAlignment="Left" Height="440" Margin="152.573,96.578,0,0" Stroke="Black" VerticalAlignment="Top" Width="440
+                 " Grid.RowSpan="2"/>
+                        <Ellipse x:Name="EllipseCritical" Fill="#00000000" HorizontalAlignment="Left" Height="240" Margin="252.333,197.818,0,0" Stroke="Black" VerticalAlignment="Top" Width="240" Grid.RowSpan="2"/>
+                        <Ellipse x:Name="EllipseWarning" Fill="#00000000" HorizontalAlignment="Left" Height="340" Margin="203.167,147.375,0,0" Stroke="Black" VerticalAlignment="Top" Width="340" Grid.RowSpan="2"/>
+                        <Ellipse x:Name="EllipseInner" Fill="#00000000" HorizontalAlignment="Left" Height="140" Margin="303.167,247.375,0,0" Stroke="Black" VerticalAlignment="Top" Width="140"/>
+
+                        <Rectangle x:Name="Presence1"  MouseDown="Rectangle_Background_MouseDown" Fill="Blue" HorizontalAlignment="Left" Height="65.083" Margin="363.333,90.573,0,0" Stroke="Black" VerticalAlignment="Top" Width="72" Clip="M8.7758116,57.161421 C8.7758116,57.161421 30.351581,56.493919 52.714075,62.568006 L65.356992,13.912982 C65.356992,13.912982 38.95195,6.6146717 8.743011,6.6150007 z"/>
+                        <Rectangle x:Name="Presence2"   Fill="Blue" HorizontalAlignment="Left" Height="71.083"  Stroke="Black" VerticalAlignment="Top" Width="72" RenderTransformOrigin="5.056,2.627" Margin="413,102.375,0,0" Clip="M3.0158731,50.76627 C3.0158731,50.76627 23.011208,55.582025 43.81249,67.406293 L68.749808,23.921833 C68.749808,23.921833 46.055131,9.996588 15.971536,2.0798232 z" />
+                        <Rectangle x:Name="Presence3"   Fill="Blue" HorizontalAlignment="Left" Height="93.167" Margin="438.333,115,0,0" VerticalAlignment="Top" Width="114.896" Clip="M18.291946,54.625344 C18.291946,54.625344 36.707851,64.653636 53.714368,81.484446 L88.859152,45.942271 C88.859152,45.942271 70.246383,26.661939 43.260531,11.187841 z"/>
+
+                        <Rectangle x:Name="Presence4" Fill="Blue" HorizontalAlignment="Left" Height="82.583"  Stroke="Black" VerticalAlignment="Top" Width="81.5" RenderTransformOrigin="5.056,2.627" Margin="490,154.156,0,0" Clip="M2.0307982,42.344322 C2.0307982,42.344322 16.978283,56.549005 29.029916,77.21899 L72.361433,52.06615 C72.361433,52.06615 58.918855,28.230478 36.877978,6.2789631 z" />
+                        <Rectangle x:Name="Presence5"  Fill="Blue" HorizontalAlignment="Left" Height="79.583"  Stroke="Black" VerticalAlignment="Top" Width="80.734" RenderTransformOrigin="5.056,2.627" Margin="511.839,197.818,0,0" Clip="M7.2363871,33.380122 C7.2363871,33.380122 18.572917,51.502629 24.864374,74.587765 L72.817054,61.837917 C72.817054,61.837917 66.066014,35.215517 50.457387,8.3069585 z" />
+                        <Rectangle x:Name="Presence6"  Fill="Blue" HorizontalAlignment="Left" Height="71.083"  Stroke="Black" VerticalAlignment="Top" Width="72" RenderTransformOrigin="5.056,2.627" Margin="532.562,252.708,0,0" Clip="M4.1561054,19.292144 C4.1561054,19.292144 10.297495,40.630504 10.250682,64.557573 L59.469319,64.120237 C59.469319,64.120237 59.990009,36.997705 52.064948,6.9162161 z" />
+                        <Rectangle x:Name="Presence7"  Fill="Blue" HorizontalAlignment="Left" Height="71.083"  Stroke="Black" VerticalAlignment="Top" Width="72" RenderTransformOrigin="5.056,2.627" Margin="532.562,310.125,0,0" Clip="M10.218765,7.1559458 C10.218765,7.1559458 10.563538,27.987287 4.4696221,51.125003 L51.91724,64.020989 C51.91724,64.020989 59.584415,37.732349 59.521229,6.6249789 z" />
+                        <Rectangle x:Name="Presence8"  Fill="Blue" HorizontalAlignment="Left" Height="75.583"  Stroke="Black" VerticalAlignment="Top" Width="78.563" RenderTransformOrigin="5.056,2.627" Margin="513.271,358.292,0,0" Clip="M23.728355,2.9580839 C23.728355,2.9580839 18.556647,23.373289 6.6817981,44.145409 L49.132797,68.696214 C49.132797,68.696214 63.2027,45.937387 71.192862,15.873559 z" Grid.RowSpan="2" />
+                        <Rectangle x:Name="Presence9"  Fill="Blue" HorizontalAlignment="Left" Height="76.288"  Stroke="Black" VerticalAlignment="Top" Width="79.096" RenderTransformOrigin="5.056,2.627" Margin="488.167,400.783,0,0" Clip="M31.769913,1.6328144 C31.769913,1.6328144 21.81906,19.44508 4.9727704,36.435627 L39.774142,71.32145 C39.774142,71.32145 58.724665,53.172178 74.223408,26.201191 z" Grid.RowSpan="2" />
+                        <Rectangle x:Name="Presence10"  Fill="Blue" HorizontalAlignment="Left" Height="82.75"  Stroke="Black" VerticalAlignment="Top" Width="82.667" RenderTransformOrigin="5.056,2.627" Margin="448.562,434.478,0,0" Clip="M44.64125,3.2657649 C44.64125,3.2657649 29.732831,18.557804 9.0630898,30.609468 L33.718939,73.156593 C33.718939,73.156593 58.337565,59.194219 80.288937,37.153487 z" />
+                        <Rectangle x:Name="Presence11"   Fill="Blue" HorizontalAlignment="Left" Height="92.77"  Stroke="Black" VerticalAlignment="Top" Width="88.5" RenderTransformOrigin="5.056,2.627" Margin="413,446.145,0,0" Clip="M44.718664,18.879796 C44.718664,18.879796 26.230129,29.646174 3.1457913,35.93718 L15.937446,83.567403 C15.937446,83.567403 42.405006,77.081695 69.312498,61.473685 z" />
+                        <Rectangle x:Name="Presence12"  Fill="Blue" HorizontalAlignment="Left" Height="110.375" Margin="339.646,456.598,0,0" Stroke="Black" VerticalAlignment="Top" Width="122.5" Clip="M76.525904,25.48949 C76.525904,25.48949 56.155105,30.5697 32.22889,30.671726 L32.270517,80.505055 C32.270517,80.505055 59.259861,81.225995 89.29045,73.113906 z"/>
+                        <Rectangle x:Name="Presence13"   Fill="Blue" HorizontalAlignment="Left" Height="71.083"  Stroke="Black" VerticalAlignment="Top" Width="72" RenderTransformOrigin="5.056,2.627" Margin="311.083,473.341,0,0" Clip="M60.791568,13.927727 C60.791568,13.927727 39.88148,14.183227 16.743498,8.0892544 L3.8849044,56.011471 C3.8849044,56.011471 29.767179,63.783068 60.874906,63.719881 z" />
+                        <Rectangle x:Name="Presence14"   Fill="Blue" HorizontalAlignment="Left" Height="78.078"  Stroke="Black" VerticalAlignment="Top" Width="81" RenderTransformOrigin="5.056,2.627" Margin="252.333,459.103,0,0" Clip="M75.497623,22.375291 C75.497623,22.375291 54.6877,16.958273 34.437886,4.875234 L9.5005154,47.583331 C9.5005154,47.583331 32.604006,62.259738 62.667285,70.249754 z" />
+                        <Rectangle x:Name="Presence15"   Fill="Blue" HorizontalAlignment="Left" Height="80.75"  Stroke="Black" VerticalAlignment="Top" Width="86.667" RenderTransformOrigin="5.056,2.627" Margin="207.909,432.686,0,0" Clip="M78.903854,31.354299 C78.903854,31.354299 61.14793,21.329634 44.715755,4.4174221 L9.4473272,39.834489 C9.4473272,39.834489 26.995416,58.543556 53.965916,74.04202 z" />
+                        <Rectangle x:Name="Presence16" Fill="Blue" HorizontalAlignment="Left" Height="89.083"  Stroke="Black" VerticalAlignment="Top" Width="93.333" RenderTransformOrigin="5.056,2.627" Margin="174.667,391.571,0,0" Clip="M77.988653,44.960285 C77.988653,44.960285 62.828804,30.644074 51.333011,10.054529 L8.1246736,35.220654 C8.1246736,35.220654 20.687513,58.415191 42.728661,80.366979 z" Grid.RowSpan="2" />
+                        <Rectangle x:Name="Presence17"  Fill="Blue" HorizontalAlignment="Left" Height="78.261"  Stroke="Black" VerticalAlignment="Top" Width="84.631" RenderTransformOrigin="5.056,2.627" Margin="146,353.822,0,0" Clip="M79.969078,47.802271 C79.969078,47.802271 69.040756,30.039248 63.265802,7.1761326 L14.562083,19.92738 C14.562083,19.92738 21.266618,46.060976 36.875024,72.969154 z" Grid.RowSpan="2" />
+                        <Rectangle x:Name="Presence18"  Fill="Blue" HorizontalAlignment="Left" Height="77.974"  Stroke="Black" VerticalAlignment="Top" Width="81.5" RenderTransformOrigin="5.056,2.627" Margin="139.5,303.234,0,0" Clip="M69.951956,58.406639 C69.951956,58.406639 64.004455,37.672837 64.343653,14.094244 L13.708327,14.015983 C13.708327,14.015983 13.168821,41.281997 21.280986,71.312876 z" />
+                        <Rectangle x:Name="Presence19"   Fill="Blue" HorizontalAlignment="Left" Height="71.083"  Stroke="Black" VerticalAlignment="Top" Width="72" RenderTransformOrigin="5.056,2.627" Margin="144.73,255.489,0,0" Clip="M59.097801,61.870316 C59.097801,61.870316 58.089435,40.480076 64.51968,17.792338 L15.691884,4.7613109 C15.691884,4.7613109 8.3939037,30.674165 8.4570903,61.781838 z" />
+                        <Rectangle x:Name="Presence20"  Fill="Blue" HorizontalAlignment="Left" Height="75.416"  Stroke="Black" VerticalAlignment="Top" Width="77.964" RenderTransformOrigin="5.056,2.627" Margin="152.667,201.417,0,0" Clip="M56.615419,71.864047 C56.615419,71.864047 61.532488,51.48981 73.615514,31.239761 L29.338421,6.1385115 C29.338421,6.1385115 15.729726,28.784797 7.7396341,58.848358 z" />
+                        <Rectangle x:Name="Presence21"   Fill="Blue" HorizontalAlignment="Left" Height="82.583"  Stroke="Black" VerticalAlignment="Top" Width="82.458" RenderTransformOrigin="5.056,2.627" Margin="174.667,154.156,0,0" Clip="M51.583198,78.531627 C51.583198,78.531627 61.241232,60.285549 78.15379,43.85217 L42.145555,7.7815406 C42.145555,7.7815406 22.831969,26.434791 7.3326696,53.406733 z" />
+                        <Rectangle x:Name="Presence22"   Fill="Blue" HorizontalAlignment="Left" Height="85.75"  Stroke="Black" VerticalAlignment="Top" Width="77.732" RenderTransformOrigin="5.056,2.627" Margin="216.844,115,0,0" Clip="M35.921866,82.984773 C35.921866,82.984773 50.447667,68.041662 70.265726,56.203471 L45.312571,11.734182 C45.312571,11.734182 21.890783,24.904772 -0.061532012,46.946444 z" />
+                        <Rectangle x:Name="Presence23"   Fill="Blue" HorizontalAlignment="Left" Height="80.083"  Stroke="Black" VerticalAlignment="Top" Width="78.667" RenderTransformOrigin="5.056,2.627" Margin="262.125,93.375,0,0" Clip="M25.042821,77.799749 C25.042821,77.799749 43.20636,66.332901 66.069827,60.557535 L52.798985,11.35083 C52.798985,11.35083 26.859784,17.82927 -0.049002593,33.438025 z" />
+                        <Rectangle x:Name="Presence24"   Fill="Blue" HorizontalAlignment="Left" Height="84.083"  Stroke="Black" VerticalAlignment="Top" Width="87" RenderTransformOrigin="5.056,2.627" Margin="303.167,83.578,0,0" Clip="M24.989722,70.312336 C24.989722,70.312336 45.363098,63.848541 68.94241,64.18739 L68.92722,13.656421 C68.92722,13.656421 41.880879,12.872114 11.84896,20.984556 z" />
+
+                        <Rectangle x:Name="Warning1" Fill="Yellow" HorizontalAlignment="Left" Height="67.25" Margin="356.271,141.823,0,0" VerticalAlignment="Top" Width="73.229" Clip="M15.937238,56.635679 C15.937238,56.635679 27.356824,55.867661 46.29183,60.380565 L59.761167,11.317567 C59.761167,11.317567 44.805577,5.967735 15.838785,5.9113732 z"/>
+                        <Rectangle x:Name="Warning2" Fill="Yellow" HorizontalAlignment="Left" Height="67.917" Margin="390.167,147.653,0,0" VerticalAlignment="Top" Width="75.729" Clip="M12.39574,54.534076 C12.39574,54.534076 23.926754,56.971998 41.036356,66.080983 L66.625971,22.12161 C66.625971,22.12161 53.814744,13.03951 25.848912,5.4875496 z"/>
+                        <Rectangle x:Name="Warning3" Fill="Yellow" HorizontalAlignment="Left" Height="74.48" Margin="425.438,162.259,0,0" VerticalAlignment="Top" Width="76.062" Clip="M5.7491756,51.428758 C5.7491756,51.428758 16.336809,56.740139 30.478545,70.115881 L66.57698,34.254858 C66.57698,34.254858 56.401267,22.084998 31.343227,7.5531182 z"/>
+                        <Rectangle x:Name="Warning4" Fill="Yellow" HorizontalAlignment="Left" Height="72.917" Margin="455.11,189.219,0,0" VerticalAlignment="Top" Width="76.119" Clip="M0.80696152,43.134996 C0.80696152,43.134996 9.7389397,50.982124 19.936965,67.562381 L63.9216,42.077798 C63.9216,42.077798 57.348835,27.819382 36.905865,7.2968685 z"/>
+                        <Rectangle x:Name="Warning5" Fill="Yellow" HorizontalAlignment="Left" Height="81.086" Margin="460,215.57,0,0" VerticalAlignment="Top" Width="93.229" Clip="M15.046848,41.211237 C15.046848,41.211237 21.982388,51.525143 27.541655,70.179941 L76.694728,56.811018 C76.694728,56.811018 73.497558,40.809467 59.062739,15.695134 z"/>
+                        <Rectangle x:Name="Warning6" Fill="Yellow" HorizontalAlignment="Left" Height="75.182" Margin="460,262.136,0,0" VerticalAlignment="Top" Width="93.229" Clip="M27.500194,23.614 C27.500194,23.614 31.270884,35.677039 31.812499,55.134835 L82.765946,55.176454 C82.765946,55.176454 84.130594,38.233769 76.687795,10.239467 z"/>
+                        <Rectangle x:Name="Warning7" Fill="Yellow" HorizontalAlignment="Left" Height="68.516" Margin="465.5,303.234,0,0" VerticalAlignment="Top" Width="87.729" Clip="M26.291447,14.036769 C26.291447,14.036769 27.01274,25.97615 22.499716,44.911637 L71.499458,58.000506 C71.499458,58.000506 77.255822,43.046091 77.31224,14.078575 z"/>
+                        <Rectangle x:Name="Warning8" Fill="Yellow" HorizontalAlignment="Left" Height="66.421" Margin="451.542,342.318,0,0" VerticalAlignment="Top" Width="96.229" Clip="M36.458085,5.8481557 C36.458085,5.8481557 33.84311,17.6422 24.583088,34.764272 L68.364783,60.196824 C68.364783,60.196824 77.906461,46.89777 85.45814,18.932093 z"/>
+                        <Rectangle x:Name="Warning9" Fill="Yellow" HorizontalAlignment="Left" Height="83.917" Margin="451.542,367.078,0,0" VerticalAlignment="Top" Width="76.02" Grid.RowSpan="2" Clip="M24.542104,10.045566 C24.542104,10.045566 19.292448,20.716396 5.9170899,34.857739 L41.624783,70.109403 C41.624783,70.109403 54.155292,60.60499 68.68667,35.547565 z"/>
+                        <Rectangle x:Name="Warning10" Fill="Yellow" HorizontalAlignment="Left" Height="79.871" Margin="425.438,400.783,0,0" VerticalAlignment="Top" Width="82.833" Grid.RowSpan="2" Clip="M31.999477,1.1229816 C31.999477,1.1229816 23.788485,10.268729 7.2081651,20.466804 L32.249504,63.639018 C32.249504,63.639018 47.174357,56.84751 67.696894,36.404351 z"/>
+                        <Rectangle x:Name="Warning11" Fill="Yellow" HorizontalAlignment="Left" Height="82.917" Margin="390.167,408.739,0,0" VerticalAlignment="Top" Width="75.729" Grid.RowSpan="2" Clip="M42.478889,12.510811 C42.478889,12.510811 31.925303,19.326721 13.270832,24.885912 L25.973502,72.761382 C25.973502,72.761382 42.462947,70.156092 67.576774,55.721248 z"/>
+                        <Rectangle x:Name="Warning12" Fill="Yellow" HorizontalAlignment="Left" Height="82.917" Margin="363.333,412.821,0,0" VerticalAlignment="Top" Width="66.563" Grid.RowSpan="2" Clip="M40.104498,20.788006 C40.104498,20.788006 28.186582,23.981114 8.7295001,24.522752 L8.5420822,73.887142 C8.5420822,73.887142 33.083238,74.220968 52.792084,68.679217 z"/>
+                        <Rectangle x:Name="Warning13" Fill="Yellow" HorizontalAlignment="Left" Height="85.417" Margin="303.167,421.583,0,0" VerticalAlignment="Top" Width="91.409" Grid.RowSpan="2" Clip="M68.944377,15.744839 C68.944377,15.744839 56.576403,16.121806 37.64243,11.609234 L24.615161,59.26139 C24.615161,59.26139 48.153439,65.336094 68.624777,65.083862 z"/>
+                        <Rectangle x:Name="Warning14" Fill="Yellow" HorizontalAlignment="Left" Height="74.104" Margin="273,417.552,0,0" VerticalAlignment="Top" Width="86.896" Grid.RowSpan="2" Clip="M67.791724,15.572904 C67.791724,15.572904 54.01042,12.270909 38.583332,3.1563295 L13.694765,45.853041 C13.694765,45.853041 34.958157,58.252317 54.797441,63.307095 z"/>
+                        <Rectangle x:Name="Warning15" Fill="Yellow" HorizontalAlignment="Left" Height="71.66" Margin="235.631,396.078,0,0" VerticalAlignment="Top" Width="83.223" Grid.RowSpan="2" Clip="M75.952867,24.588645 C75.952867,24.588645 64.255403,18.620347 51.640506,5.7346167 L17.009961,40.405648 C17.009961,40.405648 33.237594,57.477645 51.09287,67.495046 z"/>
+                        <Rectangle x:Name="Warning16" Fill="Yellow" HorizontalAlignment="Left" Height="75.183" Margin="212.438,362.635,0,0" VerticalAlignment="Top" Width="85.729" Grid.RowSpan="2" Clip="M74.853823,39.178258 C74.853823,39.178258 64.923307,30.030029 56.073169,14.31813 L13.562613,38.99077 C13.562613,38.99077 25.533363,59.551933 40.18763,73.84962 z"/>
+                        <Rectangle x:Name="Warning17" Fill="Yellow" HorizontalAlignment="Left" Height="66.421" Margin="203.167,342.318,0,0" VerticalAlignment="Top" Width="84.193" Clip="M65.37479,34.598461 C65.37479,34.598461 58.06528,23.691687 53.582962,6.2235218 L6.258347,19.015781 C6.258347,19.015781 12.409337,41.702472 22.864133,59.306911 z"/>
+                        <Rectangle x:Name="Warning18" Fill="Yellow" HorizontalAlignment="Left" Height="83.337" Margin="191,303.234,0,0" VerticalAlignment="Top" Width="91.729" Clip="M65.832962,45.307804 C65.832962,45.307804 61.516844,32.090266 61.708349,14.057781 L12.843953,14.09489 C12.843953,14.09489 12.864274,38.415924 18.406393,58.125778 z"/>
+                        <Rectangle x:Name="Warning19" Fill="Yellow" HorizontalAlignment="Left" Height="70.917" Margin="197.131,266.401,0,0" VerticalAlignment="Top" Width="95.229" Clip="M55.684934,50.932565 C55.684934,50.932565 54.975075,37.009557 59.827233,19.640958 L12.118786,6.8812155 C12.118786,6.8812155 6.461141,30.438743 6.7129757,50.911504 z"/>
+                        <Rectangle x:Name="Warning20" Fill="Yellow" HorizontalAlignment="Left" Height="70.25" Margin="197.131,227.984,0,0" VerticalAlignment="Top" Width="85.598" Clip="M59.868281,58.099163 C59.868281,58.099163 62.768446,44.954124 71.950895,29.432654 L29.056377,4.8289701 C29.056377,4.8289701 17.175414,25.456562 12.119577,45.297469 z"/>
+                        <Rectangle x:Name="Warning21" Fill="Yellow" HorizontalAlignment="Left" Height="98.375" Margin="221.73,178.458,0,0" VerticalAlignment="Top" Width="81.437" Clip="M47.270072,79.084021 C47.270072,79.084021 53.349921,67.374105 66.236519,54.758335 L30.999152,19.541786 C30.999152,19.541786 14.413464,36.560602 4.3950427,54.41676 z"/>
+                        <Rectangle x:Name="Warning23" Fill="Yellow" HorizontalAlignment="Left" Height="94.722" Margin="273,147.653,0,0" VerticalAlignment="Top" Width="78.271" Clip="M39.208368,66.555459 C39.208368,66.555459 50.609977,59.06295 68.078905,54.580422 L55.110147,6.2364642 C55.110147,6.2364642 31.651727,13.079197 14.046416,23.534079 z"/>
+                        <Rectangle x:Name="Warning24" Fill="Yellow" HorizontalAlignment="Left" Height="80.755" Margin="314.417,141.823,0,0" VerticalAlignment="Top" Width="70.75" Clip="M26.645321,60.395998 C26.645321,60.395998 38.333207,57.088349 57.790998,56.54673 L57.70825,5.9111165 C57.70825,5.9111165 41.703303,4.6480324 13.709009,12.090877 z"/>
+                        <Rectangle x:Name="Warning22" Fill="Yellow" HorizontalAlignment="Left" Height="85.074" Margin="243.458,167.661,0,0" VerticalAlignment="Top" Width="75.396" Clip="M44.458765,65.422508 C44.458765,65.422508 53.037502,55.481563 68.750647,46.630702 L43.614375,3.5215377 C43.614375,3.5215377 23.575953,15.700135 9.2768511,30.3551 z"/>
+
+                        <Rectangle x:Name="Critical1" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="348.261,178.458,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Clip="M23.583013,69.542009 C24.065243,69.544761 34.849802,69.406358 41.420558,71.375002 L54.302007,23.713646 C54.302007,23.713646 38.85286,19.628783 23.905662,19.916528"/>
+                        <Rectangle x:Name="Critical2" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="377.438,184.903,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Clip="M12.187016,65.003228 C12.652115,65.1307 23.19324,67.979154 29.030741,71.581409 L53.796636,28.831983 C53.796636,28.831983 39.616577,20.875477 25.103848,17.2847"/>
+                        <Rectangle x:Name="Critical3" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="401.24,205.75,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Clip="M5.243872,50.703727 C5.6601212,50.947226 15.381951,56.619165 20.088044,61.609525 L54.665406,26.641098 C54.665406,26.641098 43.097484,15.224539 30.008912,8.0001229"/>
+                        <Rectangle x:Name="Critical4" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="409.073,220.57,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Clip="M12.285634,46.789945 C12.624684,47.132887 20.079113,54.970947 23.333363,61.009345 L65.692416,36.47676 C65.692416,36.47676 57.401764,22.40662 46.628806,12.040606"/>
+                        <Rectangle x:Name="Critical5" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="420.573,230.263,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Clip="M12.064799,51.090942 C12.303522,51.509927 17.95094,61.728405 19.531216,68.403018 L67.010178,55.528872 C67.010178,55.528872 62.436225,39.054302 54.426383,26.486902"/>
+                        <Rectangle x:Name="Critical6" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="420.573,259.338,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Clip="M19.429624,39.288328 C19.551772,39.754826 22.362034,51.086867 22.160862,57.943127 L71.239799,57.911446 C71.239799,57.911446 71.495428,40.623944 67.011135,26.411567"/>
+                        <Rectangle x:Name="Critical7" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="420.573,284.18,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Clip="M22.145746,33.10114 C22.142994,33.583375 21.812783,44.707474 19.844013,51.278294 L67.458816,64.007069 C67.458816,64.007069 71.872122,47.938339 71.219088,33.049055"/>
+                        <Rectangle x:Name="Critical8" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="420.573,308.213,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Clip="M19.769248,27.282883 C19.641775,27.747986 16.443611,38.407858 12.841232,44.245394 L55.53897,68.864362 C55.53897,68.864362 64.188071,54.510496 67.411021,39.959158"/>
+                        <Rectangle x:Name="Critical9" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="404.073,329.43,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Clip="M29.398849,23.055314 C29.155343,23.471574 23.307206,32.940425 18.316731,37.646662 L53.364724,72.507293 C53.364724,72.507293 65.257023,60.851467 72.136281,47.630181"/>
+                        <Rectangle x:Name="Critical10" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="384.969,346.908,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Grid.RowSpan="2" Clip="M37.426974,20.146179 C37.084029,20.485231 28.50654,27.712109 22.468049,30.96633 L47.718373,74.341601 C47.718373,74.341601 62.422556,65.97793 72.489295,54.987659"/>
+                        <Rectangle x:Name="Critical11" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="365.615,362.635,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Grid.RowSpan="2" Clip="M41.853522,15.240187 C41.434508,15.478927 31.106586,20.566005 24.431567,22.14648 L37.822293,71.005326 C37.822293,71.005326 54.488623,66.609485 67.056904,58.599122"/>
+                        <Rectangle x:Name="Critical12" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="339.646,367.078,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Grid.RowSpan="2" Clip="M50.439839,17.725158 C49.973314,17.847313 39.230873,20.016579 32.374259,19.815544 L32.431264,70.26584 C32.431264,70.26584 49.562471,71.031068 63.775679,66.546567"/>
+                        <Rectangle x:Name="Critical13" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="314.417,374.875,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Grid.RowSpan="2" Clip="M57.560812,12.010359 C57.078565,12.007606 46.088127,11.058572 39.517157,9.0897626 L26.353012,58.249804 C26.353012,58.249804 42.802386,63.106399 57.69201,62.453351"/>
+                        <Rectangle x:Name="Critical14" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="294.576,362.635,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" RenderTransformOrigin="2.834,0.709" Grid.RowSpan="2" Clip="M59.376911,21.333811 C58.911826,21.206343 48.323874,17.732638 42.486584,14.130317 L16.974189,58.087837 C16.974189,58.087837 31.68515,67.288066 46.235935,70.510865"/>
+                        <Rectangle x:Name="Critical15" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="273,350.248,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Grid.RowSpan="2" Clip="M64.051194,26.534743 C63.984621,26.673878 54.894926,20.491963 50.189028,15.501671 L14.235038,51.704891 C14.235038,51.704891 25.33187,63.685815 38.552403,70.564634"/>
+                        <Rectangle x:Name="Critical16" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="253.719,334.013,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Clip="M69.468377,31.737125 C69.36806,31.85429 61.94083,23.368889 58.687124,17.330879 L14.802836,42.903989 C14.802836,42.903989 22.62554,57.879871 33.614689,67.945476"/>
+                        <Rectangle x:Name="Critical17" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="243.458,308.213,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Clip="M68.995122,43.177629 C68.867897,43.264838 64.012982,33.633139 62.432897,26.95872 L13.312582,40.303589 C13.312582,40.303589 17.157306,56.231096 25.16687,68.79797"/>
+                        <Rectangle x:Name="Critical18" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="237.927,284.18,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Clip="M68.069238,51.048958 C67.923778,51.100267 65.496636,40.003966 65.69788,33.148153 L14.823363,33.164334 C14.823363,33.164334 14.619675,50.241234 19.103689,64.452628"/>
+                        <Rectangle x:Name="Critical19" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="243.458,252.708,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Clip="M60.213764,64.61208 C60.05998,64.623993 60.587475,53.277598 62.556277,46.707477 L13.411079,33.555813 C13.411079,33.555813 8.7945052,49.998114 9.44755,64.885815"/>
+                        <Rectangle x:Name="Critical20" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="237.927,230.263,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Clip="M68.102136,69.223313 C67.950509,69.195018 71.396693,58.371768 74.998882,52.535082 L30.932167,27.111837 C30.932167,27.111837 22.217319,41.799022 18.994891,56.348458"/>
+                        <Rectangle x:Name="Critical21" Fill="Red" HorizontalAlignment="Left" Height="73.747" Margin="256.646,222.578,0,0" Stroke="Black" VerticalAlignment="Top" Width="78" Clip="M56.292822,60.23407 C56.153681,60.167492 62.068352,50.814814 67.058357,46.109607 L31.232081,10.545031 C31.232081,10.545031 19.122934,21.608682 12.244984,34.827773"/>
+                        <Rectangle x:Name="Critical22" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="273,196.61,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Clip="M50.750112,72.092988 C50.74948,72.083883 58.608066,64.398307 64.646163,61.144571 L39.17198,17.702071 C39.17198,17.702071 24.871257,25.574598 14.805529,36.56389"/>
+                        <Rectangle x:Name="Critical23" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="290.511,184.903,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Clip="M47.051509,72.86784 C47.053255,72.858881 56.657797,67.176866 63.332533,65.596615 L50.551755,17.378172 C50.551755,17.378172 34.187988,21.377631 21.620415,29.387605"/>
+                        <Rectangle x:Name="Critical24" Fill="Red" HorizontalAlignment="Left" Height="87.57" Margin="318.854,178.458,0,0" Stroke="Black" VerticalAlignment="Top" Width="80.927" Clip="M35.003156,72.169487 C35.007162,72.161286 46.102119,69.374277 52.958358,69.575425 L53.333978,19.932981 C53.333978,19.932981 36.394679,19.373419 22.182333,23.857694"/>
+                        <!--<Path  Data="M219.27101,440.5 L219.27101,0.50000001 M162.25001,431.77099 L276.021,7.5629998 M109.166,409.188 L329.00001,29.271 M64.677,374.657 L374.395,63.844 M30.416002,329.27099 L409.083,108.938 M8.7910018,277.063 L432.10402,162.126 M0.5,220.02101 L438.66701,220.02101 M6.4640098,162.526 L430.67197,276.505 M30.416007,110.407 L410.083,329.813 M64.563004,65.447 L375.281,374.926 M109.958,31.188 L330.00001,410.188 M162.25001,7.5629998 L276.333,432" Fill="#00000000" HorizontalAlignment="Left" Height="441" Margin="152.667,97.312,0,0" Stretch="Fill" Stroke="White" VerticalAlignment="Top" Width="439.167" Grid.RowSpan="2"/>-->
+                    </Grid>
+                </Viewbox>
+
+                <Path Grid.Column="1" Data="M100,0 L100,569" Fill="#00000000" HorizontalAlignment="Left" Height="101" Grid.RowSpan="3" Stretch="Fill" Stroke="#FF808080" VerticalAlignment="Top" Width="2"/>
+                <Path Grid.Column="2" Data="M100,0 L100,569" Fill="#00000000" HorizontalAlignment="Left" Height="600.5" Margin="0,-0.5,0,0" Grid.RowSpan="7" Stretch="Fill" Stroke="#FF808080" VerticalAlignment="Top" Width="2"/>
+                <Path Grid.Column="3" Data="M100,0 L100,569" Fill="#00000000" HorizontalAlignment="Left" Height="601" Margin="0,-1,0,0" Grid.RowSpan="7" Stretch="Fill" Stroke="#FF808080" VerticalAlignment="Top" Width="2"/>
+                <Path Grid.ColumnSpan="2" Data="M0,47.416667 L1015.375,47.416667" Fill="#00000000" HorizontalAlignment="Left" Height="1" Grid.Row="1" Stretch="Fill" Stroke="#FF808080" VerticalAlignment="Top" Width="624.834" Margin="0.437,0,0,0" Grid.Column="2"/>
+                <Path Grid.ColumnSpan="3" Data="M0,47.416667 L1015.375,47.416667" Fill="#00000000" HorizontalAlignment="Left" Height="1" Margin="-0.891,0,0,0" Grid.Row="2" Stretch="Fill" Stroke="#FF808080" VerticalAlignment="Top" Width="201.453"/>
+                <Path Data="M0,47.416667 L1015.375,47.416667" Fill="#00000000" HorizontalAlignment="Left" Height="1" Margin="-0.891,0,0,0" Grid.Row="3" Stretch="Fill" Stroke="#FF808080" VerticalAlignment="Top" Width="200.891" Grid.ColumnSpan="2"/>
+                <Path Grid.ColumnSpan="3" Data="M0,47.416667 L1015.375,47.416667" Fill="#00000000" HorizontalAlignment="Left" Height="1" Margin="-0.516,0,0,0" Grid.Row="4" Stretch="Fill" Stroke="#FF808080" VerticalAlignment="Top" Width="201.391"/>
+                <Path Grid.ColumnSpan="3" Data="M0,47.416667 L1015.375,47.416667" Fill="#00000000" HorizontalAlignment="Left" Height="1" Margin="-0.891,0,0,0" Grid.Row="5" Stretch="Fill" Stroke="#FF808080" VerticalAlignment="Top" Width="201.766"/>
+                <Path Data="M0,47.416667 L1015.375,47.416667" Fill="#00000000" HorizontalAlignment="Left" Height="1" Grid.Row="6" Stretch="Fill" Stroke="#FF808080" VerticalAlignment="Top" Width="624.769" Grid.Column="2" Grid.ColumnSpan="2"/>
+
+                <Rectangle x:Name="Rectangle_Vehicle" Fill="Purple" Width="28"  Height="60" Grid.Column="2" Grid.Row="2" Grid.RowSpan="4" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+
+                <Grid x:Name="Grid_RadarThreat1"  Grid.Column="2" Grid.Row="2" Grid.RowSpan="4" HorizontalAlignment="Center"  VerticalAlignment="Center">
+                    <Ellipse x:Name="Ellipse_RadarThreat1" Fill="Red" Stroke="Black" Width="28" Height="28"/>
+                    <TextBlock x:Name="TextBlock_RadarID1" Text="ID 1"  FontSize="10" FontFamily="Arial"  Height="11" HorizontalAlignment="Center" VerticalAlignment="Center"  Foreground="White" Margin="4,8,5,9" />
+                    <TextBlock x:Name="TextBlock_RadarDistance1" Text="0m"  FontSize="10" FontFamily="Arial"  Height="11" HorizontalAlignment="Left" VerticalAlignment="Center"  Foreground="White" Margin="65,24,-19,25" />
+                </Grid>
+                <Grid x:Name="Grid_RadarThreat2"  Grid.Column="2" Grid.Row="2" Grid.RowSpan="4" HorizontalAlignment="Center"  VerticalAlignment="Center">
+                    <Ellipse x:Name="Ellipse_RadarThreat2" Fill="Red" Stroke="Black" Width="28" Height="28"/>
+                    <TextBlock x:Name="TextBlock_RadarID2" Text="ID 2" FontSize="10" FontFamily="Arial"  Height="11" HorizontalAlignment="Center" VerticalAlignment="Center"  Foreground="White"  Margin="4,8,5,9" />
+                    <TextBlock x:Name="TextBlock_RadarDistance2" Text="0m"  FontSize="10" FontFamily="Arial"  Height="11" HorizontalAlignment="Left" VerticalAlignment="Center"  Foreground="White" Margin="65,24,-19,25" />
+                </Grid>
+                <Grid x:Name="Grid_RadarThreat3"  Grid.Column="2" Grid.Row="2" Grid.RowSpan="4" HorizontalAlignment="Center"  VerticalAlignment="Center" >
+                    <Ellipse x:Name="Ellipse_RadarThreat3" Fill="Red" Stroke="Black" Width="28" Height="60"/>
+                    <TextBlock x:Name="TextBlock_RadarID3" Text="ID 3" FontSize="10" FontFamily="Arial"  Height="11" HorizontalAlignment="Center" VerticalAlignment="Center"  Foreground="White"  Margin="4,8,5,9" />
+                    <TextBlock x:Name="TextBlock_RadarDistance3" Text="0m"  FontSize="10" FontFamily="Arial"  Height="11" HorizontalAlignment="Left" VerticalAlignment="Center"  Foreground="White"  Margin="65,24,-19,25" />
+                </Grid>
+                <Grid x:Name="Grid_RadarThreat4"  Grid.Column="2" Grid.Row="2" Grid.RowSpan="4" HorizontalAlignment="Center"  VerticalAlignment="Center">
+                    <Ellipse x:Name="Ellipse_RadarThreat4" Fill="Red" Stroke="Black" Width="28" Height="28"/>
+                    <TextBlock x:Name="TextBlock_RadarID4" Text="ID 4" FontSize="10" FontFamily="Arial"  Height="11" HorizontalAlignment="Center" VerticalAlignment="Center"  Foreground="White" Margin="4,8,5,9" />
+                    <TextBlock x:Name="TextBlock_RadarDistance4" Text="0m"  FontSize="10" FontFamily="Arial"  Height="11" HorizontalAlignment="Left" VerticalAlignment="Center"  Foreground="White"  Margin="65,24,-19,25" />
+                </Grid>
+                <Grid x:Name="Grid_RadarThreat5"  Grid.Column="2" Grid.Row="2" Grid.RowSpan="4" HorizontalAlignment="Center"  VerticalAlignment="Center">
+                    <Ellipse x:Name="Ellipse_RadarThreat5" Fill="Red" Stroke="Black" Width="60" Height="60"/>
+                    <TextBlock x:Name="TextBlock_RadarID5" Text="ID 5" FontSize="10"  FontFamily="Arial" Height="11" HorizontalAlignment="Center" VerticalAlignment="Center"  Foreground="White" Margin="4,8,5,9" />
+                    <TextBlock x:Name="TextBlock_RadarDistance5" Text="0m"  FontSize="10" FontFamily="Arial"  Height="11" HorizontalAlignment="Left" VerticalAlignment="Center"  Foreground="White" Margin="65,24,-19,25" />
+                </Grid>
+
+
+            </Grid>
+        </Viewbox>
+
+
+        <Button x:Name="ButtonBack" Content="Back" Margin="10" Click="ButtonBack_Click" Grid.Column="5" Grid.Row="5"/>
+        <Button x:Name="ButtonWindow" Visibility="Hidden" Content="Window" Margin="10" Click="ButtonNewWindow_Click" Grid.Column="5" Grid.Row="3"/>
+
+        <Grid x:Name="GridFooter" Grid.ColumnSpan="5" Margin="0,30,0,-35" Grid.RowSpan="2" Grid.Column="1" Grid.Row="6" Visibility="Hidden">
+            <Image Source="/Images/Booyco Logo.png" Grid.Column="1" Margin="0,0,20,10" Grid.Row="2" HorizontalAlignment="Right"/>
+            <Label Content="Booyco HMI Utility" HorizontalContentAlignment="Left" Margin="20,0,0,0" Grid.Column="1" Grid.Row="2" Foreground="Black" VerticalContentAlignment="Center" />
+        </Grid>
+        <Slider x:Name="Slider_DateTime" Grid.Column="1" HorizontalAlignment="Left" Margin="10,5,0,0" Grid.Row="6" VerticalAlignment="Top" RenderTransformOrigin="-3.333,2.852" Grid.ColumnSpan="4" Width="1001" Height="25" ValueChanged="Slider_DateTime_ValueChanged"/>
+        <TextBlock x:Name="TextBlock_SelectDateTime" HorizontalAlignment="Center" Text="Selected DateTime" TextAlignment="Center" FontSize="10" Grid.Column="2"  Margin="10,30,0,0" Grid.Row="6" TextWrapping="Wrap"  VerticalAlignment="Top" Grid.ColumnSpan="2" Width="488"/>
+        <TextBlock x:Name="TextBlock_StartDateTime" FontSize="10" Grid.Column="1" Text="Start DateTime" HorizontalAlignment="Left" Margin="10,30,0,0" Grid.Row="6" TextWrapping="Wrap"  VerticalAlignment="Top" Width="204"/>
+        <TextBlock x:Name="TextBlock_EndDateTime" FontSize="10" Grid.Column="4"  Text="End DateTime"  TextAlignment="Right" HorizontalAlignment="Right" Margin="0,30,10,0" Grid.Row="6" TextWrapping="Wrap"  VerticalAlignment="Top" Width="204"/>
+        <Button x:Name="Button_Play" Content="Play" Grid.Column="5" Margin="10,10,10,0" Grid.Row="2" VerticalAlignment="Top" Click="Button_Play_Click" Height="106"/>
+        <Button x:Name="Button_Backward" Visibility="Hidden" Content="&lt;" Grid.Column="2" HorizontalAlignment="Left" Margin="179,48,0,0" Grid.Row="6" VerticalAlignment="Top" Width="35" Height="27" Grid.RowSpan="2"/>
+        <Button x:Name="Button_Forward" Visibility="Hidden" Content="&gt;" Grid.Column="3" HorizontalAlignment="Left" Margin="44,48,0,0" Grid.Row="6" VerticalAlignment="Top" Width="35" Height="27" Grid.RowSpan="2"/>
+
+    </Grid>
+</UserControl>

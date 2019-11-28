@@ -1,0 +1,161 @@
+﻿<UserControl x:Class="Booyco_HMI_Utility.ImageFilesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Booyco_HMI_Utility"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1200" Background="White">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Booyco HMI Utility;component/Styles/Buttons/ButtonStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Booyco HMI Utility;component/Styles/Font/GeneralFontStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
+    <Grid IsVisibleChanged="Grid_IsVisibleChanged">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="5"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5"/>
+        </Grid.ColumnDefinitions>
+
+        <DataGrid x:Name="DataGridImageFiles" RowHeaderWidth="0" CanUserAddRows="False" SelectionMode="Extended" CanUserReorderColumns="False"  IsReadOnly="True" VirtualizingPanel.IsVirtualizingWhenGrouping="True" RowDetailsVisibilityMode="Collapsed" FontSize="16" Grid.ColumnSpan="1" Grid.Column="1" Grid.Row="2" Grid.RowSpan="5" Margin="10,20,10,0" AutoGenerateColumns="False" Background="SlateGray" AlternatingRowBackground="#FFA86464"  RowBackground="#FFD89A9A" RowHeight="50">
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" 
+                   Color="#8c0909"/>
+            </DataGrid.Resources>
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Background" Value="DarkRed"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="BorderBrush" Value="Black"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="Height" Value="50"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="1*" Header="No." Binding="{Binding ID}" MinWidth="60" MaxWidth="60"/>                
+                <DataGridTextColumn Width="8*" Binding="{Binding FileName}" Header="Name"/>
+                <DataGridTextColumn Width="100" Binding="{Binding FirmwareNumber}" Header="Firmware"/>
+                <DataGridTemplateColumn Width="100"  Header="Image" >                    
+                    <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate >
+                            <Image Source="{Binding ImageSource}"></Image>
+                    </DataTemplate >
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="3*"   Header="Progress">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate >
+                            <Grid>
+                                <ProgressBar Value="{Binding Progress}" Foreground="#8c0909" Background="SlateGray"></ProgressBar>
+                            <Label Content="{Binding ProgressString}" FontSize="10" HorizontalContentAlignment="Center"></Label>
+                                </Grid>
+                        </DataTemplate >
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Viewbox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+            <Label Content="Image Upload" Foreground="Black" VerticalAlignment="Top" FontSize="12" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+        </Viewbox>
+
+        <Button x:Name= "ButtonNew" Content="Upload All" Click="ButtonNew_Click" Grid.Column="2" Grid.Row="3" Margin="10"/>
+        <Button x:Name="ButtonAppend" Content="Append" Grid.Column="2" Grid.Row="4" Margin="10" Click="ButtonAppend_Click" />
+        <Button x:Name="ButtonBack" Content="Back" Click="ButtonBack_Click" Grid.Column="2" Grid.Row="6" Margin="10"/>
+        <Button x:Name= "ButtonNext"  ToolTip="Audio Files" Click="ButtonNext_Click" Grid.Column="2" Grid.Row="1" Margin="133,19,10,21" Background="Transparent" BorderThickness="0" MouseEnter="ButtonNext_MouseEnter" MouseLeave="ButtonNext_MouseLeave">
+            <Grid>
+                <Image x:Name="ImageParameter" HorizontalAlignment="Left" Height="50" Margin="-1.667,23.333,0,0" VerticalAlignment="Top" Width="53" Opacity="0.7" Source="/Images/ButtonImages/Audio.png"/>
+                <Rectangle x:Name="RectangleArrowRight"  HorizontalAlignment="Left" Fill="#8c0909" Height="84.5" Margin="43.833,4.5,0,0"  VerticalAlignment="Top" Width="45.667" Clip="M13.333999,3.3330003 L6.5000008,12.833006 L26.166998,42.500026 L7.5003334,71.166712 L13.500334,81.332998 L39.667002,42.333334 z"/>
+            </Grid>
+        </Button>
+
+        <Button x:Name= "ButtonPrevious"  ToolTip="Parameters" Click="ButtonPrevious_Click" Grid.Column="1" Grid.Row="1" Margin="10,21,831,21" BorderThickness="0" Background="Transparent" MouseEnter="ButtonPrevious_MouseEnter" MouseLeave="ButtonPrevious_MouseLeave">
+            <Grid>
+                <Image x:Name="ImagePicture" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="52" Source="/Images/ButtonImages/Parameters.png" Margin="22.667,18.166,-22.667,0"/>
+                <Rectangle x:Name="RectangleArrowLeft"  HorizontalAlignment="Left" Fill="#8c0909" Height="84.5"  VerticalAlignment="Top" Width="45.667" Clip="M13.333999,3.3330003 L6.5000008,12.833006 L26.166998,42.500026 L7.5003334,71.166712 L13.500334,81.332998 L39.667002,42.333334 z" RenderTransformOrigin="0.5,0.5" Margin="-31,0,0,0">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="-180"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+            </Grid>
+        </Button>
+
+        <Grid x:Name="Grid_Progressbar" Grid.Column="1" Grid.Row="7"  Grid.ColumnSpan="2" Background="Gray" Margin="0,5,0,0">
+            <!--Margin="0,5,0,0"-->
+            <!--<Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>-->
+            <ProgressBar x:Name="ProgressBar_ImageFiles" Grid.Row="1" Background="Black" Foreground="#8c0909" Maximum="100" Margin="5"/>
+            <Label x:Name="Label_StatusView" Content="StatusView" Grid.Row="1" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="20"/>
+            <Label x:Name="Label_ProgressStatusPercentage" Content="ProgressStatus" Grid.Row="1" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" FontSize="30"/>
+
+            <Label x:Name="Label_Index" Content="{Binding DataIndex, FallbackValue=0 }" HorizontalAlignment="Left" Margin="496,-695,0,0" VerticalAlignment="Top" Width="386" Height="70"/>
+
+        </Grid>
+        
+        <Grid x:Name="Grid_Message" Grid.Row="1"  Grid.RowSpan="8" Grid.ColumnSpan="3" Grid.Column="1" Visibility="Collapsed"  Margin="0,5,-5,-5" >
+
+            <Grid.Background>
+                <SolidColorBrush Color="Black" Opacity="0.2"/>
+            </Grid.Background>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="150"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="150"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="150"/>
+            </Grid.ColumnDefinitions>
+            <Grid Background="White" Grid.Column="1" Grid.Row="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="0.2*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Upload Images" Foreground="White" Background="DarkRed" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="0" Grid.ColumnSpan="4" Grid.RowSpan="2" Grid.Row="0" FontSize="50"/>
+                <TextBlock x:Name="RequestMessageLabel" Text="Are you sure you want to upload all the images?" Foreground="Black" Grid.Column="0"  Grid.Row="2" Grid.ColumnSpan="4" FontSize="30" TextWrapping="Wrap" Margin="5" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
+                <Button x:Name="ButtonContinue" Content="Yes" Grid.Column="1" Grid.Row="3" Margin="15" Click="ButtonContinue_Click" />
+                <Button x:Name="ButtonNo" Content="No" Grid.Column="2" Grid.Row="3" Margin="15" Click="ButtonClose_Click" />
+                <Button x:Name="ButtonClose" Content="X" Grid.Column="4" Grid.Row="0" Margin="100,0,0,30" Click="ButtonClose_Click" />
+            </Grid>
+        </Grid>
+
+    </Grid>
+</UserControl>

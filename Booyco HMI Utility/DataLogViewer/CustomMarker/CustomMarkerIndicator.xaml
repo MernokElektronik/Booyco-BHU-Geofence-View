@@ -1,0 +1,65 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	x:Class="Booyco_HMI_Utility.CustomMarkers.CustomMarkerIndicator"
+	Height="2000" Width="2000">
+
+    <Grid x:Name="Grind_Marker">
+
+        <Grid Margin="1018,1016,2,0">
+            <Label x:Name="Label_PopupInfo" Content="" Visibility="Collapsed" Background="Gray" BorderBrush="Black" BorderThickness="2" FontFamily="Segoe UI" FontSize="10"  FontWeight="Normal" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top" ></Label>
+        </Grid>
+
+        <Ellipse Visibility="Collapsed" x:Name="Ellipse_PresenceZone" Fill="blue" Opacity="0.3" HorizontalAlignment="Center" Height="60"  Stroke="Black" StrokeThickness="2" VerticalAlignment="Center" Width="60"/>
+        <Ellipse Visibility="Collapsed" x:Name="Ellipse_WarningZoneBackground" Fill="Black" Opacity="0"  HorizontalAlignment="Center" Height="44" Stroke="Black" StrokeThickness="2" VerticalAlignment="Center" Width="44"/>
+        <Ellipse Visibility="Collapsed" x:Name="Ellipse_WarningZone" Fill="Yellow" Opacity="0.3"  HorizontalAlignment="Center" Height="44"  Stroke="Black" StrokeThickness="2" VerticalAlignment="Center" Width="44"/>
+        <Ellipse Visibility="Collapsed" x:Name="Ellipse_CriticalZoneBackground" Fill="Black" Opacity="0" HorizontalAlignment="Center" Height="30" Margin="-5,-5,-5,-5" Stroke="Black" StrokeThickness="2" VerticalAlignment="Center" Width="30"/>
+        <Ellipse Visibility="Collapsed" x:Name="Ellipse_CriticalZone" Fill="Red" Opacity="0.3" HorizontalAlignment="Center" Height="30" Margin="-5,-5,-5,-5" Stroke="Black" StrokeThickness="2" VerticalAlignment="Center" Width="30"/>
+
+        <Rectangle x:Name="Rectangle_ProhibitZone"  Fill="Gray" Height="100" Opacity="0.4" HorizontalAlignment="Center" VerticalAlignment="Center" Stroke="Black" StrokeThickness="2"  Width="80"/>
+     
+        <Rectangle x:Name="Rectangle_PresenceZone" Visibility="Collapsed"  Fill="Blue" Height="200" Opacity="0.3"  Stroke="Black" StrokeThickness="0"  Width="80" RenderTransformOrigin="0.5,1" HorizontalAlignment="Center">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <!-- If you give the transform a name 
+                 you can access it easily from code. -->
+                    <RotateTransform x:Name="Rectangle_RotateTransform_Presence"></RotateTransform>
+                    <TranslateTransform x:Name="RectangleTransform_Presence" Y="-100" />
+
+                </TransformGroup>
+     
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Rectangle x:Name="Rectangle_WarningZone"  Visibility="Collapsed"  Fill="Yellow" Height="160" Opacity="0.3"  Stroke="Black" StrokeThickness="0"  Width="80" RenderTransformOrigin="0.5,1" HorizontalAlignment="Center">
+      
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <!-- If you give the transform a name 
+                 you can access it easily from code. -->
+                    <RotateTransform x:Name="Rectangle_RotateTransform_Warning"></RotateTransform>
+                    <TranslateTransform x:Name="RectangleTransform_Warning" Y="-80" />
+   
+                    </TransformGroup>
+            </Rectangle.RenderTransform>                
+        </Rectangle>
+        <Rectangle x:Name="Rectangle_CriticalZone"  Visibility="Collapsed" Fill="Red" Opacity="0.4"  Stroke="Black" StrokeThickness="0"  Width="80"  Height="120" RenderTransformOrigin="0.5,1" HorizontalAlignment="Center">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <!-- If you give the transform a name 
+                 you can access it easily from code. -->
+                    <RotateTransform x:Name="Rectangle_RotateTransform_Critical"></RotateTransform>
+                    <TranslateTransform x:Name="RectangleTransform_Crtical" Y="-60" />
+
+                </TransformGroup>
+   
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Rectangle x:Name="Rectangle_Vehicle" Fill="Pink" Opacity="0.3" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" Stroke="Black" StrokeThickness="2"  Width="30"/>
+
+
+        <Path Name="PathIndicator" MouseRightButtonDown="CustomMarkerIndicator_MouseRightButtonDown" MouseRightButtonUp="CustomMarkerIndicator_MouseRightButtonUp" MouseEnter="CustomMarkerIndicator_MouseEnter" MouseLeave="CustomMarkerIndicator_MouseLeave" Data="M187,137 L187,131 191,131 181,122 172,131 176,131 176,142 181,139 187,142 187,137z" StrokeThickness="2" Fill="Transparent" Height="20" Stretch="Fill" Stroke="Black" Width="20" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" VerticalAlignment="Center" MouseLeftButtonDown="PathIndicator_MouseLeftButtonDown">
+
+        </Path>
+
+    </Grid>
+</UserControl>

@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MernokClientFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <mernokClientList>
+    <MernokClient>
+      <Client>0</Client>
+      <Group>0</Group>
+      <ClientSiteName>None</ClientSiteName>
+      <ClientGroupName>None</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>1</Client>
+      <Group>1</Group>
+      <ClientSiteName>Mponeng</ClientSiteName>
+      <ClientGroupName>Anglogold Ashanti</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>2</Client>
+      <Group>1</Group>
+      <ClientSiteName>TauTona</ClientSiteName>
+      <ClientGroupName>Anglogold Ashanti</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>3</Client>
+      <Group>2</Group>
+      <ClientSiteName>Savuka</ClientSiteName>
+      <ClientGroupName>Anglo Platinum</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>4</Client>
+      <Group>2</Group>
+      <ClientSiteName>Bathopele</ClientSiteName>
+      <ClientGroupName>Anglo Platinum</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>5</Client>
+      <Group>2</Group>
+      <ClientSiteName>Dishaba</ClientSiteName>
+      <ClientGroupName>Anglo Platinum</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>6</Client>
+      <Group>2</Group>
+      <ClientSiteName>Mogalakwena</ClientSiteName>
+      <ClientGroupName>Anglo Platinum</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>7</Client>
+      <Group>2</Group>
+      <ClientSiteName>Siphumelele</ClientSiteName>
+      <ClientGroupName>Anglo Platinum</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>8</Client>
+      <Group>2</Group>
+      <ClientSiteName>Thembelani</ClientSiteName>
+      <ClientGroupName>Anglo Platinum</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>9</Client>
+      <Group>2</Group>
+      <ClientSiteName>Tumela</ClientSiteName>
+      <ClientGroupName>Anglo Platinum</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>10</Client>
+      <Group>2</Group>
+      <ClientSiteName>Aquarius Platinum</ClientSiteName>
+      <ClientGroupName>Anglo Platinum</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>11</Client>
+      <Group>2</Group>
+      <ClientSiteName>Bokoni Platinum</ClientSiteName>
+      <ClientGroupName>Anglo Platinum</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>12</Client>
+      <Group>3</Group>
+      <ClientSiteName>South Deep</ClientSiteName>
+      <ClientGroupName>Gold Fields</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>13</Client>
+      <Group>4</Group>
+      <ClientSiteName>Impala Rustenburg</ClientSiteName>
+      <ClientGroupName>Impala Platinum</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>14</Client>
+      <Group>4</Group>
+      <ClientSiteName>Marula</ClientSiteName>
+      <ClientGroupName>Impala Platinum</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>15</Client>
+      <Group>4</Group>
+      <ClientSiteName>Two Rivers</ClientSiteName>
+      <ClientGroupName>Impala Platinum</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>16</Client>
+      <Group>5</Group>
+      <ClientSiteName>CMTI</ClientSiteName>
+      <ClientGroupName>CMTI</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>17</Client>
+      <Group>6</Group>
+      <ClientSiteName>Marikana </ClientSiteName>
+      <ClientGroupName>Lonmin</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>18</Client>
+      <Group>6</Group>
+      <ClientSiteName>Pandora </ClientSiteName>
+      <ClientGroupName>Lonmin</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>19</Client>
+      <Group>6</Group>
+      <ClientSiteName>Akanani</ClientSiteName>
+      <ClientGroupName>Lonmin</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>20</Client>
+      <Group>7</Group>
+      <ClientSiteName>Zondereinde</ClientSiteName>
+      <ClientGroupName>Northam platinum</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>21</Client>
+      <Group>7</Group>
+      <ClientSiteName>Booysenda</ClientSiteName>
+      <ClientGroupName>Northam platinum</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>22</Client>
+      <Group>8</Group>
+      <ClientSiteName>Moab Khotsong</ClientSiteName>
+      <ClientGroupName>Harmony Gold</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>23</Client>
+      <Group>8</Group>
+      <ClientSiteName>Bambanani</ClientSiteName>
+      <ClientGroupName>Harmony Gold</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>24</Client>
+      <Group>8</Group>
+      <ClientSiteName>Tshepong</ClientSiteName>
+      <ClientGroupName>Harmony Gold</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>25</Client>
+      <Group>8</Group>
+      <ClientSiteName>Target 1</ClientSiteName>
+      <ClientGroupName>Harmony Gold</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>26</Client>
+      <Group>8</Group>
+      <ClientSiteName>Doornkop</ClientSiteName>
+      <ClientGroupName>Harmony Gold</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>27</Client>
+      <Group>8</Group>
+      <ClientSiteName>Joel</ClientSiteName>
+      <ClientGroupName>Harmony Gold</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>28</Client>
+      <Group>8</Group>
+      <ClientSiteName>Kusasalethu</ClientSiteName>
+      <ClientGroupName>Harmony Gold</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>29</Client>
+      <Group>8</Group>
+      <ClientSiteName>Masimong</ClientSiteName>
+      <ClientGroupName>Harmony Gold</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>30</Client>
+      <Group>8</Group>
+      <ClientSiteName>Masimong</ClientSiteName>
+      <ClientGroupName>Harmony Gold</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>31</Client>
+      <Group>8</Group>
+      <ClientSiteName>Kalgold</ClientSiteName>
+      <ClientGroupName>Harmony Gold</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>32</Client>
+      <Group>8</Group>
+      <ClientSiteName>Saaiplaas</ClientSiteName>
+      <ClientGroupName>Harmony Gold</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>33</Client>
+      <Group>9</Group>
+      <ClientSiteName>Finsch</ClientSiteName>
+      <ClientGroupName>Petra Diamonds</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>34</Client>
+      <Group>9</Group>
+      <ClientSiteName>Cullinan</ClientSiteName>
+      <ClientGroupName>Petra Diamonds</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>35</Client>
+      <Group>9</Group>
+      <ClientSiteName>Koffiefontein</ClientSiteName>
+      <ClientGroupName>Petra Diamonds</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>36</Client>
+      <Group>9</Group>
+      <ClientSiteName>Kimberley</ClientSiteName>
+      <ClientGroupName>Petra Diamonds</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>37</Client>
+      <Group>9</Group>
+      <ClientSiteName>Williamson</ClientSiteName>
+      <ClientGroupName>Petra Diamonds</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>38</Client>
+      <Group>10</Group>
+      <ClientSiteName>Evander Gold</ClientSiteName>
+      <ClientGroupName>PanAfrican Resources</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>39</Client>
+      <Group>10</Group>
+      <ClientSiteName>Baberton</ClientSiteName>
+      <ClientGroupName>PanAfrican Resources</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>40</Client>
+      <Group>11</Group>
+      <ClientSiteName>Beatrix</ClientSiteName>
+      <ClientGroupName>Sibanye Gold</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>41</Client>
+      <Group>11</Group>
+      <ClientSiteName>Driefontein</ClientSiteName>
+      <ClientGroupName>Sibanye Gold</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>42</Client>
+      <Group>11</Group>
+      <ClientSiteName>Kloof</ClientSiteName>
+      <ClientGroupName>Sibanye Gold</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>43</Client>
+      <Group>11</Group>
+      <ClientSiteName>Cooke</ClientSiteName>
+      <ClientGroupName>Sibanye Gold</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>44</Client>
+      <Group>12</Group>
+      <ClientSiteName>Vergenoeg</ClientSiteName>
+      <ClientGroupName>Vergenoeg</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>45</Client>
+      <Group>13</Group>
+      <ClientSiteName>ScanRF</ClientSiteName>
+      <ClientGroupName>ScanRF</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>46</Client>
+      <Group>14</Group>
+      <ClientSiteName>Eikenhof</ClientSiteName>
+      <ClientGroupName>Afrisam</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>47</Client>
+      <Group>14</Group>
+      <ClientSiteName>Ferro</ClientSiteName>
+      <ClientGroupName>Afrisam</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>48</Client>
+      <Group>14</Group>
+      <ClientSiteName>Jukskei</ClientSiteName>
+      <ClientGroupName>Afrisam</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>49</Client>
+      <Group>14</Group>
+      <ClientSiteName>Olifantsfotein</ClientSiteName>
+      <ClientGroupName>Afrisam</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>50</Client>
+      <Group>14</Group>
+      <ClientSiteName>Roodekrans</ClientSiteName>
+      <ClientGroupName>Afrisam</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>51</Client>
+      <Group>14</Group>
+      <ClientSiteName>Rooikraal</ClientSiteName>
+      <ClientGroupName>Afrisam</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>52</Client>
+      <Group>14</Group>
+      <ClientSiteName>Zeekoewater</ClientSiteName>
+      <ClientGroupName>Afrisam</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>53</Client>
+      <Group>15</Group>
+      <ClientSiteName>Black Rock</ClientSiteName>
+      <ClientGroupName>Assmang</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>54</Client>
+      <Group>15</Group>
+      <ClientSiteName>Khumani</ClientSiteName>
+      <ClientGroupName>Assmang</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>55</Client>
+      <Group>15</Group>
+      <ClientSiteName>Beeshoek</ClientSiteName>
+      <ClientGroupName>Assmang</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>56</Client>
+      <Group>16</Group>
+      <ClientSiteName>Helena</ClientSiteName>
+      <ClientGroupName>Glencore</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>57</Client>
+      <Group>16</Group>
+      <ClientSiteName>Magareng</ClientSiteName>
+      <ClientGroupName>Glencore</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>58</Client>
+      <Group>16</Group>
+      <ClientSiteName>Thorncliffe</ClientSiteName>
+      <ClientGroupName>Glencore</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>59</Client>
+      <Group>16</Group>
+      <ClientSiteName>Waterval</ClientSiteName>
+      <ClientGroupName>Glencore</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>60</Client>
+      <Group>16</Group>
+      <ClientSiteName>Kroondal</ClientSiteName>
+      <ClientGroupName>Glencore</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>61</Client>
+      <Group>16</Group>
+      <ClientSiteName>Rietvly</ClientSiteName>
+      <ClientGroupName>Glencore</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>62</Client>
+      <Group>17</Group>
+      <ClientSiteName>Tau Lekoa</ClientSiteName>
+      <ClientGroupName>Village Main Reef</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>63</Client>
+      <Group>17</Group>
+      <ClientSiteName>Kopanang</ClientSiteName>
+      <ClientGroupName>Village Main Reef</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>64</Client>
+      <Group>17</Group>
+      <ClientSiteName>Weltevreden</ClientSiteName>
+      <ClientGroupName>Village Main Reef</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>65</Client>
+      <Group>17</Group>
+      <ClientSiteName>Buffels</ClientSiteName>
+      <ClientGroupName>Village Main Reef</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>66</Client>
+      <Group>18</Group>
+      <ClientSiteName>Mernok Elektronik</ClientSiteName>
+      <ClientGroupName>Mernok Elektronik</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>67</Client>
+      <Group>19</Group>
+      <ClientSiteName>Battery Electric</ClientSiteName>
+      <ClientGroupName>Battery Electric</ClientGroupName>
+    </MernokClient>
+    <MernokClient>
+      <Client>68</Client>
+      <Group>20</Group>
+      <ClientSiteName>Booyco Electronics</ClientSiteName>
+      <ClientGroupName>Booyco Electronics</ClientGroupName>
+    </MernokClient>
+  </mernokClientList>
+  <version>1</version>
+  <dateCreated>2019-01-29T00:26:43.62902+02:00</dateCreated>
+  <createdBy>Neil P</createdBy>
+</MernokClientFile>

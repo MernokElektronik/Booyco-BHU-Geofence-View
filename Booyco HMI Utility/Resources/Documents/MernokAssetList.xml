@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MernokAssetFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <mernokAssetList>
+    <MernokAsset>
+      <Type>0</Type>
+      <Group>0</Group>
+      <GroupName>None</GroupName>
+      <TypeName>None</TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>1</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Low speed zone</TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>2</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>High speed zone</TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>3</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Medium speed zone</TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>4</Type>
+      <Group>5</Group>
+      <GroupName>RailBound Equipment</GroupName>
+      <TypeName>Locomotive</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>5</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Locomotive battery</TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>6</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>No go area</TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>7</Type>
+      <Group>8</Group>
+      <GroupName>Pedestrians</GroupName>
+      <TypeName>Person</TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>8</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Explosives</TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>9</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Ventilation door </TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>10</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Men at work </TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>11</Type>
+      <Group>1</Group>
+      <GroupName>Haul  Transport</GroupName>
+      <TypeName>Rigid haul truck</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>12</Type>
+      <Group>1</Group>
+      <GroupName>Haul  Transport</GroupName>
+      <TypeName>Articulated haul truck</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>13</Type>
+      <Group>1</Group>
+      <GroupName>Haul  Transport</GroupName>
+      <TypeName>Rigid water bowser</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>14</Type>
+      <Group>1</Group>
+      <GroupName>Haul  Transport</GroupName>
+      <TypeName>Articulated water bowser</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>15</Type>
+      <Group>2</Group>
+      <GroupName>Excavate</GroupName>
+      <TypeName>Standard excavator</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>16</Type>
+      <Group>2</Group>
+      <GroupName>Excavate</GroupName>
+      <TypeName>Face shovel excavator</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>17</Type>
+      <Group>2</Group>
+      <GroupName>Excavate</GroupName>
+      <TypeName>Rope shovel excavator</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>18</Type>
+      <Group>2</Group>
+      <GroupName>Excavate</GroupName>
+      <TypeName>Dragline</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>19</Type>
+      <Group>3</Group>
+      <GroupName>Loading</GroupName>
+      <TypeName>Front end loader</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>20</Type>
+      <Group>4</Group>
+      <GroupName>Surface Forming </GroupName>
+      <TypeName>Wheel dozer</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>21</Type>
+      <Group>4</Group>
+      <GroupName>Surface Forming </GroupName>
+      <TypeName>Track dozer</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>22</Type>
+      <Group>6</Group>
+      <GroupName>Versatile</GroupName>
+      <TypeName>Light duty vehicle</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>23</Type>
+      <Group>7</Group>
+      <GroupName>PurposeBuilt</GroupName>
+      <TypeName>Drill rig</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>24</Type>
+      <Group>4</Group>
+      <GroupName>Surface Forming </GroupName>
+      <TypeName>Grader</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>25</Type>
+      <Group>4</Group>
+      <GroupName>Surface Forming </GroupName>
+      <TypeName>Tractor backhoe loader</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>26</Type>
+      <Group>6</Group>
+      <GroupName>Versatile</GroupName>
+      <TypeName>Portable unit</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>27</Type>
+      <Group>1</Group>
+      <GroupName>Haul  Transport</GroupName>
+      <TypeName>Side tipper</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>28</Type>
+      <Group>1</Group>
+      <GroupName>Haul  Transport</GroupName>
+      <TypeName>Tractor</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>29</Type>
+      <Group>2</Group>
+      <GroupName>Excavate</GroupName>
+      <TypeName>Bucket wheel excavator</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>30</Type>
+      <Group>3</Group>
+      <GroupName>Loading</GroupName>
+      <TypeName>Skid loader</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>31</Type>
+      <Group>3</Group>
+      <GroupName>Loading</GroupName>
+      <TypeName>Fork lift</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>32</Type>
+      <Group>4</Group>
+      <GroupName>Surface Forming </GroupName>
+      <TypeName>Compact roller</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>33</Type>
+      <Group>4</Group>
+      <GroupName>Surface Forming </GroupName>
+      <TypeName>Sweeper</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>34</Type>
+      <Group>5</Group>
+      <GroupName>RailBound Equipment</GroupName>
+      <TypeName>Locomotive guard car</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>35</Type>
+      <Group>5</Group>
+      <GroupName>RailBound Equipment</GroupName>
+      <TypeName>Monorail locomotive</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>36</Type>
+      <Group>7</Group>
+      <GroupName>PurposeBuilt</GroupName>
+      <TypeName>Roof bolter</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>37</Type>
+      <Group>7</Group>
+      <GroupName>PurposeBuilt</GroupName>
+      <TypeName>Pipe carrier</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>38</Type>
+      <Group>7</Group>
+      <GroupName>PurposeBuilt</GroupName>
+      <TypeName>Reclaimer</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>39</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Traffic system healthy</TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>40</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Traffic system faulty</TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>41</Type>
+      <Group>7</Group>
+      <GroupName>PurposeBuilt</GroupName>
+      <TypeName>Face drill</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>42</Type>
+      <Group>7</Group>
+      <GroupName>PurposeBuilt</GroupName>
+      <TypeName>Hammer breaker</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>43</Type>
+      <Group>7</Group>
+      <GroupName>PurposeBuilt</GroupName>
+      <TypeName>Cherry picker</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>44</Type>
+      <Group>7</Group>
+      <GroupName>PurposeBuilt</GroupName>
+      <TypeName>Winch controller</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>45</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Loading box</TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>46</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Battery bay</TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>47</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Workshop</TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>48</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Tip</TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>49</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Bend</TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>50</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Waiting point</TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>51</Type>
+      <Group>7</Group>
+      <GroupName>PurposeBuilt</GroupName>
+      <TypeName>Winch scraper</TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>52</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Rail bound best station</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>53</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Trackless test station</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>54</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Pedestrian test station</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>55</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Rail bound test point</TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>56</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Trackless test point</TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>57</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Pedestrian test point</TypeName>
+      <IsLicensable>false</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>58</Type>
+      <Group>7</Group>
+      <GroupName>PurposeBuilt</GroupName>
+      <TypeName>Wetcreter</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>59</Type>
+      <Group>7</Group>
+      <GroupName>PurposeBuilt</GroupName>
+      <TypeName>Water Cannon</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>60</Type>
+      <Group>6</Group>
+      <GroupName>Versatile</GroupName>
+      <TypeName>Visitor Vehicle</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+  </mernokAssetList>
+  <version>0</version>
+  <dateCreated>2018-11-06T11:16:33.009397+02:00</dateCreated>
+  <createdBy>Hermi du Plessis</createdBy>
+</MernokAssetFile>

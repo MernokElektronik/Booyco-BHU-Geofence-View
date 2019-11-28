@@ -1,0 +1,157 @@
+﻿<UserControl x:Class="Booyco_HMI_Utility.StartUp"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Booyco_HMI_Utility"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1200"  FontFamily="Arial Black" IsVisibleChanged="UserControl_IsVisibleChanged">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Booyco HMI Utility;component/Styles/Buttons/ButtonStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Booyco HMI Utility;component/Styles/Font/GeneralFontStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid  Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+        <Viewbox Grid.Column="1"  Grid.Row="1">
+            <StackPanel>
+                <Label Content="Select Interface:" HorizontalContentAlignment="Center" Foreground="Black" FontSize="15"/>
+            </StackPanel>
+        </Viewbox>
+
+        <Button x:Name= "ButtonNext"  ToolTip="Login" Click="ButtonNext_Click" Grid.Column="1" Grid.Row="1" Background="Transparent" BorderThickness="0" MouseEnter="ButtonNext_MouseEnter" MouseLeave="ButtonNext_MouseLeave" HorizontalAlignment="Right" Width="78" Margin="0,27,0,22">
+            <Grid>
+                <Image x:Name="ImageLogin" HorizontalAlignment="Left" Height="78" VerticalAlignment="Top" Width="74" Opacity="0.7" Source="/Images/ButtonImages/Login.png"/>
+                <!--<Rectangle x:Name="RectangleArrowRight"  HorizontalAlignment="Left" Fill="#8c0909" Height="84.5" Margin="43.833,4.5,0,0"  VerticalAlignment="Top" Width="45.667" Clip="M13.333999,3.3330003 L6.5000008,12.833006 L26.166998,42.500026 L7.5003334,71.166712 L13.500334,81.332998 L39.667002,42.333334 z"/>-->
+            </Grid>
+        </Button>
+
+
+        <Button x:Name="BtnFile" Grid.Column="1" Grid.Row="2" Margin="5" Click="BtnFile_Click">
+            <StackPanel Orientation="Horizontal">
+                <Grid Width="500">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="/Images/ButtonImages/file2white.png" Margin="5"/>
+                    <Label Content="File"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1"/>
+                </Grid>
+
+            </StackPanel>
+        </Button>
+        <Button x:Name="BtnWiFi" Grid.Column="1" Grid.Row="3" Margin="5" Click="BtnWiFi_Click">
+            <StackPanel Orientation="Horizontal">
+                <Grid Width="500">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="/Images/ButtonImages/WIFI white.png" Margin="10"/>
+                    <Label Content="WiFi" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1"/>
+                </Grid>
+            </StackPanel>
+        </Button>
+        <!--<Button x:Name="BtnBlue" Grid.Column="1" Grid.Row="6" Margin="5" IsEnabled="False" Click="BtnBlue_Click">
+            <StackPanel Orientation="Horizontal">
+                <Grid Width="500">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="/Images/ButtonImages/BluetoothGray.png" Margin="5"/>
+                    <Label Content="Bluetooth" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1"/>
+                </Grid>
+            </StackPanel>
+        </Button>-->
+        <Button x:Name="ButtonServer" Grid.Column="1" Grid.Row="6" Margin="5" IsEnabled="true" Click="ButtonServer_Click">
+            <StackPanel Orientation="Horizontal">
+                <Grid Width="500">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <!--<Image Source="/Images/ButtonImages/BluetoothGray.png" Margin="5"/>-->
+                    <Label Content="Server" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1"/>
+                </Grid>
+            </StackPanel>
+        </Button>
+        <!--<Button x:Name="BtnUSB" Grid.Column="1" Grid.Row="5" Margin="5" IsEnabled="False" Click="BtnUSB_Click">
+            <StackPanel Orientation="Horizontal">
+                <Grid Width="500">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="122"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="/Images/ButtonImages/USBgray.png"/>
+                    <Label Content="USB" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1"/>
+                </Grid>
+            </StackPanel>
+        </Button>-->
+        <Button x:Name="ButtonGeofence" Grid.Column="1" Grid.Row="5" Margin="5" IsEnabled="true" Click="BtnGeofence_Click">
+            <StackPanel Orientation="Horizontal">
+                <Grid Width="500">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="122"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Label Content="Geofences" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1"/>
+                </Grid>
+            </StackPanel>
+        </Button>
+        <Button x:Name="BtnGPRS" Margin="5" IsEnabled="True" Click="BtnGPRS_Click" Grid.Column="1" Grid.Row="4">
+            <StackPanel Orientation="Horizontal">
+                <Grid Width="500">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="/Images/ButtonImages/GPRSgray.png" Margin="5"/>
+                    <Label Content="GPRS" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1"/>
+                </Grid>
+            </StackPanel>
+        </Button>
+
+    </Grid>
+</UserControl>
