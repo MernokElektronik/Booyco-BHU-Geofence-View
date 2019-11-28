@@ -97,7 +97,7 @@
                 <local:ServerView x:Name="ServerView" Grid.Row="1" Grid.Column="1"  Visibility="Collapsed" Grid.ColumnSpan="2"/>
 
                 <Image Source="/Images/Booyco Logo.png" Grid.Column="2" Margin="0,0,20,10" Grid.Row="2" HorizontalAlignment="Right"/>
-                <Label Content="Booyco BHU Utility" FontSize="40" FontFamily="Arial Bold" HorizontalContentAlignment="Left" Margin="20,0,0,0" Grid.Column="1" Grid.Row="2" Foreground="Black" VerticalContentAlignment="Center" Grid.ColumnSpan="2" />
+                <Label Content="Booyco BHU Utility - Rifin Test" FontSize="40" FontFamily="Arial Bold" HorizontalContentAlignment="Left" Margin="20,0,0,0" Grid.Column="1" Grid.Row="2" Foreground="Black" VerticalContentAlignment="Center" Grid.ColumnSpan="2" />
                 <Label Content="{Binding HeartbeatCount, FallbackValue=0}" HorizontalContentAlignment="Center" Margin="80,0,0,0" Grid.Column="1" Grid.Row="2" FontSize="12" Foreground="Black" VerticalContentAlignment="Top" Grid.ColumnSpan="2" />
                 <Grid Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="578,22,84.577,22">
                     <Grid.ColumnDefinitions>

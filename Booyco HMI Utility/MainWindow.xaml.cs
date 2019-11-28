@@ -34,6 +34,7 @@ namespace Booyco_HMI_Utility
         public MainWindow()
         {
             // Check if user is NOT admin
+            /* Davey: Commented out for easier testing
             if (!IsRunningAsAdministrator())
             {
                 // Setting up start info of the new process of the same application
@@ -49,6 +50,7 @@ namespace Booyco_HMI_Utility
                 // Shut down the current (old) process
                 Environment.Exit(Environment.ExitCode);
             }
+            */
             InitializeComponent();
 
                 DataContext = this;
