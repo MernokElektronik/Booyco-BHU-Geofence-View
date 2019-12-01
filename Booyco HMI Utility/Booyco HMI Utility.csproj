@@ -312,13 +312,18 @@
     <Compile Include="DataLogViewer\DateTimeUtility\DateTimeCheck.cs" />
     <Compile Include="DataLogViewer\ExcelFileManagement.cs" />
     <Compile Include="Geofence.cs" />
+    <Compile Include="Geofences\CustomMarkers\GMarkerEdgeButton.cs" />
+    <Compile Include="Geofences\CustomMarkers\GMarkerShapeCenter.cs" />
+    <Compile Include="Geofences\CustomMarkers\GMarkerMovablePoint.cs" />
     <Compile Include="Geofences\CustomMarkers\GMarkerArrow.cs" />
     <Compile Include="Geofences\GeoFenceEditor.cs" />
     <Compile Include="Geofences\GeofenceMapView.xaml.cs">
       <DependentUpon>GeofenceMapView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Geofences\GeoFenceObject.cs" />
-    <Compile Include="Geofences\GeofenceEditorShape.cs" />
+    <Compile Include="Geofences\Shapes\GeofenceEditorPolygonShape.cs" />
+    <Compile Include="Geofences\Shapes\GeofenceEditorShape.cs" />
+    <Compile Include="Geofences\Shapes\EditableShapePoint.cs" />
     <Compile Include="GPRS\GPRSView.xaml.cs">
       <DependentUpon>GPRSView.xaml</DependentUpon>
     </Compile>

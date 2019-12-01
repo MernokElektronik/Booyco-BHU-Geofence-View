@@ -1,4 +1,5 @@
 ﻿using Booyco_HMI_Utility.Geofences;
+using Booyco_HMI_Utility.Geofences.Shapes;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 using System;
