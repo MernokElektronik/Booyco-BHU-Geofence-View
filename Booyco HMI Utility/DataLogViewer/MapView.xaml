@@ -53,6 +53,5 @@
         <Button x:Name="ButtonMapType" Content="Map" Grid.Column="1" HorizontalAlignment="Left" Margin="0,25,0,0" Grid.Row="6" VerticalAlignment="Top" Width="162" Click="ButtonMapType_Click" Height="45"/>
         <Button x:Name="ButtonClear" Content="Clear" Margin="10" Click="ButtonClear_Click" Grid.Column="5" Grid.Row="2"/>
         <Button x:Name="ButtonPrintMap" Content="Print" Grid.Column="1" HorizontalAlignment="Left" Margin="183,25,0,0" Grid.Row="6" VerticalAlignment="Top" Width="162" Click="ButtonPrintMap_Click" Height="45" Grid.ColumnSpan="2"/>
-        <local:GeofenceMapView Grid.ColumnSpan="2" Grid.Column="3" HorizontalAlignment="Left" Height="100" Margin="191,116,0,0" Grid.Row="3" Grid.RowSpan="2" VerticalAlignment="Top" Width="100"/>
     </Grid>
 </UserControl>

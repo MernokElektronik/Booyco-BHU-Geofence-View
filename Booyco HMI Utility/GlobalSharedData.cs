@@ -1,4 +1,5 @@
 ﻿
+using Booyco_HMI_Utility.Geofences;
 using GMap.NET.WindowsPresentation;
 using System;
 using System.Collections.Generic;
@@ -81,6 +82,7 @@ namespace Booyco_HMI_Utility
         public static DateTime StartDateTimeDatalog = new DateTime();
         public static DateTime EndDateTimeDatalog = new DateTime();
 
+        public static GeoFenceObject geoFenceData = null; 
     }
 
     public class GeneralFunctions

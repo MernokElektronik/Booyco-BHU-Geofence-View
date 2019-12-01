@@ -37,7 +37,7 @@
     <BootstrapperComponentsUrl>http://go.microsoft.com/fwlink/%3fLinkId=2053982&amp;amp</BootstrapperComponentsUrl>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -170,6 +170,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Xceed.Wpf.AvalonDock, Version=3.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <HintPath>..\packages\Extended.Wpf.Toolkit.3.5.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
     </Reference>
@@ -309,9 +312,13 @@
     <Compile Include="DataLogViewer\DateTimeUtility\DateTimeCheck.cs" />
     <Compile Include="DataLogViewer\ExcelFileManagement.cs" />
     <Compile Include="Geofence.cs" />
+    <Compile Include="Geofences\CustomMarkers\GMarkerArrow.cs" />
+    <Compile Include="Geofences\GeoFenceEditor.cs" />
     <Compile Include="Geofences\GeofenceMapView.xaml.cs">
       <DependentUpon>GeofenceMapView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Geofences\GeoFenceObject.cs" />
+    <Compile Include="Geofences\GeofenceEditorShape.cs" />
     <Compile Include="GPRS\GPRSView.xaml.cs">
       <DependentUpon>GPRSView.xaml</DependentUpon>
     </Compile>

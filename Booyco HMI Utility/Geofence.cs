@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GMap.NET;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,5 +36,27 @@ namespace Booyco_HMI_Utility
         UInt32 Length;
         UInt32 Heading;
         UInt32 Type;
+    }
+
+    public class LatLonCoord
+    {
+        double Latitude;
+        double Longitude;
+
+        public LatLonCoord(double Latitude, double Longitude)
+        {
+            this.Latitude = Latitude;
+            this.Longitude = Longitude;
+        }
+
+        public LatLonCoord average(LatLonCoord otherPoint)
+        {
+            return new LatLonCoord((this.Latitude + otherPoint.Latitude) / 2, (this.Longitude + otherPoint.Longitude) / 2);
+        }
+
+        public PointLatLng ToPointLatLng()
+        {
+            return new PointLatLng(this.Latitude, this.Longitude);
+        }
     }
 }

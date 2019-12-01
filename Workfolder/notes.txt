@@ -1,0 +1,10 @@
+- shapes
+  - 3 types
+    - circle
+      (center vertex, edge vertex to decide radius)
+    - box
+    - polygon (needs to be converted to triangles)
+  - all shapes can optionally have a heading (degrees 0-360)
+  - boxes have a checkmark "testing area"
+  
+- see email  
