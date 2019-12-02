@@ -15,6 +15,7 @@ namespace Booyco_HMI_Utility.Geofences
         private List<GeofenceEditorShape> shapes;
         private GMapControl map;
         private bool mouseDown = false;
+        private GMapMarker markerUnderMouse = null;
 
         private GMapOverlay PolygonOverlay = new GMapOverlay("polygons");
         internal readonly GMapOverlay MarkerOverlay = new GMapOverlay("objects");
@@ -28,6 +29,8 @@ namespace Booyco_HMI_Utility.Geofences
 
 
             this.map.OnMarkerClick += OnMarkerClick;
+            this.map.OnMarkerEnter += OnMarkerEnter;
+            this.map.OnMarkerLeave += OnMarkerLeave;
             this.map.MouseMove += OnMouseMove;
             this.map.MouseDown += OnMouseDown;
             this.map.MouseUp += OnMouseUp;
@@ -39,7 +42,7 @@ namespace Booyco_HMI_Utility.Geofences
             {
                 foreach (GeofenceEditorShape shape in shapes)
                 {
-                    shape.OnMouseMove(mouseDown, sender, e);
+                    shape.OnMouseMove(mouseDown, markerUnderMouse, sender, e);
                 }
             }
         }
@@ -56,10 +59,34 @@ namespace Booyco_HMI_Utility.Geofences
 
         void OnMarkerClick(GMapMarker item, MouseEventArgs e)
         {
-            foreach(GeofenceEditorShape shape in shapes)
+            GeofenceEditorShape shapeForMarker = null;
+            foreach (GeofenceEditorShape shape in shapes)
             {
-                shape.MarkerClicked(item, e);
+                if (shape.HasMarker(item))
+                {
+                    shapeForMarker = shape;
+                    break;
+                }
             }
+            if (shapeForMarker != null)
+            {
+                setSelectedShape(shapeForMarker);
+                shapeForMarker.MarkerClicked(item, e);
+            }
+            else
+            {
+                throw new Exception("OnMarkerClick error, marker clicked that is not in a shape.");
+            }
+        }
+
+        void OnMarkerEnter(GMapMarker item)
+        {
+            markerUnderMouse = item;
+        }
+
+        void OnMarkerLeave(GMapMarker item)
+        {
+            markerUnderMouse = null;
         }
 
         public void setSelectedShape(GeofenceEditorShape selectedShape) {
@@ -67,7 +94,10 @@ namespace Booyco_HMI_Utility.Geofences
             // clear old stuff
             foreach(GeofenceEditorShape shape in shapes)
             {
-                shape.SetSelected(false);
+                if (!shape.Equals(selectedShape))
+                {
+                    shape.SetSelected(false);
+                }
             }
             selectedShape.SetSelected(true);
         }

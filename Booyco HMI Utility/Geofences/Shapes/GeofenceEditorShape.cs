@@ -45,17 +45,16 @@ namespace Booyco_HMI_Utility.Geofences
             this.Id = new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        internal void OnMouseMove(bool mouseDown, object sender, MouseEventArgs e)
+        internal void OnMouseMove(bool mouseDown, GMapMarker markerUnderMouse, object sender, MouseEventArgs e)
         {
             foreach (EditableShapePoint point in this.editableShapePoints)
             {
-                point.OnMouseMove(this.map, mouseDown, sender, e);
+                point.OnMouseMove(this.map, mouseDown, markerUnderMouse, sender, e);
             }
         }
 
         internal void MarkerClicked(GMapMarker item, MouseEventArgs e)
         {
-            bool myMarkerClicked = false;
             foreach (EditableShapePoint point in this.editableShapePoints)
             {
                 GMapMarker m = point.GetMarker();
@@ -72,11 +71,34 @@ namespace Booyco_HMI_Utility.Geofences
             }
         }
 
+        internal bool HasMarker(GMapMarker item)
+        {
+            foreach (EditableShapePoint point in this.editableShapePoints)
+            {
+                GMapMarker m = point.GetMarker();
+                if (m.Equals(item))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public virtual void SetSelected(bool selected)
         {
+            bool oldSelected = this.selected;
             this.selected = selected;
-            foreach(EditableShapePoint point in this.editableShapePoints)
+            Console.Out.WriteLine("Shape: SetSelected " + this.Id + " Selected: " + selected);
+            foreach (EditableShapePoint point in this.editableShapePoints)
             {
+                if (oldSelected && (oldSelected == this.selected))
+                {
+                    // selected the shape that is already selected does not deselect any points
+                }
+                else
+                {
+                    point.SetSelected(false);
+                }
                 point.SetShapeSelected(this.selected);
             }
         }

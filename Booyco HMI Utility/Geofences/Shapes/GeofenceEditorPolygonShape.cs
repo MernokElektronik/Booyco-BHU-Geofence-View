@@ -30,7 +30,7 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
         }
 
         public override void SetSelected(bool selected)
-        {
+        {            
             base.SetSelected(selected);
             RedrawPolygon();
         }
@@ -41,6 +41,7 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             if(item.Name == this.Id + "Polygon")
             {
                 this.InvokeOnShapeClick(e);
+                Console.Out.WriteLine("OnPolygonClick " + this.Id + "Polygon");
             }
         }
 
@@ -52,13 +53,18 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             {
                 throw new Exception("GeofenceEditorPolygonShape: No overlay 'objects' found on map");
             }
-            // add the points
-            foreach (LatLonCoord coord in polygonCoordinates)
-            {
-                result.Add(new EditableShapePoint(EditableShapePoint.EditableShapePointType.PolygonPoint, coord, overlay));
-            }
-            // add the edge buttons
+
             int l = polygonCoordinates.Count;
+            // add the points
+            for (var i = 0; i < l; i++)
+            {
+                var coord = polygonCoordinates[i];
+                var p = new EditableShapePoint(EditableShapePoint.EditableShapePointType.PolygonPoint, coord, overlay);
+                p.sourceIndex = i;
+                p.OnPositionChanged += OnVertexPositionChanged;
+                result.Add(p);
+            }
+            // add the edge buttons            
             for (var i = 0; i < l; i++)
             {
                 if (i == 0)
@@ -66,18 +72,59 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
                     // last and first
                     LatLonCoord a = polygonCoordinates[l - 1];
                     LatLonCoord b = polygonCoordinates[0];
-                    result.Add(new EditableShapePoint(EditableShapePoint.EditableShapePointType.PolygonEdgeButton, a.average(b), overlay)); // middle between a and b
+                    var p = new EditableShapePoint(EditableShapePoint.EditableShapePointType.PolygonEdgeButton, a.average(b), overlay); // middle between a and b
+                    p.sourceIndex = i;
+                    result.Add(p);
                 }
                 else
                 {
                     // this and previous
                     LatLonCoord a = polygonCoordinates[i];
                     LatLonCoord b = polygonCoordinates[i - 1];
-                    result.Add(new EditableShapePoint(EditableShapePoint.EditableShapePointType.PolygonEdgeButton, a.average(b), overlay)); // middle between a and b
+                    var p = new EditableShapePoint(EditableShapePoint.EditableShapePointType.PolygonEdgeButton, a.average(b), overlay); // middle between a and b
+                    p.sourceIndex = i;
+                    result.Add(p);
                 }
             }
 
             return result;
+        }
+
+        private void OnVertexPositionChanged(EditableShapePoint thisPoint)
+        {
+            if (thisPoint.GetShapePointType() == EditableShapePoint.EditableShapePointType.PolygonPoint) // only thing we can move
+            {
+                var i = thisPoint.sourceIndex;
+                EditableShapePoint previousEdge = GetShapePointbyTypeAndSourceIndex(EditableShapePoint.EditableShapePointType.PolygonEdgeButton, WrapIndex(i));
+                EditableShapePoint nextEdge = GetShapePointbyTypeAndSourceIndex(EditableShapePoint.EditableShapePointType.PolygonEdgeButton, WrapIndex(i + i));
+                EditableShapePoint previousPoint = GetShapePointbyTypeAndSourceIndex(EditableShapePoint.EditableShapePointType.PolygonPoint, WrapIndex(i - i));
+                EditableShapePoint nextPoint = GetShapePointbyTypeAndSourceIndex(EditableShapePoint.EditableShapePointType.PolygonPoint, WrapIndex(i + i));
+                // next edge
+                LatLonCoord coordNext = thisPoint.GetCoordinate().average(nextPoint.GetCoordinate()); // middle between a and b
+                nextEdge.SetPosition(coordNext);
+                // previous edge
+                LatLonCoord coordPrev = thisPoint.GetCoordinate().average(previousPoint.GetCoordinate()); // middle between a and b
+                previousEdge.SetPosition(coordPrev);
+            }
+        }
+
+        private EditableShapePoint GetShapePointbyTypeAndSourceIndex(EditableShapePoint.EditableShapePointType type, int sourceIndex)
+        {
+            foreach (EditableShapePoint p in editableShapePoints)
+            {
+                if( (type == p.GetShapePointType()) && (p.sourceIndex == sourceIndex))
+                {
+                    return p;
+                }
+            }
+            return null;
+        }
+
+        private int WrapIndex(int i)
+        {
+            int l = editableShapePoints.Count;
+            while (i < 0){ i += l; }
+            return i % l;
         }
 
         private void RedrawPolygon()
@@ -101,6 +148,8 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             {
                 mapPolygonObject.Points.Clear();
                 mapPolygonObject.Points.AddRange(points);
+                mapPolygonObject.IsVisible = false;
+                mapPolygonObject.IsVisible = true;
             }
             // set colour
             if (this.selected)

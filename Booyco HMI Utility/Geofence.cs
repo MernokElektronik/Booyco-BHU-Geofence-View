@@ -58,5 +58,10 @@ namespace Booyco_HMI_Utility
         {
             return new PointLatLng(this.Latitude, this.Longitude);
         }
+
+        public static LatLonCoord FromPointLatLng(PointLatLng coord)
+        {
+            return new LatLonCoord(coord.Lat, coord.Lng);
+        }
     }
 }

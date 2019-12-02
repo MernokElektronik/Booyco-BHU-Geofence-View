@@ -11,14 +11,18 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
 {
     public class EditableShapePoint
     {
+        public delegate void EditableShapePointPositionChanged(EditableShapePoint item);
         public enum EditableShapePointType { PolygonPoint, PolygonEdgeButton, ShapeCenter, CircleRadius, RectangleCorner };
 
         private EditableShapePointType type;
         private LatLonCoord coordinate;
         private bool selected = false;
         private bool shapeSelected = false;
+        public int sourceIndex = -1; // variable used to keep track of where in the source this point is used
 
         private GMapMarker marker = null;
+
+        public event EditableShapePointPositionChanged OnPositionChanged;
 
         public EditableShapePoint(EditableShapePointType type, LatLonCoord coordinate, GMapOverlay overlay)
         {
@@ -56,14 +60,27 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             this.CheckMarkerSelected();
         }
 
-        internal void OnMouseMove(GMapControl map, bool mouseDown, object sender, MouseEventArgs e)
+        internal void OnMouseMove(GMapControl map, bool mouseDown, GMapMarker markerUnderMouse, object sender, MouseEventArgs e)
         {
-            if (type == EditableShapePointType.PolygonPoint)
+            if ((type == EditableShapePointType.PolygonPoint) && (marker != null))
             {
-                bool isInDragMode = ((GMarkerMovablePoint)marker).GetDragMode();
+                bool isInDragMode = (marker.Equals(markerUnderMouse) && this.selected); // we can only drag points once we have selected them
                 if (isInDragMode)
                 {
-                    this.SetPosition(map.FromLocalToLatLng(e.X, e.Y));
+                    this.SetPosition(LatLonCoord.FromPointLatLng(map.FromLocalToLatLng(e.X, e.Y))); // move marker to cursor latlng
+                }
+            }
+        }
+
+        public void SetPosition(LatLonCoord coord)
+        {
+            this.coordinate = coord;
+            if(this.marker != null)
+            {
+                this.marker.Position = coord.ToPointLatLng();
+                if (OnPositionChanged != null)
+                {
+                    OnPositionChanged.Invoke(this);
                 }
             }
         }

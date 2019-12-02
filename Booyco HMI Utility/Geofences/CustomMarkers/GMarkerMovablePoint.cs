@@ -17,7 +17,6 @@ namespace Booyco_HMI_Utility.Geofences
         public float Bearing = 0;
         private float _scale = 1;
         private bool selected = false;
-        private bool dragMode = false;
 
         public float Scale
         {
@@ -42,7 +41,6 @@ namespace Booyco_HMI_Utility.Geofences
 
         public void SetSelected(bool selected)
         {
-            this.dragMode = (this.selected && selected) // previously selected and now clicked again
             this.selected = selected;
             if (this.selected)
             {
@@ -52,11 +50,6 @@ namespace Booyco_HMI_Utility.Geofences
             {
                 this.Fill = new SolidBrush(Color.Black);
             }
-        }
-
-        public bool GetDragMode()
-        {
-            return dragMode;
         }
 
         public static explicit operator GMarkerGoogle(GMarkerMovablePoint v)
