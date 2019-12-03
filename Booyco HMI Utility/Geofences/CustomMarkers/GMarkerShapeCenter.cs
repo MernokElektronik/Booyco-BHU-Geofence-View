@@ -12,11 +12,14 @@ namespace Booyco_HMI_Utility.Geofences
     public class GMarkerShapeCenter : GMapMarker, ISerializable
     {
         [NonSerialized]
-        public Brush Fill = new SolidBrush(Color.FromArgb(255, Color.Black));
+        public Brush FillBackground = new SolidBrush(Color.FromArgb(255, Color.Green));
+        public Brush FillForeground = new SolidBrush(Color.FromArgb(255, Color.White));
 
         public float Bearing = 0;
         private float _scale = 1;
         private bool selected = false;
+
+        static readonly Point[] Arrow = new[] { new Point(-7, 7), new Point(0, -22), new Point(7, 7), new Point(0, 2) };
 
         public float Scale
         {
@@ -28,7 +31,7 @@ namespace Booyco_HMI_Utility.Geofences
             {
                 _scale = value;
 
-                Size = new Size((int)(14 * _scale), (int)(14 * _scale));
+                Size = new Size((int)(50 * _scale), (int)(50 * _scale));
                 Offset = new Point(-Size.Width / 2, (int)(-Size.Height / 1.4));
             }
         }
@@ -44,11 +47,11 @@ namespace Booyco_HMI_Utility.Geofences
             this.selected = selected;
             if (this.selected)
             {
-                this.Fill = new SolidBrush(Color.Blue);
+                this.FillBackground = new SolidBrush(Color.Blue);
             }
             else
             {
-                this.Fill = new SolidBrush(Color.Black);
+                this.FillBackground = new SolidBrush(Color.Green);
             }
 
         }
@@ -68,7 +71,8 @@ namespace Booyco_HMI_Utility.Geofences
                     g.RotateTransform(Bearing - Overlay.Control.Bearing);
                     g.ScaleTransform(Scale, Scale);
 
-                    g.FillEllipse(Fill, new RectangleF(-Size.Width / 2, -Size.Height / 2, Size.Width, Size.Height));
+                    g.FillEllipse(FillBackground, new RectangleF(-Size.Width / 2, -Size.Height / 2, Size.Width, Size.Height));
+                    g.FillPolygon(FillForeground, Arrow);
                 }
                 g.EndContainer(c);
                 g.TranslateTransform(-ToolTipPosition.X, -ToolTipPosition.Y);
@@ -83,10 +87,10 @@ namespace Booyco_HMI_Utility.Geofences
             //   Pen = null;
             //}
 
-            if (Fill != null)
+            if (FillBackground != null)
             {
-                Fill.Dispose();
-                Fill = null;
+                FillBackground.Dispose();
+                FillBackground = null;
             }
 
             base.Dispose();
@@ -102,6 +106,11 @@ namespace Booyco_HMI_Utility.Geofences
         protected GMarkerShapeCenter(SerializationInfo info, StreamingContext context)
            : base(info, context)
         {
+        }
+
+        internal void SetBearing(int bearing)
+        {
+            this.Bearing = bearing;
         }
 
         #endregion

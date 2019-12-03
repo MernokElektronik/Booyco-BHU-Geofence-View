@@ -12,6 +12,7 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
     public class EditableShapePoint
     {
         public delegate void EditableShapePointPositionChanged(EditableShapePoint item);
+        public delegate void EditableShapePointClicked(EditableShapePoint item, MouseEventArgs e);
         public enum EditableShapePointType { PolygonPoint, PolygonEdgeButton, ShapeCenter, CircleRadius, RectangleCorner };
 
         private EditableShapePointType type;
@@ -23,6 +24,7 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
         private GMapMarker marker = null;
 
         public event EditableShapePointPositionChanged OnPositionChanged;
+        public event EditableShapePointClicked OnClicked;
 
         public EditableShapePoint(EditableShapePointType type, LatLonCoord coordinate, GMapOverlay overlay)
         {
@@ -35,6 +37,18 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
                 marker = new GMarkerEdgeButton(this.coordinate.ToPointLatLng());
             }
             else if (type == EditableShapePointType.PolygonPoint)
+            {
+                marker = new GMarkerMovablePoint(this.coordinate.ToPointLatLng());
+            }
+            else if (type == EditableShapePointType.CircleRadius)
+            {
+                marker = new GMarkerMovablePoint(this.coordinate.ToPointLatLng());
+            }
+            else if (type == EditableShapePointType.ShapeCenter)
+            {
+                marker = new GMarkerShapeCenter(this.coordinate.ToPointLatLng());
+            }
+            else if (type == EditableShapePointType.RectangleCorner)
             {
                 marker = new GMarkerMovablePoint(this.coordinate.ToPointLatLng());
             }
@@ -62,7 +76,7 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
 
         internal void OnMouseMove(GMapControl map, bool mouseDown, GMapMarker markerUnderMouse, object sender, MouseEventArgs e)
         {
-            if ((type == EditableShapePointType.PolygonPoint) && (marker != null))
+            if ( ((type == EditableShapePointType.ShapeCenter) ||  (type == EditableShapePointType.PolygonPoint) || (type == EditableShapePointType.CircleRadius) || (type == EditableShapePointType.RectangleCorner)) && (marker != null))
             {
                 bool isInDragMode = (marker.Equals(markerUnderMouse) && this.selected); // we can only drag points once we have selected them
                 if (isInDragMode)
@@ -72,22 +86,26 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             }
         }
 
-        public void SetPosition(LatLonCoord coord)
+        public void SetPosition(LatLonCoord coord, bool invokeOnChanged = true)
         {
             this.coordinate = coord;
             if(this.marker != null)
             {
                 this.marker.Position = coord.ToPointLatLng();
-                if (OnPositionChanged != null)
+                if ((OnPositionChanged != null) && invokeOnChanged)
                 {
                     OnPositionChanged.Invoke(this);
                 }
             }
         }
 
-        public void Clear()
+        public void Clear(GMapOverlay overlay)
         {
-
+            GMapMarker m = GetMarker();
+            if (m != null)
+            {
+                overlay.Markers.Remove(m);
+            }
         }
 
         public LatLonCoord GetCoordinate()
@@ -102,7 +120,10 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
 
         internal void MarkerClicked(GMapMarker item, MouseEventArgs e)
         {
-            // marker has been clicked
+            if(OnClicked != null)
+            {
+                OnClicked.Invoke(this, e);
+            }
         }
 
         public EditableShapePointType GetShapePointType()
@@ -127,6 +148,11 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
                     ((GMarkerShapeCenter)marker).SetSelected(this.selected);
                 }
             }
+        }
+
+        internal bool GetSelected()
+        {
+            return this.selected;
         }
     }
 }

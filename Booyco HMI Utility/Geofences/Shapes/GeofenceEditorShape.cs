@@ -20,19 +20,16 @@ namespace Booyco_HMI_Utility.Geofences
     public abstract class GeofenceEditorShape: IGeofenceEditorShapeInterface
     {
         public enum GeofenceEditorShapeType { Polygon, Rectangle, Circle };
-
         protected string Id;
-
         protected GMapControl map;
         protected GeofenceEditorShapeType type;
-
         protected LatLonCoord center = null;
-
         protected List<EditableShapePoint> editableShapePoints = null;
-
         protected bool selected = false;
-
+        protected GMapOverlay polygonOverlay;
+        protected GMapPolygon mapPolygonObject = null;
         public event GeofenceEditorShapeClick OnShapeClick;
+        protected int bearing = 0;
 
         public GeofenceEditorShape(GMapControl map, GeofenceEditorShapeType type)
         {
@@ -103,9 +100,68 @@ namespace Booyco_HMI_Utility.Geofences
             }
         }
 
+        public void SetBearing(int bearing)
+        {
+            this.bearing = bearing;
+            // communicate bearing to a shape center if it exists
+            foreach (EditableShapePoint point in this.editableShapePoints)
+            {
+                if(point.GetShapePointType() == EditableShapePoint.EditableShapePointType.ShapeCenter)
+                {
+                    GMapMarker m = point.GetMarker();
+                    if (m != null) {
+                        ((GMarkerShapeCenter)m).SetBearing(this.bearing);
+                    }
+                }
+            }
+        }
+
         public void InvokeOnShapeClick(MouseEventArgs e)
         {
-            OnShapeClick.Invoke(this, e);
+            if (OnShapeClick != null)
+            {
+                OnShapeClick.Invoke(this, e);
+            }
+        }
+
+        internal EditableShapePoint GetSelectedPoint()
+        {
+            foreach (EditableShapePoint point in this.editableShapePoints)
+            {
+                if (point.GetSelected())
+                {
+                    return point;
+                }
+            }
+            return null;
+        }
+
+        internal int GetBearing()
+        {
+            return this.bearing;
+        }
+
+        public GeofenceEditorShapeType GetShapeType()
+        {
+            return this.type;
+        }
+
+        public void Clear()
+        {
+            GMapOverlay overlay = this.map.Overlays.Where((o) => { return o.Id == "objects"; }).FirstOrDefault();
+            if (overlay != null)
+            {
+                foreach (EditableShapePoint point in this.editableShapePoints)
+                {
+                    point.Clear(overlay);
+                }
+            }
+        }
+
+        internal void Delete()
+        {
+            Clear();
+            mapPolygonObject.Dispose();
         }
 
         public abstract List<EditableShapePoint> BuildEditableShapePoints();

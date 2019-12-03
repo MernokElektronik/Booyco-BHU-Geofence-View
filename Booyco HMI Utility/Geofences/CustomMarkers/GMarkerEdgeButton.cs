@@ -12,7 +12,8 @@ namespace Booyco_HMI_Utility.Geofences
     public class GMarkerEdgeButton : GMapMarker, ISerializable
     {
         [NonSerialized]
-        public Brush Fill = new SolidBrush(Color.FromArgb(255, Color.Black));
+        public Brush FillBackground = new SolidBrush(Color.FromArgb(180, Color.Gray));
+        public Brush FillForeground = new SolidBrush(Color.FromArgb(255, Color.White));
 
         //[NonSerialized]
         //public Pen Pen = new Pen(Brushes.Blue, 5);
@@ -32,7 +33,7 @@ namespace Booyco_HMI_Utility.Geofences
             {
                 _scale = value;
 
-                Size = new Size((int)(14 * _scale), (int)(14 * _scale));
+                Size = new Size((int)(35 * _scale), (int)(35 * _scale));
                 Offset = new Point(-Size.Width / 2, (int)(-Size.Height / 1.4));
             }
         }
@@ -58,8 +59,25 @@ namespace Booyco_HMI_Utility.Geofences
                 {
                     g.RotateTransform(Bearing - Overlay.Control.Bearing);
                     g.ScaleTransform(Scale, Scale);
-
-                    g.FillEllipse(Fill, new RectangleF(-Size.Width / 2, -Size.Height / 2, Size.Width, Size.Height));
+                    // draw bg
+                    g.FillEllipse(FillBackground, new RectangleF(-Size.Width / 2, -Size.Height / 2, Size.Width, Size.Height));
+                    // draw plus
+                    float smallEdge = 0.1f;
+                    float bigEdge = 0.4f;
+                    float widePart = 1 - (smallEdge * 2);
+                    float thinPart = 1 - (bigEdge * 2);
+                    g.FillRectangle(FillForeground, new RectangleF(
+                        (-Size.Width / 2) + (Size.Width * smallEdge), 
+                        (-Size.Height / 2) + (Size.Height * bigEdge), 
+                        Size.Width * widePart, 
+                        Size.Height * thinPart
+                    )); // horizontal dash
+                    g.FillRectangle(FillForeground, new RectangleF(
+                        (-Size.Width / 2) + (Size.Width * bigEdge),
+                        (-Size.Height / 2) + (Size.Height * smallEdge),
+                        Size.Width * thinPart,
+                        Size.Height * widePart
+                    )); // vertical dash
                 }
                 g.EndContainer(c);
                 g.TranslateTransform(-ToolTipPosition.X, -ToolTipPosition.Y);
@@ -74,10 +92,10 @@ namespace Booyco_HMI_Utility.Geofences
             //   Pen = null;
             //}
 
-            if (Fill != null)
+            if (FillBackground != null)
             {
-                Fill.Dispose();
-                Fill = null;
+                FillBackground.Dispose();
+                FillBackground = null;
             }
 
             base.Dispose();

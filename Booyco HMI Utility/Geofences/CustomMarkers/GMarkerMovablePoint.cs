@@ -12,7 +12,7 @@ namespace Booyco_HMI_Utility.Geofences
     public class GMarkerMovablePoint : GMapMarker, ISerializable
     {
         [NonSerialized]
-        public Brush Fill = new SolidBrush(Color.FromArgb(255, Color.Black));
+        public Brush Fill = new SolidBrush(Color.FromArgb(180, Color.Black));
 
         public float Bearing = 0;
         private float _scale = 1;
@@ -28,7 +28,7 @@ namespace Booyco_HMI_Utility.Geofences
             {
                 _scale = value;
 
-                Size = new Size((int)(14 * _scale), (int)(14 * _scale));
+                Size = new Size((int)(35 * _scale), (int)(35 * _scale));
                 Offset = new Point(-Size.Width / 2, (int)(-Size.Height / 1.4));
             }
         }
@@ -44,11 +44,11 @@ namespace Booyco_HMI_Utility.Geofences
             this.selected = selected;
             if (this.selected)
             {
-                this.Fill = new SolidBrush(Color.Blue);
+                this.Fill = new SolidBrush(Color.FromArgb(180, Color.Blue));
             }
             else
             {
-                this.Fill = new SolidBrush(Color.Black);
+                this.Fill = new SolidBrush(Color.FromArgb(180, Color.Black));
             }
         }
 

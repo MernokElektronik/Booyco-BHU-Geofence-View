@@ -31,6 +31,9 @@ namespace Booyco_HMI_Utility
         public double StartLon = 28.163630;
         private GMapControl MainMap = null;
 
+        bool shapeSelected = false;
+        bool pointSelected = false;
+
         public GeofenceMapView()
         {
             InitializeComponent();
@@ -42,6 +45,13 @@ namespace Booyco_HMI_Utility
             if (geoFenceEditor == null)
             {
                 geoFenceEditor = new GeoFenceEditor(MainMap);
+                geoFenceEditor.OnShapeSelectionChanged += GeoFenceEditor_OnShapeSelectionChanged;
+                geoFenceEditor.OnShapePointSelectionChanged += GeoFenceEditor_OnShapePointSelectionChanged;
+                // init buttons
+                LabelBearing.Visibility = Visibility.Collapsed;
+                SliderBearing.Visibility = Visibility.Collapsed;
+                RemoveShapeButton.Visibility = Visibility.Collapsed;
+                RemovePointButton.Visibility = Visibility.Collapsed;
             }
 
             // set correct map parameters
@@ -83,15 +93,51 @@ namespace Booyco_HMI_Utility
 
         }
 
+        private void GeoFenceEditor_OnShapePointSelectionChanged(EditableShapePoint point)
+        {
+            pointSelected = (point != null);
+            if (pointSelected)
+            {
+                RemovePointButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                RemovePointButton.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void GeoFenceEditor_OnShapeSelectionChanged(GeofenceEditorShape item)
+        {
+            shapeSelected = (item != null);
+            if (shapeSelected)
+            {
+                SliderBearing.Value = item.GetBearing();
+                LabelBearing.Content = "Bearing: " + item.GetBearing();
+                LabelBearing.Visibility = Visibility.Visible;
+                SliderBearing.Visibility = Visibility.Visible;
+                RemoveShapeButton.Visibility = Visibility.Visible;
+                RemovePointButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                SliderBearing.Value = 0;
+                LabelBearing.Content = "Bearing";
+                LabelBearing.Visibility = Visibility.Collapsed;
+                SliderBearing.Visibility = Visibility.Collapsed;
+                RemoveShapeButton.Visibility = Visibility.Collapsed;
+                RemovePointButton.Visibility = Visibility.Collapsed;
+            }
+        }
+
         // public override void OnMapRender(Graphics g)
         // {
-            //int r = (int)((Radius) / Overlay.Control.MapProvider.Projection.GetGroundResolution((int)Overlay.Control.Zoom, Position.Lat)) * 2;
+        //int r = (int)((Radius) / Overlay.Control.MapProvider.Projection.GetGroundResolution((int)Overlay.Control.Zoom, Position.Lat)) * 2;
 
-            //if (IsFilled)
-            //{
-            //    g.FillEllipse(Fill, new Rectangle(LocalPosition.X - r / 2, LocalPosition.Y - r / 2, r, r));
-            //}
-            //g.DrawEllipse(Stroke, new Rectangle(LocalPosition.X - r / 2, LocalPosition.Y - r / 2, r, r));
+        //if (IsFilled)
+        //{
+        //    g.FillEllipse(Fill, new Rectangle(LocalPosition.X - r / 2, LocalPosition.Y - r / 2, r, r));
+        //}
+        //g.DrawEllipse(Stroke, new Rectangle(LocalPosition.X - r / 2, LocalPosition.Y - r / 2, r, r));
         // }
 
         private void GridMapView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -107,22 +153,6 @@ namespace Booyco_HMI_Utility
             this.InitGeoFenceModal();
         }
 
-        private void AddPolygonButton_Click(object sender, RoutedEventArgs e)
-        {
-            LatLonCoord center = new LatLonCoord(MainMap.Position.Lat, MainMap.Position.Lng);
-            double w = MainMap.ViewArea.WidthLng;
-            double h = MainMap.ViewArea.HeightLat;
-            PointLatLng m = MainMap.ViewArea.LocationMiddle;
-
-            this.geoFenceEditor.addShape(
-                new GeofenceEditorPolygonShape(MainMap, new List<LatLonCoord>{
-                    new LatLonCoord(m.Lat-(h/6), m.Lng),
-                    new LatLonCoord(m.Lat+(h/6), m.Lng+(h/6)),
-                    new LatLonCoord(m.Lat+(h/6), m.Lng-(h/6))
-                })
-            );
-        }
-
         private void MapPanel_Loaded(object sender, RoutedEventArgs e)
         {
             // Create the MaskedTextBox control.
@@ -133,6 +163,67 @@ namespace Booyco_HMI_Utility
                 // Assign the MaskedTextBox control as the host control's child.
                 WindowsFormHost.Child = this.MainMap;
             }
+        }
+
+        private void ButtonBack_Click(object sender, RoutedEventArgs e)
+        {
+            ProgramFlow.ProgramWindow = (int)ProgramFlowE.Startup;
+            this.Visibility = Visibility.Collapsed;
+        }
+
+        private void RemovePointButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.geoFenceEditor.DeletedSelectedPoint();
+        }
+
+        private void AddPolygonButton_Click(object sender, RoutedEventArgs e)
+        {
+            LatLonCoord center = new LatLonCoord(MainMap.Position.Lat, MainMap.Position.Lng);
+            double w = MainMap.ViewArea.WidthLng;
+            double h = MainMap.ViewArea.HeightLat;
+            PointLatLng m = MainMap.ViewArea.LocationMiddle;
+
+            this.geoFenceEditor.AddShape(
+                new GeofenceEditorPolygonShape(MainMap, new List<LatLonCoord>{
+                    new LatLonCoord(m.Lat-(h/6), m.Lng),
+                    new LatLonCoord(m.Lat+(h/6), m.Lng+(h/6)),
+                    new LatLonCoord(m.Lat+(h/6), m.Lng-(h/6))
+                })
+            );
+        }
+
+        private void AddCircleButton_Click(object sender, RoutedEventArgs e)
+        {
+            LatLonCoord center = new LatLonCoord(MainMap.Position.Lat, MainMap.Position.Lng);
+            double w = MainMap.ViewArea.WidthLng;
+            double h = MainMap.ViewArea.HeightLat;
+            PointLatLng m = MainMap.ViewArea.LocationMiddle;
+            this.geoFenceEditor.AddShape(
+                new GeofenceEditorCircleShape(MainMap, center, 100)
+            );
+        }
+
+        private void AddBlockButton_Click(object sender, RoutedEventArgs e)
+        {
+            LatLonCoord center = new LatLonCoord(MainMap.Position.Lat, MainMap.Position.Lng);
+            double w = MainMap.ViewArea.WidthLng;
+            double h = MainMap.ViewArea.HeightLat;
+            PointLatLng m = MainMap.ViewArea.LocationMiddle;
+            this.geoFenceEditor.AddShape(
+                new GeofenceEditorBlockShape(MainMap, center, 100, 100)
+            );
+        }
+
+        private void RemoveShapeButton_Click(object sender, RoutedEventArgs e)
+        {
+            geoFenceEditor.DeleteSelectedShape();
+        }
+
+        private void SliderBearing_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            int bearing = (int)Math.Round(SliderBearing.Value);
+            this.geoFenceEditor.SetSelectedShapeBearing(bearing);
+            LabelBearing.Content = "Bearing: " + bearing;
         }
     }
 }

@@ -321,6 +321,8 @@
       <DependentUpon>GeofenceMapView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Geofences\GeoFenceObject.cs" />
+    <Compile Include="Geofences\Shapes\GeofenceEditorBlockShape.cs" />
+    <Compile Include="Geofences\Shapes\GeofenceEditorCircleShape.cs" />
     <Compile Include="Geofences\Shapes\GeofenceEditorPolygonShape.cs" />
     <Compile Include="Geofences\Shapes\GeofenceEditorShape.cs" />
     <Compile Include="Geofences\Shapes\EditableShapePoint.cs" />

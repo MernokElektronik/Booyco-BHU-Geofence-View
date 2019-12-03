@@ -7,6 +7,14 @@
              xmlns:gmaps="clr-namespace:GMap.NET.WindowsForms;assembly=GMap.NET.WindowsForms"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1200" Background="White">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Booyco HMI Utility;component/Styles/Buttons/ButtonStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Booyco HMI Utility;component/Styles/Font/GeneralFontStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <Label Content="GeofenceMapView" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Grid x:Name="GridMapView" IsVisibleChanged="GridMapView_IsVisibleChanged">
@@ -17,7 +25,9 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="70"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="5"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -27,16 +37,25 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="5"/>
             </Grid.ColumnDefinitions>
-            <Button Name="AddPolygonButton" Grid.Column="1" HorizontalAlignment="Left" Margin="10,55,0,0" Grid.Row="1" VerticalAlignment="Top" Width="190" Height="49" Content="Add Polygon" Click="AddPolygonButton_Click"/>
-            <DockPanel x:Name="MapPanel" LastChildFill="true" Loaded="MapPanel_Loaded" Grid.ColumnSpan="5" Margin="10" Grid.RowSpan="5" Grid.Column="1" Grid.Row="2">
+            <DockPanel x:Name="MapPanel" LastChildFill="true" Loaded="MapPanel_Loaded" Grid.ColumnSpan="5" Margin="10" Grid.RowSpan="8" Grid.Column="1" Grid.Row="1">
                 <WindowsFormsHost Name="WindowsFormHost" DockPanel.Dock="Top" 
                                           Background="Yellow"         
                                           HorizontalAlignment="Stretch"             
-                                          VerticalAlignment="Stretch" >
+                                          VerticalAlignment="Stretch" Margin="0,0,0,0" >
                 </WindowsFormsHost>
             </DockPanel>
+            <Button Name="AddPolygonButton" Grid.Column="6" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="2" VerticalAlignment="Top" Content="Add Polygon" Click="AddPolygonButton_Click" Grid.ColumnSpan="2" Width="320" Height="79"/>
+            <Button Content="Back" Click="ButtonBack_Click" Grid.Column="6" Grid.Row="8" Margin="10,0,10,10" VerticalAlignment="Bottom" RenderTransformOrigin="1.967,4.088" Grid.ColumnSpan="2" Height="78" />
+            <Button x:Name="RemovePointButton" Grid.Column="6" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="5" VerticalAlignment="Top" Content="Delete Point" Click="RemovePointButton_Click" Grid.ColumnSpan="2" Width="320" Height="79" />
+            <Button x:Name="AddCircleButton" Grid.Column="6" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Content="Add Circle" Click="AddCircleButton_Click" Grid.ColumnSpan="2" Width="320" Height="79" />
+            <Button x:Name="AddBlockButton" Grid.Column="6" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="3" VerticalAlignment="Top" Content="Add Block"  Click="AddBlockButton_Click" Grid.ColumnSpan="2" Width="320" Height="79" />
+            <Button x:Name="RemoveShapeButton" Grid.Column="6" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="4" VerticalAlignment="Top" Content="Delete Shape" Grid.ColumnSpan="2" Width="320" Height="79" Click="RemoveShapeButton_Click" />
+            <Slider x:Name="SliderBearing" Grid.Column="6" HorizontalAlignment="Left" Margin="10,56,0,0" Grid.Row="6" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="33" Width="320" TickFrequency="10" TickPlacement="TopLeft" Maximum="360" Foreground="#FF5F5F5F" ValueChanged="SliderBearing_ValueChanged"/>
+            <Label x:Name="LabelBearing" Content="Bearing" Grid.Column="6" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="6" VerticalAlignment="Top" Height="41" Width="320" Grid.ColumnSpan="2" Foreground="#FF3E3E3E"/>
         </Grid>
     </Grid>
 </UserControl>
