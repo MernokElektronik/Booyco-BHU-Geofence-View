@@ -159,9 +159,12 @@ namespace Booyco_HMI_Utility
                 // not initialised, load from file, throw error, up to you
                 GlobalSharedData.GeoFenceData = new GeoFenceObject();
             }
-            this.editableGeoFenceData = GlobalSharedData.GeoFenceData.Clone();
-            this.editableGeoFenceData.CalculateStartLatitudeAndLongitude();
-            this.InitGeoFenceModal();
+            if (GridMapView.IsVisible)
+            {
+                this.editableGeoFenceData = GlobalSharedData.GeoFenceData.Clone();
+                this.editableGeoFenceData.CalculateStartLatitudeAndLongitude();
+                this.InitGeoFenceModal();
+            }
         }
 
         private void MapPanel_Loaded(object sender, RoutedEventArgs e)

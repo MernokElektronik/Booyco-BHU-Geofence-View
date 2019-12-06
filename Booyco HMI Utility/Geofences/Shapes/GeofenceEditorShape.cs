@@ -105,13 +105,17 @@ namespace Booyco_HMI_Utility.Geofences
         {
             this.bearing = bearing;
             // communicate bearing to a shape center if it exists
-            foreach (EditableShapePoint point in this.editableShapePoints)
+            if (this.editableShapePoints != null)
             {
-                if(point.GetShapePointType() == EditableShapePoint.EditableShapePointType.ShapeCenter)
+                foreach (EditableShapePoint point in this.editableShapePoints)
                 {
-                    GMapMarker m = point.GetMarker();
-                    if (m != null) {
-                        ((GMarkerShapeCenter)m).SetBearing(this.bearing);
+                    if (point.GetShapePointType() == EditableShapePoint.EditableShapePointType.ShapeCenter)
+                    {
+                        GMapMarker m = point.GetMarker();
+                        if (m != null)
+                        {
+                            ((GMarkerShapeCenter)m).SetBearing(this.bearing);
+                        }
                     }
                 }
             }

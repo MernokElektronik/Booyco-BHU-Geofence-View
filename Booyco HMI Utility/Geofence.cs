@@ -38,7 +38,7 @@ namespace Booyco_HMI_Utility
 
     public interface IGeofenceShape { }
 
-    public class GeofenceCircle: IGeofenceShape
+    public struct GeofenceCircle: IGeofenceShape
     {
         public UInt32 Latitude;
         public UInt32 Longitude;
@@ -59,7 +59,7 @@ namespace Booyco_HMI_Utility
         }
     }
 
-    public class GeofenceTriangle: IGeofenceShape
+    public struct GeofenceTriangle : IGeofenceShape
     {
         public UInt32 LatitudePoint1;
         public UInt32 LongitudePoint1;
@@ -85,7 +85,7 @@ namespace Booyco_HMI_Utility
         }
     }
 
-    public class GeofenceBlock: IGeofenceShape
+    public struct GeofenceBlock : IGeofenceShape
     {
         public UInt32 Latitude;
         public UInt32 Longitude;
@@ -126,6 +126,18 @@ namespace Booyco_HMI_Utility
                 StartLatitude = this.StartLatitude,
                 StartLongitude = this.StartLongitude
             };
+            for (int i = 0; i < geofenceCircles.Length; i++)
+            {
+                o.geofenceCircles[i] = this.geofenceCircles[i]; // a struct, deep enough
+            }
+            for (int i = 0; i < geofenceTriangles.Length; i++)
+            {
+                o.geofenceTriangles[i] = this.geofenceTriangles[i]; // a struct, deep enough
+            }
+            for (int i = 0; i < geofenceBlocks.Length; i++)
+            {
+                o.geofenceBlocks[i] = this.geofenceBlocks[i]; // a struct, deep enough
+            }
             return o;
         }
 
@@ -136,28 +148,28 @@ namespace Booyco_HMI_Utility
             int objCount = 0;
             foreach (GeofenceCircle circle in geofenceCircles)
             {
-                if (circle != null)
+                if (circle.Type != 0)
                 {
-                    latSum += circle.Latitude;
-                    longSum += circle.Longitude;
+                    latSum += LatLonCoord.LatLonPartFromUInt32(circle.Latitude);
+                    longSum += LatLonCoord.LatLonPartFromUInt32(circle.Longitude);
                     objCount++;
                 }
             }
             foreach (GeofenceTriangle triangle in geofenceTriangles)
             {
-                if (triangle != null)
+                if (triangle.Type != 0)
                 {
-                    latSum += triangle.LatitudePoint1 + triangle.LatitudePoint2 + triangle.LatitudePoint3;
-                    longSum += triangle.LongitudePoint1 + triangle.LongitudePoint2 + triangle.LongitudePoint3;
+                    latSum += LatLonCoord.LatLonPartFromUInt32(triangle.LatitudePoint1 + triangle.LatitudePoint2 + triangle.LatitudePoint3);
+                    longSum += LatLonCoord.LatLonPartFromUInt32(triangle.LongitudePoint1 + triangle.LongitudePoint2 + triangle.LongitudePoint3);
                     objCount += 3;
                 }
             }
             foreach (GeofenceBlock block in geofenceBlocks)
             {
-                if (block != null)
+                if (block.Type != 0)
                 {
-                    latSum += block.Latitude;
-                    longSum += block.Longitude;
+                    latSum += LatLonCoord.LatLonPartFromUInt32(block.Latitude);
+                    longSum += LatLonCoord.LatLonPartFromUInt32(block.Longitude);
                     objCount++;
                 }
             }
@@ -285,7 +297,7 @@ namespace Booyco_HMI_Utility
 
     public class LatLonPolygon
     {
-        public List<LatLonCoord> Points = new List<LatLonCoord>();
+        // public List<LatLonCoord> Points = new List<LatLonCoord>();
         public int Bearing = 0;
         public GeoFenceAreaType areaType = GeoFenceAreaType.None;
         private List<LatLonLineSegment> cpLines;
@@ -300,6 +312,16 @@ namespace Booyco_HMI_Utility
                     new LatLonVertex(new LatLonCoord(line.B.Position.Latitude, line.B.Position.Longitude), line.B.Index)
                 ));
             }
+        }
+
+        internal List<LatLonCoord> ToPoints()
+        {
+            List<LatLonCoord> points = new List<LatLonCoord>();
+            foreach (LatLonLineSegment line in cpLines)
+            {
+                points.Add(new LatLonCoord(line.A.Position.Latitude, line.A.Position.Longitude));
+            }
+            return points;
         }
     }
 

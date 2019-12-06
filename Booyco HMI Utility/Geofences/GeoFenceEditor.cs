@@ -80,11 +80,11 @@ namespace Booyco_HMI_Utility.Geofences
             List<LatLonPolygon> polygons = LatLonCoord.Triangulator.TrianglesToPolygons(editableGeoFenceData.geofenceTriangles);
             foreach (LatLonPolygon polygon in polygons)
             {
-                AddShape(new GeofenceEditorPolygonShape(this.map, polygon.Points, polygon.Bearing, polygon.areaType));
+                AddShape(new GeofenceEditorPolygonShape(this.map, polygon.ToPoints(), polygon.Bearing, polygon.areaType));
             }
         }
 
-        private void Clear()
+        private void ClearSelection()
         {
             foreach (GeofenceEditorShape shape in shapes)
             {
@@ -102,6 +102,26 @@ namespace Booyco_HMI_Utility.Geofences
             {
                 OnShapeSelectionChanged.Invoke(this.selectedShape);
             }
+        }
+
+        public void Clear()
+        {
+            foreach (GeofenceEditorShape shape in shapes)
+            {
+                shape.Clear();
+            }
+            if (selectedShape != null)
+            {
+                selectedShape.SetSelected(true);
+            }
+            // notify of change
+            if (OnShapeSelectionChanged != null)
+            {
+                OnShapeSelectionChanged.Invoke(this.selectedShape);
+            }
+            // redraw
+            if (map.Overlays[0] != null) { map.Overlays[0].Clear(); }
+            if (map.Overlays[1] != null) { map.Overlays[1].Clear(); }
         }
 
         void OnMouseDown(object sender, MouseEventArgs e)
@@ -157,7 +177,7 @@ namespace Booyco_HMI_Utility.Geofences
         public void SetSelectedShape(GeofenceEditorShape selectedShape) {
             this.selectedShape = selectedShape;
             // clear old stuff
-            this.Clear();
+            this.ClearSelection();
         }
 
         public void OnShapeClick(GeofenceEditorShape item, MouseEventArgs e)
@@ -307,6 +327,8 @@ namespace Booyco_HMI_Utility.Geofences
                 result.geofenceBlocks[blockIndex] = GeofenceBlock.GetEmpty();
                 blockIndex++;
             }
+            // finally push temp object clone into global
+            GlobalSharedData.GeoFenceData = result.Clone();
 
             return valid;
         }
