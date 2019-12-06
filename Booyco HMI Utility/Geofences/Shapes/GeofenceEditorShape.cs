@@ -23,7 +23,8 @@ namespace Booyco_HMI_Utility.Geofences
         protected string Id;
         protected GMapControl map;
         protected GeofenceEditorShapeType type;
-        protected LatLonCoord center = null;
+        protected GeoFenceAreaType areaType;
+        protected LatLonCoord center;
         protected List<EditableShapePoint> editableShapePoints = null;
         protected bool selected = false;
         protected GMapOverlay polygonOverlay;
@@ -146,6 +147,11 @@ namespace Booyco_HMI_Utility.Geofences
             return this.type;
         }
 
+        internal GeoFenceAreaType GetAreaType()
+        {
+            return this.areaType;
+        }
+
         public void Clear()
         {
             GMapOverlay overlay = this.map.Overlays.Where((o) => { return o.Id == "objects"; }).FirstOrDefault();
@@ -165,5 +171,12 @@ namespace Booyco_HMI_Utility.Geofences
         }
 
         public abstract List<EditableShapePoint> BuildEditableShapePoints();
+
+        public abstract bool IsValid();
+
+        internal void SetAreaType(GeoFenceAreaType areaType)
+        {
+            this.areaType = areaType;
+        }
     }
 }

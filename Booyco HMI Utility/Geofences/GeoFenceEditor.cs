@@ -14,7 +14,7 @@ namespace Booyco_HMI_Utility.Geofences
     public enum GeofenceEditorNotificationSeverity { Success, Notice, Warning, Error };
     public delegate void GeofenceEditorShapeSelectionChanged(GeofenceEditorShape item);
     public delegate void GeofenceEditorPointSelectionChanged(EditableShapePoint point);
-    public delegate void GeofenceEditorNotification(GeofenceEditorNotificationSeverity severity, String Message);
+    public delegate void GeofenceEditorNotification(GeofenceEditorNotificationSeverity severity, String message);
 
     public class GeoFenceEditor
     {
@@ -56,6 +56,51 @@ namespace Booyco_HMI_Utility.Geofences
                 {
                     shape.OnMouseMove(mouseDown, markerUnderMouse, sender, e);
                 }
+            }
+        }
+
+        internal void LoadGeoFenceObject(GeoFenceObject editableGeoFenceData)
+        {
+            this.Clear(); // first clear
+            foreach (GeofenceCircle circle in editableGeoFenceData.geofenceCircles)
+            {
+                if (circle.Type != (UInt32)GeoFenceAreaType.None)
+                {
+                    AddShape(new GeofenceEditorCircleShape(this.map, new LatLonCoord(circle.Latitude, circle.Longitude), circle.Radius, (GeoFenceAreaType)circle.Type, (int)circle.Heading));
+                }
+            }
+            foreach (GeofenceBlock block in editableGeoFenceData.geofenceBlocks)
+            {
+                if (block.Type != (UInt32)GeoFenceAreaType.None)
+                {
+                    AddShape(new GeofenceEditorBlockShape(this.map, new LatLonCoord(block.Latitude, block.Longitude), block.Width, block.Length, (int)block.Heading, (GeoFenceAreaType)block.Type));
+                }
+            }
+
+            List<LatLonPolygon> polygons = LatLonCoord.Triangulator.TrianglesToPolygons(editableGeoFenceData.geofenceTriangles);
+            foreach (LatLonPolygon polygon in polygons)
+            {
+                AddShape(new GeofenceEditorPolygonShape(this.map, polygon.Points, polygon.Bearing, polygon.areaType));
+            }
+        }
+
+        private void Clear()
+        {
+            foreach (GeofenceEditorShape shape in shapes)
+            {
+                if (!shape.Equals(selectedShape))
+                {
+                    shape.SetSelected(false);
+                }
+            }
+            if (selectedShape != null)
+            {
+                selectedShape.SetSelected(true);
+            }
+            // notify of change
+            if (OnShapeSelectionChanged != null)
+            {
+                OnShapeSelectionChanged.Invoke(this.selectedShape);
             }
         }
 
@@ -112,22 +157,7 @@ namespace Booyco_HMI_Utility.Geofences
         public void SetSelectedShape(GeofenceEditorShape selectedShape) {
             this.selectedShape = selectedShape;
             // clear old stuff
-            foreach(GeofenceEditorShape shape in shapes)
-            {
-                if (!shape.Equals(selectedShape))
-                {
-                    shape.SetSelected(false);
-                }
-            }
-            if (selectedShape != null)
-            {
-                selectedShape.SetSelected(true);
-            }
-            // notify of change
-            if(OnShapeSelectionChanged != null)
-            {
-                OnShapeSelectionChanged.Invoke(this.selectedShape);
-            }
+            this.Clear();
         }
 
         public void OnShapeClick(GeofenceEditorShape item, MouseEventArgs e)
@@ -149,7 +179,7 @@ namespace Booyco_HMI_Utility.Geofences
                 if(shapePoint != null)
                 {
                     GeofenceEditorShapeType shapeType = this.selectedShape.GetShapeType();
-                    if (shapeType == GeofenceEditorShapeType.Polygon)
+                    if ((shapeType == GeofenceEditorShapeType.Polygon) && (shapePoint.GetShapePointType() == EditableShapePoint.EditableShapePointType.PolygonPoint))
                     {
                         ((GeofenceEditorPolygonShape)this.selectedShape).RemovePoint(shapePoint);
                     }
@@ -179,6 +209,113 @@ namespace Booyco_HMI_Utility.Geofences
                 // refresh marker overlay
                 this.MarkerOverlay.IsVisibile = false;
                 this.MarkerOverlay.IsVisibile = true;
+            }
+        }
+
+        internal bool TrySave()
+        {
+            bool valid = true;
+            GeoFenceObject result = new GeoFenceObject(); // build result object
+            int maxTriangeCount = GlobalSharedData.GeoFenceData.geofenceTriangles.Length;
+            int maxCircleCount = GlobalSharedData.GeoFenceData.geofenceCircles.Length;
+            int maxBlockCount = GlobalSharedData.GeoFenceData.geofenceBlocks.Length;
+            int triangeCount = 0;
+            int circleCount = 0;
+            int blockCount = 0;
+            // check all valid
+            foreach (GeofenceEditorShape shape in shapes)
+            {
+                if (!shape.IsValid())
+                {
+                    ShowError(GeofenceEditorNotificationSeverity.Error, "Not all shapes are valid, correct red shapes.");
+                    valid = false;
+                }
+                else
+                {
+                    // count
+                    if (valid)
+                    {
+                        switch (shape.GetShapeType())
+                        {
+                            case GeofenceEditorShapeType.Circle: { circleCount++; break; }
+                            case GeofenceEditorShapeType.Polygon: { triangeCount += ((GeofenceEditorPolygonShape)shape).CountTriangles(); break; }
+                            case GeofenceEditorShapeType.Rectangle: { blockCount++; break; }
+                            default: { valid = false; ShowError(GeofenceEditorNotificationSeverity.Error, "System error TrySave unknown type"); break; }
+                        }
+                    }
+                }
+            }
+            // check counts
+            if (valid && (circleCount > maxCircleCount))
+            {
+                valid = false;
+                ShowError(GeofenceEditorNotificationSeverity.Error, "This device only allows " + maxCircleCount + " circles, found " + circleCount);
+            }
+            if (valid && (triangeCount > maxTriangeCount))
+            {
+                valid = false;
+                ShowError(GeofenceEditorNotificationSeverity.Error, "This device only allows " + maxTriangeCount + " polygon triangles, found "+triangeCount);
+            }
+            if (valid && (blockCount > maxBlockCount))
+            {
+                valid = false;
+                ShowError(GeofenceEditorNotificationSeverity.Error, "This device only allows " + maxBlockCount + " blocks, found " + blockCount);
+            }
+            // if still valid save
+            int circleIndex = 0;
+            int triangleIndex = 0;
+            int blockIndex = 0;
+            foreach (GeofenceEditorShape shape in shapes)
+            {
+                switch (shape.GetShapeType())
+                {
+                    case GeofenceEditorShapeType.Circle: { 
+                            result.geofenceCircles[circleIndex] = ((GeofenceEditorCircleShape)shape).ToGeoFenceCircle(); 
+                            circleIndex++; 
+                            break; 
+                    }
+                    case GeofenceEditorShapeType.Polygon: {
+                            GeofenceEditorPolygonShape polygon = ((GeofenceEditorPolygonShape)shape);
+                            List<LatLonTriangle> triangles = polygon.ToGeoFenceTriangles();
+                            foreach (LatLonTriangle triangle in triangles) {
+                                result.geofenceTriangles[triangleIndex] = triangle.ToGeoFenceTriangle(polygon);
+                                triangleIndex++;
+                            }
+                            break; 
+                    }
+                    case GeofenceEditorShapeType.Rectangle: { 
+                            result.geofenceBlocks[blockIndex] = ((GeofenceEditorBlockShape)shape).ToGeoFenceBlock(); 
+                            blockIndex++; 
+                            break; 
+                    }
+                    default: { valid = false; ShowError(GeofenceEditorNotificationSeverity.Error, "System error TrySave unknown type"); break; }
+                }
+            }
+            // pad arrays with empty objects
+            while (circleIndex < maxCircleCount - 1)
+            {
+                result.geofenceCircles[circleIndex] = GeofenceCircle.GetEmpty();
+                circleIndex++;
+            }
+            while (triangleIndex < maxCircleCount - 1)
+            {
+                result.geofenceTriangles[triangleIndex] = GeofenceTriangle.GetEmpty();
+                triangleIndex++;
+            }
+            while (blockIndex < maxCircleCount - 1)
+            {
+                result.geofenceBlocks[blockIndex] = GeofenceBlock.GetEmpty();
+                blockIndex++;
+            }
+
+            return valid;
+        }
+
+        internal void SetSelectedShapeAreaType(GeoFenceAreaType areaType)
+        {
+            if (this.selectedShape != null)
+            {
+                this.selectedShape.SetAreaType(areaType);
             }
         }
     }

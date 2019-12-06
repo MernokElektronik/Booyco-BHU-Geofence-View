@@ -16,12 +16,14 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
         private EditableShapePoint shapeCenterPoint;
         private EditableShapePoint shapeRadiusPoint;
 
-        public GeofenceEditorCircleShape(GMapControl map, LatLonCoord center, Double radiusMeters) : base(map, GeofenceEditorShapeType.Circle)
+        public GeofenceEditorCircleShape(GMapControl map, LatLonCoord center, Double radiusMeters, GeoFenceAreaType areaType, int bearing) : base(map, GeofenceEditorShapeType.Circle)
         {
             // set vars
             this.center = center;
             this.radiusMeters = radiusMeters;
             this.polygonOverlay = this.map.Overlays.Where((o) => { return o.Id == "polygons"; }).FirstOrDefault();
+            this.SetBearing(bearing);
+            this.SetAreaType(areaType);
             // build
             this.editableShapePoints = this.BuildEditableShapePoints();
             RedrawPolygon();
@@ -125,7 +127,11 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
                 mapPolygonObject.IsVisible = true;
             }
             // set colour
-            if (this.selected)
+            if(!this.IsValid())
+            {
+                mapPolygonObject.Stroke = new Pen(Brushes.Red, 5);
+            }
+            else if (this.selected)
             {
                 mapPolygonObject.Stroke = new Pen(Brushes.Blue, 5);
             }
@@ -133,6 +139,25 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             {
                 mapPolygonObject.Stroke = new Pen(Brushes.Gray, 5);
             }
+        }
+
+        public override bool IsValid()
+        {
+            return (this.radiusMeters > 0);
+        }
+
+        internal GeofenceCircle ToGeoFenceCircle()
+        {
+            GeofenceCircle item = new GeofenceCircle
+            {
+                Latitude = LatLonCoord.LatLonPartToUInt32(this.center.Latitude),
+                Longitude = LatLonCoord.LatLonPartToUInt32(this.center.Longitude),
+                Heading = (UInt32)this.bearing,
+                Radius = (UInt32)Math.Round(this.radiusMeters),
+                Type = (UInt32)this.areaType
+            };
+            if (item.Radius < 1) { item.Radius = 1; }
+            return item;
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Booyco_HMI_Utility.Geofences
                 _scale = value;
 
                 Size = new Size((int)(50 * _scale), (int)(50 * _scale));
-                Offset = new Point(-Size.Width / 2, (int)(-Size.Height / 1.4));
+                Offset = new Point(-Size.Width / 2, (int)(-Size.Height / 2));
             }
         }
 

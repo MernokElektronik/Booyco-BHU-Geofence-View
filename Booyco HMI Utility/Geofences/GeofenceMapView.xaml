@@ -41,21 +41,31 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="5"/>
             </Grid.ColumnDefinitions>
-            <DockPanel x:Name="MapPanel" LastChildFill="true" Loaded="MapPanel_Loaded" Grid.ColumnSpan="5" Margin="10" Grid.RowSpan="8" Grid.Column="1" Grid.Row="1">
+            <DockPanel x:Name="MapPanel" LastChildFill="true" Loaded="MapPanel_Loaded" Grid.ColumnSpan="5" Margin="10,10,10,98" Grid.RowSpan="8" Grid.Column="1" Grid.Row="1">
                 <WindowsFormsHost Name="WindowsFormHost" DockPanel.Dock="Top" 
                                           Background="Yellow"         
                                           HorizontalAlignment="Stretch"             
                                           VerticalAlignment="Stretch" Margin="0,0,0,0" >
                 </WindowsFormsHost>
             </DockPanel>
-            <Button Name="AddPolygonButton" Grid.Column="6" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="2" VerticalAlignment="Top" Content="Add Polygon" Click="AddPolygonButton_Click" Grid.ColumnSpan="2" Width="320" Height="79"/>
-            <Button Content="Back" Click="ButtonBack_Click" Grid.Column="6" Grid.Row="8" Margin="10,0,10,10" VerticalAlignment="Bottom" RenderTransformOrigin="1.967,4.088" Grid.ColumnSpan="2" Height="78" />
-            <Button x:Name="RemovePointButton" Grid.Column="6" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="5" VerticalAlignment="Top" Content="Delete Point" Click="RemovePointButton_Click" Grid.ColumnSpan="2" Width="320" Height="79" />
-            <Button x:Name="AddCircleButton" Grid.Column="6" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Content="Add Circle" Click="AddCircleButton_Click" Grid.ColumnSpan="2" Width="320" Height="79" />
-            <Button x:Name="AddBlockButton" Grid.Column="6" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="3" VerticalAlignment="Top" Content="Add Block"  Click="AddBlockButton_Click" Grid.ColumnSpan="2" Width="320" Height="79" />
-            <Button x:Name="RemoveShapeButton" Grid.Column="6" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="4" VerticalAlignment="Top" Content="Delete Shape" Grid.ColumnSpan="2" Width="320" Height="79" Click="RemoveShapeButton_Click" />
-            <Slider x:Name="SliderBearing" Grid.Column="6" HorizontalAlignment="Left" Margin="10,56,0,0" Grid.Row="6" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="33" Width="320" TickFrequency="10" TickPlacement="TopLeft" Maximum="360" Foreground="#FF5F5F5F" ValueChanged="SliderBearing_ValueChanged"/>
-            <Label x:Name="LabelBearing" Content="Bearing" Grid.Column="6" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="6" VerticalAlignment="Top" Height="41" Width="320" Grid.ColumnSpan="2" Foreground="#FF3E3E3E"/>
+            <Button Name="AddPolygonButton" Grid.Column="6" Margin="10,10,10,10" Grid.Row="2" Content="Add Polygon" Click="AddPolygonButton_Click" Grid.ColumnSpan="2" />
+            <Button x:Name="RemovePointButton" Grid.Column="6" Margin="10,10,10,10" Grid.Row="5" Content="Delete Point" Click="RemovePointButton_Click" Grid.ColumnSpan="2" />
+            <Button x:Name="AddCircleButton" Grid.Column="6" Margin="10,10,10,10" Grid.Row="1" Content="Add Circle" Click="AddCircleButton_Click" Grid.ColumnSpan="2" />
+            <Button x:Name="AddBlockButton" Grid.Column="6" Margin="10,10,10,10" Grid.Row="3" Content="Add Block"  Click="AddBlockButton_Click" Grid.ColumnSpan="2" />
+            <Button x:Name="RemoveShapeButton" Grid.Column="6" Margin="10,10,10,10" Grid.Row="4" Content="Delete Shape" Grid.ColumnSpan="2" Click="RemoveShapeButton_Click" />
+            <Slider x:Name="SliderBearing" Grid.Column="6" HorizontalAlignment="Left" Margin="10,62,0,0" Grid.Row="6" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="33" Width="320" TickFrequency="10" TickPlacement="TopLeft" Maximum="360" Foreground="#FF5F5F5F" ValueChanged="SliderBearing_ValueChanged"/>
+            <Label x:Name="LabelBearing" Content="Bearing" Grid.Column="6" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="6" VerticalAlignment="Top" Height="41" Width="320" Grid.ColumnSpan="2" Foreground="#FF3E3E3E"/>
+            <Button Content="Save" Grid.Column="7" Grid.Row="8" Margin="10,10,10,10" RenderTransformOrigin="1.967,4.088" Click="Button_Click" />
+            <Button Content="Back" Click="ButtonBack_Click" Grid.Column="6" Grid.Row="8" Margin="10,10,10,10" RenderTransformOrigin="1.967,4.088" />
+            <TextBlock x:Name="LabelNotification" Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,10,10" Grid.Row="8" Foreground="#FF575757" Grid.ColumnSpan="5" Width="830" TextWrapping="WrapWithOverflow"/>
+            <ComboBox x:Name="DropdownType" Grid.ColumnSpan="2" Grid.Column="6" Margin="10,10,10,10" Grid.Row="7" Background="#FF8C0909" Foreground="#FF4D4D4D" FontFamily="Arial Black" FontSize="30" FontWeight="Bold" SelectedIndex="0" ScrollViewer.CanContentScroll="False" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderThickness="0" Focusable="False" SelectionChanged="DropdownType_SelectionChanged">
+                <ComboBoxItem Content="None" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Tag="0" />
+                <ComboBoxItem Content="Low Speed" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"  Tag="1" />
+                <ComboBoxItem Content="Medium Speed" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Tag="2" />
+                <ComboBoxItem Content="High Speed" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Tag="3" />
+                <ComboBoxItem Content="No Go Zone" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Tag="6" />
+                <ComboBoxItem Content="Geo fence active" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Tag="255" />
+            </ComboBox>
         </Grid>
     </Grid>
 </UserControl>

@@ -82,7 +82,7 @@ namespace Booyco_HMI_Utility
         public static DateTime StartDateTimeDatalog = new DateTime();
         public static DateTime EndDateTimeDatalog = new DateTime();
 
-        public static GeoFenceObject geoFenceData = null; 
+        public static GeoFenceObject GeoFenceData = null; 
     }
 
     public class GeneralFunctions

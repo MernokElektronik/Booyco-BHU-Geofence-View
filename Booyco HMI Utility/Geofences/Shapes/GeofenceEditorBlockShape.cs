@@ -17,13 +17,15 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
         private EditableShapePoint shapeCenterPoint;
         private EditableShapePoint shapeCornerPoint;
 
-        public GeofenceEditorBlockShape(GMapControl map, LatLonCoord center, Double blockWidth, Double blockHeight) : base(map, GeofenceEditorShapeType.Rectangle)
+        public GeofenceEditorBlockShape(GMapControl map, LatLonCoord center, Double blockWidth, Double blockHeight, int bearing, GeoFenceAreaType areaType) : base(map, GeofenceEditorShapeType.Rectangle)
         {
             // set vars
             this.center = center;
             this.blockWidth = blockWidth;
             this.blockHeight = blockHeight;
             this.polygonOverlay = this.map.Overlays.Where((o) => { return o.Id == "polygons"; }).FirstOrDefault();
+            this.SetBearing(bearing);
+            this.SetAreaType(areaType);
             // build
             this.editableShapePoints = this.BuildEditableShapePoints();
             RedrawPolygon();
@@ -111,7 +113,11 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
                 mapPolygonObject.IsVisible = true;
             }
             // set colour
-            if (this.selected)
+            if (!IsValid())
+            {
+                mapPolygonObject.Stroke = new Pen(Brushes.Red, 5);
+            } 
+            else if (this.selected)
             {
                 mapPolygonObject.Stroke = new Pen(Brushes.Blue, 5);
             }
@@ -119,6 +125,29 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             {
                 mapPolygonObject.Stroke = new Pen(Brushes.Gray, 5);
             }
+        }
+
+        public override bool IsValid()
+        {
+            return ((this.blockWidth > 0) && (this.blockHeight > 0));
+        }
+
+        internal GeofenceBlock ToGeoFenceBlock()
+        {
+            GeofenceBlock item = new GeofenceBlock
+            {
+                Latitude = LatLonCoord.LatLonPartToUInt32(this.center.Latitude),
+                Longitude = LatLonCoord.LatLonPartToUInt32(this.center.Longitude),
+                Length = (UInt32)Math.Round(this.blockHeight),
+                Width = (UInt32)Math.Round(this.blockWidth),
+                Heading = (UInt32)this.bearing,
+                Type = (UInt32)this.areaType
+            };
+            if (item.Length < 1) { item.Length = 1; }
+            if (item.Width < 1) { item.Width = 1; }
+            if (item.Length > 255) { item.Length = 255; }
+            if (item.Width > 255) { item.Width = 255; }
+            return item;
         }
     }
 }

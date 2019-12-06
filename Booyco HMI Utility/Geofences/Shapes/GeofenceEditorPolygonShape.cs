@@ -10,16 +10,37 @@ using System.Windows.Forms;
 
 namespace Booyco_HMI_Utility.Geofences.Shapes
 {
+    public struct Line
+    {
+        public double PointALatitude;
+        public double PointALongitude;
+        public double PointBLatitude;
+        public double PointBLongitude;
+
+        public static Line FromPoints(LatLonCoord PointA, LatLonCoord PointB)
+        {
+            Line line = new Line
+            {
+                PointALatitude = PointA.GetLatitude(),
+                PointALongitude = PointA.GetLongitude(),
+                PointBLatitude = PointB.GetLatitude(),
+                PointBLongitude = PointB.GetLongitude()
+            };            
+            return line;
+        }
+    }
     public class GeofenceEditorPolygonShape : GeofenceEditorShape
     {
         public List<LatLonCoord> polygonCoordinates;
         private EditableShapePoint centerPoint = null;
 
-        public GeofenceEditorPolygonShape(GMapControl map, List<LatLonCoord> polygonCoordinates) : base(map, GeofenceEditorShapeType.Polygon)
+        public GeofenceEditorPolygonShape(GMapControl map, List<LatLonCoord> polygonCoordinates, int bearing, GeoFenceAreaType areaType) : base(map, GeofenceEditorShapeType.Polygon)
         {
             // set vars
             this.polygonCoordinates = polygonCoordinates;
             this.polygonOverlay = this.map.Overlays.Where((o) => { return o.Id == "polygons"; }).FirstOrDefault();
+            this.SetBearing(bearing);
+            this.SetAreaType(areaType);
             // build
             this.editableShapePoints = this.BuildEditableShapePoints();
             RedrawPolygon();
@@ -150,7 +171,7 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
                     }
                     else
                     {
-                        throw new Exception("Can not remove a point when there are only 3 left");
+                        GeoFenceEditor.instance.ShowError(GeofenceEditorNotificationSeverity.Error, "Can not remove a point when there are only 3 left");
                     }
                 }
             }
@@ -199,6 +220,18 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             }
         }
 
+        internal List<LatLonTriangle> ToGeoFenceTriangles()
+        {
+            return LatLonCoord.Triangulator.Triangulate(polygonCoordinates.ToArray(), WindingOrder.Clockwise);
+        }
+
+        internal int CountTriangles()
+        {
+            LatLonCoord[] coordinates = polygonCoordinates.ToArray();
+            List<LatLonTriangle> triangles = LatLonCoord.Triangulator.Triangulate(coordinates, WindingOrder.Clockwise);
+            return triangles.Count;
+        }
+
         private EditableShapePoint GetShapePointbyTypeAndSourceIndex(EditableShapePoint.EditableShapePointType type, int sourceIndex)
         {
             foreach (EditableShapePoint p in editableShapePoints)
@@ -243,7 +276,11 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
                 mapPolygonObject.IsVisible = true;
             }
             // set colour
-            if (this.selected)
+            if (!this.IsValid())
+            {
+                mapPolygonObject.Stroke = new Pen(Brushes.Red, 5);
+            } 
+            else if (this.selected)
             {
                 mapPolygonObject.Stroke = new Pen(Brushes.Blue, 5);
             }
@@ -251,6 +288,75 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             {
                 mapPolygonObject.Stroke = new Pen(Brushes.Gray, 5);
             }
+        }
+
+        public bool PolygonSelfIntersects()
+        {
+            int l = polygonCoordinates.Count;
+            Line a, b; // line a and b
+            HashSet<string> checkedDict = new HashSet<string>();
+            string checkKey = "";
+            for (var checkingIndex = 0; checkingIndex < l; checkingIndex++)
+            {
+                var checkingIndexn = (checkingIndex + 1) % l;
+                a = Line.FromPoints(polygonCoordinates[checkingIndex], polygonCoordinates[checkingIndexn]);
+                for (var i = 0; i < l; i++)
+                {
+                    var inext = (i + 1) % l;
+                    if ((i != checkingIndex) && (i != checkingIndexn) && (inext != checkingIndex) && (inext != checkingIndexn))
+                    { // make it so that this check is never done for touching lines or its own line
+                        if (checkingIndex > i) { checkKey = i + "_" + checkingIndex; } else { checkKey = checkingIndex + "_" + i; }
+                        if (!checkedDict.Contains(checkKey))
+                        { // see if we already compared these 2 segments
+                            checkedDict.Add(checkKey);
+                            b = Line.FromPoints(polygonCoordinates[i], polygonCoordinates[inext]);
+                            if (this.LinesIntersect(a.PointALatitude, a.PointALongitude, a.PointBLatitude, a.PointBLongitude, b.PointALatitude, b.PointALongitude, b.PointBLatitude, b.PointBLongitude))
+                            {
+                                return true; // found some undue intersection
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// returns true iff the line from (a,b)->(c,d) intersects with (p,q)->(r,s)
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        /// <param name="d"></param>
+        /// <param name="p"></param>
+        /// <param name="q"></param>
+        /// <param name="r"></param>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public bool LinesIntersect(double a, double b, double c, double d, double p, double q, double r, double s)
+        { 
+            double det, gamma, lambda;
+            det = (c - a) * (s - q) - (r - p) * (d - b);
+            if (det == 0)
+            {
+                return false;
+            }
+            else
+            {
+                lambda = ((s - q) * (r - a) + (p - r) * (s - b)) / det;
+                gamma = ((b - d) * (r - a) + (c - a) * (s - b)) / det;
+                return (0 < lambda && lambda < 1) && (0 < gamma && gamma < 1);
+            }
+        }
+
+        public override bool IsValid()
+        {
+            bool result = true;
+            if (PolygonSelfIntersects())
+            {
+                result = false;
+            }
+            return result;
         }
     }
 }
