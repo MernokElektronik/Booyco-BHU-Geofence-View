@@ -110,8 +110,8 @@ namespace Booyco_HMI_Utility
     public class GeoFenceObject
     {
         public GeofenceCircle[] geofenceCircles = new GeofenceCircle[30]; // 30 Circles
-        public GeofenceTriangle[] geofenceTriangles = new GeofenceTriangle[30]; // 20 Triangles
-        public GeofenceBlock[] geofenceBlocks = new GeofenceBlock[30]; // 1 Block
+        public GeofenceTriangle[] geofenceTriangles = new GeofenceTriangle[20]; // 20 Triangles
+        public GeofenceBlock[] geofenceBlocks = new GeofenceBlock[1]; // 1 Block
         public double StartLatitude;
         public double StartLongitude;
 
@@ -316,12 +316,7 @@ namespace Booyco_HMI_Utility
 
         internal List<LatLonCoord> ToPoints()
         {
-            List<LatLonCoord> points = new List<LatLonCoord>();
-            foreach (LatLonLineSegment line in cpLines)
-            {
-                points.Add(new LatLonCoord(line.A.Position.Latitude, line.A.Position.Longitude));
-            }
-            return points;
+            return LatLonCoord.Triangulator.CreatePolyFromLines(cpLines);
         }
     }
 
@@ -512,7 +507,7 @@ namespace Booyco_HMI_Utility
         {
             double t;
             t = this.A.Position.Longitude; this.A.Position.Longitude = this.B.Position.Longitude;  this.B.Position.Longitude = t;
-            t = this.A.Position.Latitude; this.A.Position.Latitude = this.B.Position.Longitude; this.B.Position.Latitude = t;
+            t = this.A.Position.Latitude; this.A.Position.Latitude = this.B.Position.Latitude; this.B.Position.Latitude = t;
         }
 
         public double? IntersectsWithRay(LatLonCoord origin, LatLonCoord direction)
@@ -570,12 +565,8 @@ namespace Booyco_HMI_Utility
 
         public static void MakePoints(ref List<LatLonCoord> pl, int pCount)
         {
-            int n;
             pl.Clear();
-            for(int i=0; i<pCount; i++)
-            {
-                pl.Add(new LatLonCoord(0,0));
-            }
+            for (int i = 0; i < pCount; i++) { pl.Add(new LatLonCoord(0, 0)); }
         }
 
         internal LatLonLineSegment Clone()
@@ -594,12 +585,12 @@ namespace Booyco_HMI_Utility
 
         public static UInt32 LatLonPartToUInt32(double LatOrLon)
         {
-            return (UInt32)Math.Round(LatOrLon * 10e7); // multiply by 10e7, round, cast
+            return (UInt32)((Int32)Math.Round(LatOrLon * 10e6)); // multiply by 10e6, round, cast
         }
 
         public static double LatLonPartFromUInt32(UInt32 LatOrLon)
         {
-            return LatOrLon / 10e7; // divide by 10e7
+            return (((Int32)LatOrLon) / 10e6); // divide by 10e6
         }
 
         public LatLonCoord(double Latitude, double Longitude)
@@ -783,6 +774,62 @@ namespace Booyco_HMI_Utility
                 return tlns;
             }
 
+            public static List<LatLonCoord> CreatePolyFromLines(List<LatLonLineSegment> plns)
+            {
+                List<LatLonCoord> result = new List<LatLonCoord>();
+                int cpL, cpp, cpn, cpi, cpf;
+                double cpLat = 0, cpLon = 0;
+                cpL = plns.Count;
+                if (cpL > 0) {
+                    cpn = 0;
+                    cpf = -1;
+                    while (cpn < cpL) // Walk the lines and find the Leftest (or Toppest of the Lefts) line to start to build from...
+                    {
+                        if (cpf < 0) { 
+                            cpLon = plns[cpn].A.Position.Longitude; cpLat = plns[cpn].A.Position.Latitude; cpf = cpn; 
+                        } // Found a line linking normally...  
+                        else if (plns[cpn].A.Position.Longitude < cpLon){ 
+                            cpLon = plns[cpn].A.Position.Longitude; cpLat = plns[cpn].A.Position.Latitude; cpf = cpn; 
+                        } // Found a line linking to the wrong end
+                        else if ((plns[cpn].A.Position.Longitude == cpLon) && (plns[cpn].A.Position.Latitude < cpLat)){ 
+                            cpLat = plns[cpn].A.Position.Latitude; cpf = cpn; 
+                        }
+                        cpn++;
+                    }
+                    // MakePoints(result, cpL + 1);          // There are exactly n+1 points to any n connected lines.
+                    cpp = 0;
+                    result.Add(new LatLonCoord(cpLat, cpLon)); // Start the first polygon point on the Lat1-lon1 of Line 1.
+                    while ((cpf >= 0) && (cpp < cpL))
+                    { // Every time a new line (or the first line) is found (cpf>=0),    
+                        cpi = cpf;                               // Set cpi at the found line index,
+                        cpp++;                               // increase the polypoint index cpp,
+                        cpLat = plns[cpi].B.Position.Latitude;  // Pin point coordinates to the Lat2-Lon2 of the line,
+                        cpLon = plns[cpi].B.Position.Longitude;
+                        result.Add(new LatLonCoord(cpLat, cpLon));  // set the new poly point cpp to the pinned coordinates,   
+                        cpn = 0; cpf = -1;                   // Find any next line which starts exactly at the current pinned Lat2-Lon2:
+                        while (cpn < cpL)
+                        {
+                            if (cpn != cpi)
+                            {
+                                if (
+                                    (plns[cpn].A.Position.Latitude == cpLat) && (plns[cpn].A.Position.Longitude == cpLon)
+                                )
+                                {
+                                    cpf = cpn; cpn = cpL;
+                                }
+                                else if ((plns[cpn].B.Position.Latitude == cpLat) && (plns[cpn].B.Position.Longitude == cpLon))
+                                {    // Found a line linking to the wrong end,
+                                    cpf = cpn; cpn = cpL;  // Mark the line as found,
+                                    plns[cpf].swapCoordinates(); // Swap line-ending points.
+                                }
+                            }
+                            cpn++;
+                        }
+                    }
+                }
+                return result;
+            }
+
             public static List<LatLonPolygon> TrianglesToPolygons(GeofenceTriangle[] geoFenceTriangleArray)
             {
                 // convert to list
@@ -793,8 +840,8 @@ namespace Booyco_HMI_Utility
                     {
                         tls.Add(new LatLonTriangle(
                            new LatLonVertex(new LatLonCoord(LatLonPartFromUInt32(geoFenceTriangleArray[ti].LatitudePoint1), LatLonPartFromUInt32(geoFenceTriangleArray[ti].LongitudePoint1)), 0),
-                           new LatLonVertex(new LatLonCoord(LatLonPartFromUInt32(geoFenceTriangleArray[ti].LatitudePoint2), LatLonPartFromUInt32(geoFenceTriangleArray[ti].LongitudePoint2)), 0),
-                           new LatLonVertex(new LatLonCoord(LatLonPartFromUInt32(geoFenceTriangleArray[ti].LatitudePoint3), LatLonPartFromUInt32(geoFenceTriangleArray[ti].LongitudePoint3)), 0)
+                           new LatLonVertex(new LatLonCoord(LatLonPartFromUInt32(geoFenceTriangleArray[ti].LatitudePoint2), LatLonPartFromUInt32(geoFenceTriangleArray[ti].LongitudePoint2)), 1),
+                           new LatLonVertex(new LatLonCoord(LatLonPartFromUInt32(geoFenceTriangleArray[ti].LatitudePoint3), LatLonPartFromUInt32(geoFenceTriangleArray[ti].LongitudePoint3)), 2)
                         ));
                     }
                 }

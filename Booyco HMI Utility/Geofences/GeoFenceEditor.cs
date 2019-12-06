@@ -80,7 +80,7 @@ namespace Booyco_HMI_Utility.Geofences
             List<LatLonPolygon> polygons = LatLonCoord.Triangulator.TrianglesToPolygons(editableGeoFenceData.geofenceTriangles);
             foreach (LatLonPolygon polygon in polygons)
             {
-                AddShape(new GeofenceEditorPolygonShape(this.map, polygon.ToPoints(), polygon.Bearing, polygon.areaType));
+               AddShape(new GeofenceEditorPolygonShape(this.map, polygon.ToPoints(), polygon.Bearing, polygon.areaType));
             }
         }
 
@@ -317,12 +317,12 @@ namespace Booyco_HMI_Utility.Geofences
                 result.geofenceCircles[circleIndex] = GeofenceCircle.GetEmpty();
                 circleIndex++;
             }
-            while (triangleIndex < maxCircleCount - 1)
+            while (triangleIndex < maxTriangeCount - 1)
             {
                 result.geofenceTriangles[triangleIndex] = GeofenceTriangle.GetEmpty();
                 triangleIndex++;
             }
-            while (blockIndex < maxCircleCount - 1)
+            while (blockIndex < maxBlockCount - 1)
             {
                 result.geofenceBlocks[blockIndex] = GeofenceBlock.GetEmpty();
                 blockIndex++;
