@@ -32,6 +32,9 @@ namespace Booyco_HMI_Utility.Geofences
         public event GeofenceEditorShapeClick OnShapeClick;
         protected int bearing = 0;
 
+        private static Random random;
+        private static object syncObj = new object();
+
         public GeofenceEditorShape(GMapControl map, GeofenceEditorShapeType type)
         {
             this.type = type;
@@ -39,8 +42,12 @@ namespace Booyco_HMI_Utility.Geofences
             // generate random id
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             int length = 12;
-            Random random = new Random();
-            this.Id = new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
+            lock (syncObj) // static random is not thread safe and needs to be locked
+            {
+                if (random == null)
+                    random = new Random();
+                this.Id = new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
+            }
         }
 
         internal void OnMouseMove(bool mouseDown, GMapMarker markerUnderMouse, object sender, MouseEventArgs e)
@@ -166,17 +173,16 @@ namespace Booyco_HMI_Utility.Geofences
                     point.Clear(overlay);
                 }
             }
-        }
-
-        internal void Delete()
-        {
-            Clear();
-            mapPolygonObject.Dispose();
+            if(mapPolygonObject != null){
+                mapPolygonObject.Dispose();
+            }
         }
 
         public abstract List<EditableShapePoint> BuildEditableShapePoints();
 
         public abstract bool IsValid();
+
+        public abstract void OnPolygonClick(GMapPolygon item, MouseEventArgs e);
 
         internal void SetAreaType(GeoFenceAreaType areaType)
         {

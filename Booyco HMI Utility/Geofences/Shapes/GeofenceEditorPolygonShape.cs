@@ -44,8 +44,6 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             // build
             this.editableShapePoints = this.BuildEditableShapePoints();
             RedrawPolygon();
-            // events
-            this.map.OnPolygonClick += OnPolygonClick;
         }
 
         public override void SetSelected(bool selected)
@@ -54,7 +52,7 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             RedrawPolygon();
         }
 
-        private void OnPolygonClick(GMapPolygon item, MouseEventArgs e)
+        public override void OnPolygonClick(GMapPolygon item, MouseEventArgs e)
         {
             // check if this object is clicked
             if(item.Name == this.Id + "Polygon")

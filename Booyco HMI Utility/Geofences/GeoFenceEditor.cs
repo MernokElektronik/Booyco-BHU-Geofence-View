@@ -46,6 +46,7 @@ namespace Booyco_HMI_Utility.Geofences
             this.map.MouseMove += OnMouseMove;
             this.map.MouseDown += OnMouseDown;
             this.map.MouseUp += OnMouseUp;
+            this.map.OnPolygonClick += OnPolygonClick;
         }
 
         void OnMouseMove(object sender, MouseEventArgs e)
@@ -192,6 +193,14 @@ namespace Booyco_HMI_Utility.Geofences
             geofenceEditorShape.OnShapeClick += OnShapeClick;
         }
 
+        private void OnPolygonClick(GMapPolygon item, MouseEventArgs e)
+        {
+            foreach(GeofenceEditorShape shape in shapes)
+            {
+                shape.OnPolygonClick(item, e);
+            }
+        }
+
         internal void DeletedSelectedPoint()
         {
             if(this.selectedShape != null)
@@ -216,7 +225,7 @@ namespace Booyco_HMI_Utility.Geofences
         {
             if(this.selectedShape != null)
             {
-                this.selectedShape.Delete();
+                this.selectedShape.Clear();
                 this.shapes.Remove(this.selectedShape);
                 this.SetSelectedShape(null);
             }
