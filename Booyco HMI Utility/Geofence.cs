@@ -207,6 +207,16 @@ namespace Booyco_HMI_Utility
             return _Result;
         }
 
+        // n+1 because b/a tends to 1 with n leading digits
+        public static double DoubleEpsilon { get; } = Math.Pow(10, -(12 + 1));
+
+        public static bool DoubleEqual(double a, double b)
+        {
+            if (Math.Abs(a) <= double.Epsilon || Math.Abs(b) <= double.Epsilon)
+                return Math.Abs(a - b) <= double.Epsilon;
+            return Math.Abs(1.0 - a / b) <= DoubleEpsilon;
+        }
+
     }
 
     class IndexableCyclicalLinkedList<T> : LinkedList<T>
@@ -460,7 +470,7 @@ namespace Booyco_HMI_Utility
 
         public bool Equals(LatLonVertex obj)
         {
-            return obj.Position.Equals(Position) && obj.Index == Index;
+            return (MathHelper.DoubleEqual(Position.Longitude, obj.Position.Longitude)) && (MathHelper.DoubleEqual(Position.Latitude, obj.Position.Latitude)) && (obj.Index == Index);
         }
 
         public override int GetHashCode()
@@ -488,26 +498,28 @@ namespace Booyco_HMI_Utility
             B = b;
         }
 
-        public void orientateLeftUp() {
+        public LatLonLineSegment orientateLeftUp() {
             bool bSwap = false;
             if (this.A.Position.Longitude > this.B.Position.Longitude) {
                 bSwap = true;
             }
-            else if ((this.A.Position.Longitude == this.B.Position.Longitude) && (this.A.Position.Latitude > this.B.Position.Latitude))
+            else if ((MathHelper.DoubleEqual(this.A.Position.Longitude, this.B.Position.Longitude)) && (this.A.Position.Latitude > this.B.Position.Latitude))
             {
                 bSwap = true;
             }
             if (bSwap)
             {
-                this.swapCoordinates();
+                return this.swapCoordinates();
             }
+            return this;
         }
 
-        public void swapCoordinates()
+        public LatLonLineSegment swapCoordinates()
         {
             double t;
             t = this.A.Position.Longitude; this.A.Position.Longitude = this.B.Position.Longitude;  this.B.Position.Longitude = t;
             t = this.A.Position.Latitude; this.A.Position.Latitude = this.B.Position.Latitude; this.B.Position.Latitude = t;
+            return this;
         }
 
         public double? IntersectsWithRay(LatLonCoord origin, LatLonCoord direction)
@@ -641,7 +653,7 @@ namespace Booyco_HMI_Utility
 
         public static double Distance(LatLonCoord coord1, LatLonCoord coord2)
         {
-            if ((coord1.Latitude == coord2.Latitude) && (coord1.Longitude == coord2.Longitude))
+            if (MathHelper.DoubleEqual(coord1.Latitude, coord2.Latitude) && MathHelper.DoubleEqual(coord1.Longitude, coord2.Longitude))
             {
                 return 0;
             }
@@ -695,7 +707,7 @@ namespace Booyco_HMI_Utility
             public static LatLonLineSegment SideToLine(List<LatLonTriangle> tls, int triangleIdx, int SidePoint1, int Sidepoint2)
             {
                 LatLonLineSegment sideLine = new LatLonLineSegment(tls[triangleIdx][SidePoint1], tls[triangleIdx][Sidepoint2]);
-                sideLine.orientateLeftUp();
+                sideLine = sideLine.orientateLeftUp();
                 return sideLine;
             }
 
@@ -708,13 +720,13 @@ namespace Booyco_HMI_Utility
                 }
             }
 
-            public static bool AddTriangleToPolyLines(ref List<LatLonLineSegment> plns, List<LatLonLineSegment> tlns)
+            public static bool AddTriangleToPolyLines(ref List<LatLonLineSegment> polyLines, List<LatLonLineSegment> triangleLines)
             {
                 int atPL, atTL, atn, ati, atf;
                 bool bHasCommonSide = false;
                 bool result = false;
-                atTL = tlns.Count;
-                atPL = plns.Count;
+                atTL = triangleLines.Count;
+                atPL = polyLines.Count;
                 int[] aCommonSides = new int[3];
                 if (atTL == 3)
                 {
@@ -726,7 +738,7 @@ namespace Booyco_HMI_Utility
                             atn = 0; // Find if there exists a line in the polygon that is the exact same as the current Triangle side (ati),
                             while (atn < atPL)
                             {
-                                if (plns[atn].Matches(tlns[ati])) { atf = atn; atn = atPL; } else { atn++; }
+                                if (polyLines[atn].Matches(triangleLines[ati])) { atf = atn; atn = atPL; } else { atn++; }
                             }
                         }
                         if (atf < 0) {       // If no such side exists yet, this side must be added to either this, or the next polygon.
@@ -737,7 +749,7 @@ namespace Booyco_HMI_Utility
                             atPL--; // when all inner lines are removed, what remains is the outer polygon).
                             aCommonSides[ati] = 1;     // Mark this Side as being common (to avoid adding it later)
                             bHasCommonSide = true;
-                            plns.RemoveAt(atf); // remove in between
+                            polyLines.RemoveAt(atf); // remove in between
                         }
                     }
                     if ((bHasCommonSide) || (atPL < 3))
@@ -750,21 +762,21 @@ namespace Booyco_HMI_Utility
                         { // Walk the lines/sides list...
                             if (aCommonSides[ati] == 0)
                             { // If this is not a common side, add it...
-                                LatLonLineSegment line = tlns[ati].Clone();
-                                plns.Add(line);
+                                LatLonLineSegment line = triangleLines[ati].Clone();
+                                polyLines.Add(line);
                             }
                         }
                     }
                 }
                 else
                 {
-                    throw new Exception("tlns not a triangle");
+                    throw new Exception("triangleLines not a triangle");
                 }
                 return result;
             }
 
             public static List<LatLonLineSegment> TriangleToLines(List<LatLonTriangle> tls, int triangleIdx)
-            {
+             {
                 List<LatLonLineSegment> tlns = new List<LatLonLineSegment>();
                 int ttlL = 3;
                 MakeLines(tlns, 3);
@@ -791,9 +803,9 @@ namespace Booyco_HMI_Utility
                         else if (plns[cpn].A.Position.Longitude < cpLon){ 
                             cpLon = plns[cpn].A.Position.Longitude; cpLat = plns[cpn].A.Position.Latitude; cpf = cpn; 
                         } // Found a line linking to the wrong end
-                        else if ((plns[cpn].A.Position.Longitude == cpLon) && (plns[cpn].A.Position.Latitude < cpLat)){ 
+                        else if ((MathHelper.DoubleEqual(plns[cpn].A.Position.Longitude, cpLon)) && (plns[cpn].A.Position.Latitude < cpLat)){ 
                             cpLat = plns[cpn].A.Position.Latitude; cpf = cpn; 
-                        }
+                        }                                                                        
                         cpn++;
                     }
                     // MakePoints(result, cpL + 1);          // There are exactly n+1 points to any n connected lines.
@@ -812,21 +824,22 @@ namespace Booyco_HMI_Utility
                             if (cpn != cpi)
                             {
                                 if (
-                                    (plns[cpn].A.Position.Latitude == cpLat) && (plns[cpn].A.Position.Longitude == cpLon)
+                                    MathHelper.DoubleEqual(plns[cpn].A.Position.Latitude, cpLat) && MathHelper.DoubleEqual(plns[cpn].A.Position.Longitude, cpLon)
                                 )
                                 {
                                     cpf = cpn; cpn = cpL;
                                 }
-                                else if ((plns[cpn].B.Position.Latitude == cpLat) && (plns[cpn].B.Position.Longitude == cpLon))
+                                else if (MathHelper.DoubleEqual(plns[cpn].B.Position.Latitude, cpLat) && MathHelper.DoubleEqual(plns[cpn].B.Position.Longitude, cpLon))
                                 {    // Found a line linking to the wrong end,
                                     cpf = cpn; cpn = cpL;  // Mark the line as found,
-                                    plns[cpf].swapCoordinates(); // Swap line-ending points.
+                                    plns[cpf] = plns[cpf].swapCoordinates(); // Swap line-ending points.
                                 }
                             }
                             cpn++;
                         }
                     }
                 }
+                result.RemoveAt(result.Count - 1);
                 return result;
             }
 
@@ -848,25 +861,31 @@ namespace Booyco_HMI_Utility
                 
                 int L = tls.Count;
                 int i = 0;
-                List<LatLonLineSegment> cpLines, ctLines;
+                List<LatLonLineSegment> polyLines, triangleLines;
                 List<LatLonPolygon> pls = new List<LatLonPolygon>();
+                int newPolyHeading = 0;
+                GeoFenceAreaType newPolyAreaType = GeoFenceAreaType.None;
 
-                cpLines = new List<LatLonLineSegment>();
+
+                polyLines = new List<LatLonLineSegment>();
                 if (L > 0)
                 {
                     for (int n = 0; n < L; n++)// Walk the Triangle List...
                     {
-                        ctLines = TriangleToLines(tls, n);
-                        if (!AddTriangleToPolyLines(ref cpLines, ctLines)) {  // If the adder return false, we should start a new Polygon...
-                            if (cpLines.Count > 0) {  // If there are any valid lines added,
-                                pls.Add(new LatLonPolygon(cpLines, (int)geoFenceTriangleArray[n].Heading, (GeoFenceAreaType)geoFenceTriangleArray[n].Type));       // Create a new Polygon from the lines and push it onto the list.
-                                cpLines.Clear();
-                                AddTriangleToPolyLines(ref cpLines, ctLines);   // Add the current triangle now to the new Polygon. (Nvm, the return value, this must be new)
+                        triangleLines = TriangleToLines(tls, n);
+                        newPolyHeading = (int)geoFenceTriangleArray[n].Heading;
+                        newPolyAreaType = (GeoFenceAreaType)geoFenceTriangleArray[n].Type;
+                        if (!AddTriangleToPolyLines(ref polyLines, triangleLines)) {  // If the adder return false, we should start a new Polygon...
+                            if (polyLines.Count > 0) {  // If there are any valid lines added,
+                                pls.Add(new LatLonPolygon(polyLines, newPolyHeading, newPolyAreaType));       // Create a new Polygon from the lines and push it onto the list.
+                                polyLines.Clear();
+                                AddTriangleToPolyLines(ref polyLines, triangleLines);   // Add the current triangle now to the new Polygon. (Nvm, the return value, this must be new)
                             }
                         }
-                        if(cpLines.Count > 0){  // If there are any valid lines still, the final Polygon must be closed off...
-                            pls.Add(new LatLonPolygon(cpLines, (int)geoFenceTriangleArray[n].Heading, (GeoFenceAreaType)geoFenceTriangleArray[n].Type)); // Create a new Polygon from the lines and push it onto the list.
-                        }
+                    }
+                    if (polyLines.Count > 0)
+                    {  // If there are any valid lines still, the final Polygon must be closed off...
+                        pls.Add(new LatLonPolygon(polyLines, newPolyHeading, newPolyAreaType)); // Create a new Polygon from the lines and push it onto the list.
                     }
                 }
                 return pls;
@@ -1159,7 +1178,7 @@ namespace Booyco_HMI_Utility
 
         internal bool Matches(LatLonCoord pointToCheck)
         {
-            return ((this.Longitude == pointToCheck.Longitude) && (this.Latitude == pointToCheck.Latitude));
+            return (MathHelper.DoubleEqual(this.Longitude, pointToCheck.Longitude) && MathHelper.DoubleEqual(this.Latitude, pointToCheck.Latitude));
         }
     }
 }
