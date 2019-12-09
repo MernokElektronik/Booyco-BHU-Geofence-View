@@ -20,7 +20,7 @@ namespace Booyco_HMI_Utility.Geofences
     public abstract class GeofenceEditorShape: IGeofenceEditorShapeInterface
     {
         public enum GeofenceEditorShapeType { Polygon, Rectangle, Circle };
-        protected string Id;
+        protected string id;
         protected GMapControl map;
         protected GeofenceEditorShapeType type;
         protected GeoFenceAreaType areaType;
@@ -29,16 +29,15 @@ namespace Booyco_HMI_Utility.Geofences
         protected bool selected = false;
         protected GMapOverlay polygonOverlay;
         protected GMapPolygon mapPolygonObject = null;
+        protected List<GMapPolygon> mapDebugPolygonObject = new List<GMapPolygon>();
         public event GeofenceEditorShapeClick OnShapeClick;
         protected int bearing = 0;
 
         private static Random random;
-        private static object syncObj = new object();
+        private static readonly object syncObj = new object();
 
         public GeofenceEditorShape(GMapControl map, GeofenceEditorShapeType type)
         {
-            this.type = type;
-            this.map = map;
             // generate random id
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             int length = 12;
@@ -46,8 +45,10 @@ namespace Booyco_HMI_Utility.Geofences
             {
                 if (random == null)
                     random = new Random();
-                this.Id = new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
+                this.id = new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
             }
+            this.type = type;
+            this.map = map;
         }
 
         internal void OnMouseMove(bool mouseDown, GMapMarker markerUnderMouse, object sender, MouseEventArgs e)
@@ -93,7 +94,6 @@ namespace Booyco_HMI_Utility.Geofences
         {
             bool oldSelected = this.selected;
             this.selected = selected;
-            Console.Out.WriteLine("Shape: SetSelected " + this.Id + " Selected: " + selected);
             foreach (EditableShapePoint point in this.editableShapePoints)
             {
                 if (oldSelected && (oldSelected == this.selected))
@@ -175,6 +175,13 @@ namespace Booyco_HMI_Utility.Geofences
             }
             if(mapPolygonObject != null){
                 mapPolygonObject.Dispose();
+            }
+            if(mapDebugPolygonObject != null)
+            {
+                foreach(GMapPolygon mapDebugPolygon in mapDebugPolygonObject)
+                {
+                    mapDebugPolygon.Dispose();
+                }
             }
         }
 

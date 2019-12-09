@@ -21,13 +21,13 @@ namespace Booyco_HMI_Utility.Geofences
         public static GeoFenceEditor instance = null; // singeton
 
         private GeofenceEditorShape selectedShape;
-        private List<GeofenceEditorShape> shapes;
-        private GMapControl map;
+        private readonly List<GeofenceEditorShape> shapes;
+        private readonly GMapControl map;
         private bool mouseDown = false;
         private GMapMarker markerUnderMouse = null;
 
-        private GMapOverlay PolygonOverlay = new GMapOverlay("polygons");
-        private GMapOverlay MarkerOverlay = new GMapOverlay("objects");
+        private readonly GMapOverlay polygonOverlay = new GMapOverlay("polygons");
+        private readonly GMapOverlay markerOverlay = new GMapOverlay("objects");
 
         public event GeofenceEditorShapeSelectionChanged OnShapeSelectionChanged;
         public event GeofenceEditorPointSelectionChanged OnShapePointSelectionChanged;
@@ -37,8 +37,8 @@ namespace Booyco_HMI_Utility.Geofences
         {
             GeoFenceEditor.instance = this; // set instance, does mean only 1 can be made
             this.map = map;
-            this.map.Overlays.Add(PolygonOverlay);
-            this.map.Overlays.Add(MarkerOverlay);
+            this.map.Overlays.Add(polygonOverlay);
+            this.map.Overlays.Add(markerOverlay);
             this.shapes = new List<GeofenceEditorShape>();
             this.map.OnMarkerClick += OnMarkerClick;
             this.map.OnMarkerEnter += OnMarkerEnter;
@@ -122,8 +122,8 @@ namespace Booyco_HMI_Utility.Geofences
                 OnShapeSelectionChanged.Invoke(this.selectedShape);
             }
             // redraw
-            if (PolygonOverlay != null) { PolygonOverlay.Clear(); }
-            if (MarkerOverlay != null) { MarkerOverlay.Clear(); }
+            if (polygonOverlay != null) { polygonOverlay.Clear(); }
+            if (markerOverlay != null) { markerOverlay.Clear(); }
         }
 
         void OnMouseDown(object sender, MouseEventArgs e)
@@ -237,8 +237,8 @@ namespace Booyco_HMI_Utility.Geofences
             {
                 this.selectedShape.SetBearing(bearing);
                 // refresh marker overlay
-                this.MarkerOverlay.IsVisibile = false;
-                this.MarkerOverlay.IsVisibile = true;
+                this.markerOverlay.IsVisibile = false;
+                this.markerOverlay.IsVisibile = true;
             }
         }
 

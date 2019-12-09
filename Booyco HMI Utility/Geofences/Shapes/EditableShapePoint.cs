@@ -15,13 +15,13 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
         public delegate void EditableShapePointClicked(EditableShapePoint item, MouseEventArgs e);
         public enum EditableShapePointType { PolygonPoint, PolygonEdgeButton, ShapeCenter, CircleRadius, RectangleCorner };
 
-        private EditableShapePointType type;
+        private readonly EditableShapePointType type;
         private LatLonCoord coordinate;
         private bool selected = false;
         private bool shapeSelected = false;
         public int sourceIndex = -1; // variable used to keep track of where in the source this point is used
 
-        private GMapMarker marker = null;
+        private readonly GMapMarker marker = null;
 
         public event EditableShapePointPositionChanged OnPositionChanged;
         public event EditableShapePointClicked OnClicked;
@@ -74,7 +74,9 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             this.CheckMarkerSelected();
         }
 
+        #pragma warning disable IDE0060 // Remove unused parameter
         internal void OnMouseMove(GMapControl map, bool mouseDown, GMapMarker markerUnderMouse, object sender, MouseEventArgs e)
+        #pragma warning restore IDE0060 // Remove unused parameter
         {
             if ( ((type == EditableShapePointType.ShapeCenter) ||  (type == EditableShapePointType.PolygonPoint) || (type == EditableShapePointType.CircleRadius) || (type == EditableShapePointType.RectangleCorner)) && (marker != null))
             {
@@ -118,7 +120,9 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             return marker;
         }
 
+        #pragma warning disable IDE0060 // Remove unused parameter
         internal void MarkerClicked(GMapMarker item, MouseEventArgs e)
+        #pragma warning restore IDE0060 // Remove unused parameter
         {
             if(OnClicked != null)
             {

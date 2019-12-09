@@ -33,6 +33,7 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
     {
         public List<LatLonCoord> polygonCoordinates;
         private EditableShapePoint centerPoint = null;
+        private bool debugTriangles = false;
 
         public GeofenceEditorPolygonShape(GMapControl map, List<LatLonCoord> polygonCoordinates, int bearing, GeoFenceAreaType areaType) : base(map, GeofenceEditorShapeType.Polygon)
         {
@@ -55,10 +56,14 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
         public override void OnPolygonClick(GMapPolygon item, MouseEventArgs e)
         {
             // check if this object is clicked
-            if(item.Name == this.Id + "Polygon")
+            if(item.Name == this.id + "Polygon")
             {
                 this.InvokeOnShapeClick(e);
-                Console.Out.WriteLine("OnPolygonClick " + this.Id + " Polygon");
+                if(e.Button == MouseButtons.Right)
+                {
+                    debugTriangles = (!debugTriangles);
+                    RedrawPolygon();
+                }
             }
         }
 
@@ -98,8 +103,10 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             for (var i = 0; i < l; i++)
             {
                 LatLonCoord vertextCoord = polygonCoordinates[i];
-                EditableShapePoint vertextPoint = new EditableShapePoint(EditableShapePoint.EditableShapePointType.PolygonPoint, vertextCoord, overlay);
-                vertextPoint.sourceIndex = i;
+                EditableShapePoint vertextPoint = new EditableShapePoint(EditableShapePoint.EditableShapePointType.PolygonPoint, vertextCoord, overlay)
+                {
+                    sourceIndex = i
+                };
                 vertextPoint.OnPositionChanged += OnVertexPositionChanged;
                 result.Add(vertextPoint);
             }
@@ -262,14 +269,17 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             // set maps object, new or existing
             if (mapPolygonObject == null) 
             {
-                mapPolygonObject = new GMapPolygon(points, this.Id + "Polygon");
-                mapPolygonObject.IsHitTestVisible = true;
+                mapPolygonObject = new GMapPolygon(points, this.id + "Polygon")
+                {
+                    IsHitTestVisible = true
+                };
                 polygonOverlay.Polygons.Add(mapPolygonObject);
             }
             else
             {
                 mapPolygonObject.Points.Clear();
                 mapPolygonObject.Points.AddRange(points);
+                mapPolygonObject.Name = this.id + "Polygon";
                 mapPolygonObject.IsVisible = false;
                 mapPolygonObject.IsVisible = true;
             }
@@ -286,6 +296,43 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             {
                 mapPolygonObject.Stroke = new Pen(Brushes.Gray, 5);
             }
+            // draw debug stuff
+            if (mapDebugPolygonObject.Count > 0)
+            {
+                foreach (GMapPolygon mapDebugPolygon in mapDebugPolygonObject)
+                {
+                    mapDebugPolygon.Dispose();
+                }
+                mapDebugPolygonObject.Clear();
+            }
+            if (debugTriangles)
+            {
+                LatLonCoord[] debugPoint = new LatLonCoord[points.Count];
+                int i = 0;
+                foreach(PointLatLng point in points)
+                {
+                    debugPoint[i] = LatLonCoord.FromPointLatLng(point);
+                    i++;
+                }
+                List<LatLonTriangle> triangles = LatLonCoord.Triangulator.Triangulate(debugPoint, WindingOrder.Clockwise);
+                foreach (LatLonTriangle triangle in triangles)
+                {
+                    List<PointLatLng> trianglePoints = new List<PointLatLng>
+                    {
+                        triangle.A.Position.ToPointLatLng(),
+                        triangle.B.Position.ToPointLatLng(),
+                        triangle.C.Position.ToPointLatLng()
+                    };
+                    GMapPolygon mapDebugPolygon = new GMapPolygon(trianglePoints, this.id + "Polygon")
+                    {
+                        IsHitTestVisible = true,
+                        Stroke = new Pen(Brushes.Orange, 3),
+                        Fill = new SolidBrush(Color.FromArgb(0, Color.White))
+                    };
+                    polygonOverlay.Polygons.Add(mapDebugPolygon);
+                    mapDebugPolygonObject.Add(mapDebugPolygon);
+                }
+            }
         }
 
         public bool PolygonSelfIntersects()
@@ -293,7 +340,7 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             int l = polygonCoordinates.Count;
             Line a, b; // line a and b
             HashSet<string> checkedDict = new HashSet<string>();
-            string checkKey = "";
+            string checkKey;
             for (var checkingIndex = 0; checkingIndex < l; checkingIndex++)
             {
                 var checkingIndexn = (checkingIndex + 1) % l;

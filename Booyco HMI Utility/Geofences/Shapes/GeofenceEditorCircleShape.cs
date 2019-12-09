@@ -38,10 +38,10 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
         public override void OnPolygonClick(GMapPolygon item, MouseEventArgs e)
         {
             // check if this object is clicked
-            if(item.Name == this.Id + "Circle")
+            if(item.Name == this.id + "Circle")
             {
                 this.InvokeOnShapeClick(e);
-                Console.Out.WriteLine("OnPolygonClick " + this.Id + " Circle");
+                Console.Out.WriteLine("OnPolygonClick " + this.id + " Circle");
             }
         }
 
@@ -83,7 +83,9 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             }
         }
 
+        #pragma warning disable IDE0051 // Remove unused private members
         private EditableShapePoint GetShapePointbyTypeAndSourceIndex(EditableShapePoint.EditableShapePointType type, int sourceIndex)
+        #pragma warning restore IDE0051 // Remove unused private members
         {
             foreach (EditableShapePoint p in editableShapePoints)
             {
@@ -113,8 +115,10 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             // set maps object, new or existing
             if (mapPolygonObject == null) 
             {
-                mapPolygonObject = new GMapPolygon(points, this.Id + "Circle");
-                mapPolygonObject.IsHitTestVisible = true;
+                mapPolygonObject = new GMapPolygon(points, this.id + "Circle")
+                {
+                    IsHitTestVisible = true
+                };
                 polygonOverlay.Polygons.Add(mapPolygonObject);
             }
             else

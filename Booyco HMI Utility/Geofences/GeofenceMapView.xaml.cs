@@ -152,7 +152,9 @@ namespace Booyco_HMI_Utility
             return 0; // default to index 0
         }
 
+        #pragma warning disable IDE0060 // Remove unused parameter
         private void GridMapView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        #pragma warning restore IDE0060 // Remove unused parameter
         {
             if (GlobalSharedData.GeoFenceData == null)
             {
@@ -172,8 +174,10 @@ namespace Booyco_HMI_Utility
             // Create the MaskedTextBox control.
             if (this.MainMap == null) // only once
             {
-                this.MainMap = new GMapControl();                
-                this.MainMap.Dock = System.Windows.Forms.DockStyle.Fill;
+                this.MainMap = new GMapControl
+                {
+                    Dock = System.Windows.Forms.DockStyle.Fill
+                };
                 // Assign the MaskedTextBox control as the host control's child.
                 WindowsFormHost.Child = this.MainMap;
             }
@@ -200,11 +204,8 @@ namespace Booyco_HMI_Utility
 
         private void AddPolygonButton_Click(object sender, RoutedEventArgs e)
         {
-            LatLonCoord center = new LatLonCoord(MainMap.Position.Lat, MainMap.Position.Lng);
-            double w = MainMap.ViewArea.WidthLng;
             double h = MainMap.ViewArea.HeightLat;
             PointLatLng m = MainMap.ViewArea.LocationMiddle;
-
             this.geoFenceEditor.AddShape(
                 new GeofenceEditorPolygonShape(MainMap, new List<LatLonCoord>{
                     new LatLonCoord(m.Lat-(h/6), m.Lng),
@@ -217,9 +218,6 @@ namespace Booyco_HMI_Utility
         private void AddCircleButton_Click(object sender, RoutedEventArgs e)
         {
             LatLonCoord center = new LatLonCoord(MainMap.Position.Lat, MainMap.Position.Lng);
-            double w = MainMap.ViewArea.WidthLng;
-            double h = MainMap.ViewArea.HeightLat;
-            PointLatLng m = MainMap.ViewArea.LocationMiddle;
             this.geoFenceEditor.AddShape(
                 new GeofenceEditorCircleShape(MainMap, center, 30, GeoFenceAreaType.MedSpeed, 0)
             );
@@ -228,9 +226,6 @@ namespace Booyco_HMI_Utility
         private void AddBlockButton_Click(object sender, RoutedEventArgs e)
         {
             LatLonCoord center = new LatLonCoord(MainMap.Position.Lat, MainMap.Position.Lng);
-            double w = MainMap.ViewArea.WidthLng;
-            double h = MainMap.ViewArea.HeightLat;
-            PointLatLng m = MainMap.ViewArea.LocationMiddle;
             this.geoFenceEditor.AddShape(
                 new GeofenceEditorBlockShape(MainMap, center, 20, 20, 0, GeoFenceAreaType.MedSpeed)
             );

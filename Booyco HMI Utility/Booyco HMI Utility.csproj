@@ -274,6 +274,7 @@
     <Compile Include="Configure\ImageFiles\ImageFilesView.xaml.cs">
       <DependentUpon>ImageFilesView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GeneralFunctions\Geometry\CyclicalList.cs" />
     <Compile Include="DataLogViewer\CustomMarker\CustomMarkerCross.xaml.cs" />
     <Compile Include="DataLogViewer\CustomMarker\CustomMarkerVehicle.xaml.cs">
       <DependentUpon>CustomMarkerVehicle.xaml</DependentUpon>
@@ -312,7 +313,14 @@
     <Compile Include="DataLogViewer\LogEntry.cs" />
     <Compile Include="DataLogViewer\DateTimeUtility\DateTimeCheck.cs" />
     <Compile Include="DataLogViewer\ExcelFileManagement.cs" />
-    <Compile Include="Geofence.cs" />
+    <Compile Include="GeneralFunctions\Geometry\Geofence.cs" />
+    <Compile Include="GeneralFunctions\Geometry\LatLonCoord.cs" />
+    <Compile Include="GeneralFunctions\Geometry\LatLonLineSegment.cs" />
+    <Compile Include="GeneralFunctions\Geometry\LatLonPolygon.cs" />
+    <Compile Include="GeneralFunctions\Geometry\LatLonTriangle.cs" />
+    <Compile Include="GeneralFunctions\Geometry\LatLonVertex.cs" />
+    <Compile Include="GeneralFunctions\MathHelper.cs" />
+    <Compile Include="GeneralFunctions\Geometry\Triangulator.cs" />
     <Compile Include="Geofences\CustomMarkers\GMarkerEdgeButton.cs" />
     <Compile Include="Geofences\CustomMarkers\GMarkerShapeCenter.cs" />
     <Compile Include="Geofences\CustomMarkers\GMarkerMovablePoint.cs" />

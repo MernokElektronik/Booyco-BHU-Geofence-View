@@ -40,10 +40,10 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
         public override void OnPolygonClick(GMapPolygon item, MouseEventArgs e)
         {
             // check if this object is clicked
-            if(item.Name == this.Id + "Rect")
+            if(item.Name == this.id + "Rect")
             {
                 this.InvokeOnShapeClick(e);
-                Console.Out.WriteLine("OnPolygonClick " + this.Id + " Rect");
+                Console.Out.WriteLine("OnPolygonClick " + this.id + " Rect");
             }
         }
 
@@ -90,17 +90,21 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
 
         private void RedrawPolygon()
         {
-            List<PointLatLng> points = new List<PointLatLng>();
-            points.Add(LatLonCoord.FindPointAtOffSet(center, this.blockWidth / 2, this.blockHeight / 2).ToPointLatLng());
-            points.Add(LatLonCoord.FindPointAtOffSet(center, -this.blockWidth / 2, this.blockHeight / 2).ToPointLatLng());
-            points.Add(LatLonCoord.FindPointAtOffSet(center, -this.blockWidth / 2, -this.blockHeight / 2).ToPointLatLng());
-            points.Add(LatLonCoord.FindPointAtOffSet(center, this.blockWidth / 2, -this.blockHeight / 2).ToPointLatLng());
+            List<PointLatLng> points = new List<PointLatLng>
+            {
+                LatLonCoord.FindPointAtOffSet(center, this.blockWidth / 2, this.blockHeight / 2).ToPointLatLng(),
+                LatLonCoord.FindPointAtOffSet(center, -this.blockWidth / 2, this.blockHeight / 2).ToPointLatLng(),
+                LatLonCoord.FindPointAtOffSet(center, -this.blockWidth / 2, -this.blockHeight / 2).ToPointLatLng(),
+                LatLonCoord.FindPointAtOffSet(center, this.blockWidth / 2, -this.blockHeight / 2).ToPointLatLng()
+            };
 
             // set maps object, new or existing
             if (mapPolygonObject == null) 
             {
-                mapPolygonObject = new GMapPolygon(points, this.Id + "Rect");
-                mapPolygonObject.IsHitTestVisible = true;
+                mapPolygonObject = new GMapPolygon(points, this.id + "Rect")
+                {
+                    IsHitTestVisible = true
+                };
                 polygonOverlay.Polygons.Add(mapPolygonObject);
             }
             else
