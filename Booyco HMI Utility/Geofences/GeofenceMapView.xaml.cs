@@ -228,17 +228,19 @@ namespace Booyco_HMI_Utility
 
         private void AddCircleButton_Click(object sender, RoutedEventArgs e)
         {
+            double diagonalMeters = LatLonCoord.Distance(LatLonCoord.FromPointLatLng(MainMap.ViewArea.LocationRightBottom), LatLonCoord.FromPointLatLng(MainMap.ViewArea.LocationTopLeft));
             LatLonCoord center = new LatLonCoord(MainMap.Position.Lat, MainMap.Position.Lng);
             this.geoFenceEditor.AddShape(
-                new GeofenceEditorCircleShape(MainMap, center, 30, GeoFenceAreaType.MedSpeed, 0)
+                new GeofenceEditorCircleShape(MainMap, center, diagonalMeters/8, GeoFenceAreaType.MedSpeed, 0)
             );
         }
 
         private void AddBlockButton_Click(object sender, RoutedEventArgs e)
         {
+            double diagonalMeters = LatLonCoord.Distance(LatLonCoord.FromPointLatLng(MainMap.ViewArea.LocationRightBottom), LatLonCoord.FromPointLatLng(MainMap.ViewArea.LocationTopLeft));
             LatLonCoord center = new LatLonCoord(MainMap.Position.Lat, MainMap.Position.Lng);
             this.geoFenceEditor.AddShape(
-                new GeofenceEditorBlockShape(MainMap, center, 20, 20, 0, GeoFenceAreaType.MedSpeed)
+                new GeofenceEditorBlockShape(MainMap, center, diagonalMeters/4, diagonalMeters / 4, 0, GeoFenceAreaType.MedSpeed)
             );
         }
 

@@ -13,6 +13,10 @@ namespace Booyco_HMI_Utility.Geofences
 {
     public enum GeofenceEditorNotificationSeverity { Success, Notice, Warning, Error };
     public delegate void GeofenceEditorShapeSelectionChanged(GeofenceEditorShape item);
+    public delegate void OnMapClickAggregation(
+            List<GeoFenceEditor.MapClickAggregator.PolgygonClickData> polygonClickEvents, 
+            List<GeoFenceEditor.MapClickAggregator.MarkerClickData> markerClickEvents
+    );
     public delegate void GeofenceEditorPointSelectionChanged(EditableShapePoint point);
     public delegate void GeofenceEditorNotification(GeofenceEditorNotificationSeverity severity, String message);
 
@@ -25,6 +29,7 @@ namespace Booyco_HMI_Utility.Geofences
         private readonly GMapControl map;
         private bool mouseDown = false;
         private GMapMarker markerUnderMouse = null;
+        private MapClickAggregator mapClickAggregator = null;
 
         private readonly GMapOverlay polygonOverlay = new GMapOverlay("polygons");
         private readonly GMapOverlay markerOverlay = new GMapOverlay("objects");
@@ -33,6 +38,70 @@ namespace Booyco_HMI_Utility.Geofences
         public event GeofenceEditorPointSelectionChanged OnShapePointSelectionChanged;
         public event GeofenceEditorNotification OnError;
 
+        // little class to aggregate events so we can detect if overlapping shapes and markers have been clicked
+        public class MapClickAggregator
+        {
+            public struct PolgygonClickData
+            {
+                public GMapPolygon gMapPolygon;
+                public MouseEventArgs mouseEventArgs;
+            }
+
+            public struct MarkerClickData
+            {
+                public GMapMarker gMapMarker;
+                public MouseEventArgs mouseEventArgs;
+            }
+
+            public event OnMapClickAggregation OnMapClickAggregation = null;
+            private List<PolgygonClickData> polygonClickEvents = new List<PolgygonClickData>();
+            private List<MarkerClickData> markerClickEvents = new List<MarkerClickData>();
+            private Timer postClicktimer = null;
+
+            public void AddPolygonClickEvent(GMapPolygon gMapPolygon, MouseEventArgs mouseEventArgs)
+            {
+                polygonClickEvents.Add(new PolgygonClickData
+                {
+                    gMapPolygon = gMapPolygon,
+                    mouseEventArgs = mouseEventArgs
+                });
+                RefreshTimer();
+            }
+
+            public void AddMarkerClickEvent(GMapMarker gMapMarker, MouseEventArgs mouseEventArgs)
+            {
+                markerClickEvents.Add(new MarkerClickData
+                {
+                    gMapMarker = gMapMarker,
+                    mouseEventArgs = mouseEventArgs
+                });
+                RefreshTimer();
+            }
+
+            private void RefreshTimer()
+            {
+                if(this.postClicktimer == null)
+                {
+                    this.postClicktimer = new Timer
+                    {
+                        Interval = 50 // 50 ms
+                    };
+                    this.postClicktimer.Tick += new EventHandler(OnMapclickAggregationTrigger);
+                    this.postClicktimer.Start();
+                }
+            }
+
+            private void OnMapclickAggregationTrigger(object sender, System.EventArgs args)
+            {
+                this.postClicktimer.Stop();
+                this.postClicktimer = null;
+                // trigger
+                if(this.OnMapClickAggregation != null){ this.OnMapClickAggregation.Invoke(this.polygonClickEvents, this.markerClickEvents); }
+                this.polygonClickEvents.Clear();
+                this.markerClickEvents.Clear();
+            }
+        }
+
         public GeoFenceEditor(GMapControl map)
         {
             GeoFenceEditor.instance = this; // set instance, does mean only 1 can be made
@@ -40,13 +109,67 @@ namespace Booyco_HMI_Utility.Geofences
             this.map.Overlays.Add(polygonOverlay);
             this.map.Overlays.Add(markerOverlay);
             this.shapes = new List<GeofenceEditorShape>();
-            this.map.OnMarkerClick += OnMarkerClick;
+            this.map.OnMarkerClick += OnMarkerClickUiEvent;
             this.map.OnMarkerEnter += OnMarkerEnter;
             this.map.OnMarkerLeave += OnMarkerLeave;
             this.map.MouseMove += OnMouseMove;
             this.map.MouseDown += OnMouseDown;
             this.map.MouseUp += OnMouseUp;
-            this.map.OnPolygonClick += OnPolygonClick;
+            this.map.OnPolygonClick += OnPolygonClickUiEvent;
+            this.mapClickAggregator = new MapClickAggregator();
+            this.mapClickAggregator.OnMapClickAggregation += MapClickAggregator_OnMapClickAggregation;
+        }
+
+        private void MapClickAggregator_OnMapClickAggregation(List<MapClickAggregator.PolgygonClickData> polygonClickEvents, List<MapClickAggregator.MarkerClickData> markerClickEvents)
+        {
+            bool handled = false;
+            // see if there are any of my markers, if so only execute marker events
+            if (markerClickEvents.Count > 0)
+            {
+                if (this.selectedShape != null)
+                {
+                    MapClickAggregator.MarkerClickData myMarkerClickData;
+                    foreach (MapClickAggregator.MarkerClickData clickdata in markerClickEvents)
+                    {
+                        if (this.selectedShape.HasMarker(clickdata.gMapMarker))
+                        {
+                            OnMarkerClick(clickdata.gMapMarker, clickdata.mouseEventArgs); // found my marker, forward click
+                            handled = true;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    MapClickAggregator.MarkerClickData clickdata = markerClickEvents.FirstOrDefault();
+                    OnMarkerClick(clickdata.gMapMarker, clickdata.mouseEventArgs); // found my marker, forward click
+                    handled = true;
+                }
+            }
+
+            // see if shapes are clicked
+            if ((!handled) && (polygonClickEvents.Count > 0))
+            {
+                // select the next polygon (first on that isnt the selected shape)
+                if (this.selectedShape != null)
+                {
+                    foreach (MapClickAggregator.PolgygonClickData clickdata in polygonClickEvents)
+                    {
+                        if (!this.selectedShape.HasPolygon(clickdata.gMapPolygon))
+                        {
+                            OnPolygonClick(clickdata.gMapPolygon, clickdata.mouseEventArgs); // found my marker, forward click
+                            handled = true;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    MapClickAggregator.PolgygonClickData clickdata = polygonClickEvents.FirstOrDefault();
+                    OnPolygonClick(clickdata.gMapPolygon, clickdata.mouseEventArgs); // found my marker, forward click
+                    handled = true;
+                }
+            }
         }
 
         void OnMouseMove(object sender, MouseEventArgs e)
@@ -158,14 +281,36 @@ namespace Booyco_HMI_Utility.Geofences
             }
         }
 
+        void OnMarkerClickUiEvent(GMapMarker item, MouseEventArgs e)
+        {
+            this.mapClickAggregator.AddMarkerClickEvent(item, e);
+        }
+
         void OnMarkerEnter(GMapMarker item)
         {
-            markerUnderMouse = item;
+            if (selectedShape != null)
+            {
+                if (!selectedShape.HasMarker(markerUnderMouse)) // see if only marker under mouse still exists
+                {
+                    markerUnderMouse = null;
+                }
+                if (markerUnderMouse == null)
+                {
+                    markerUnderMouse = item;
+                }
+            }
+            else
+            {
+                markerUnderMouse = item;
+            }            
         }
 
         void OnMarkerLeave(GMapMarker item)
         {
-            markerUnderMouse = null;
+            if (item.Equals(markerUnderMouse))
+            {
+                markerUnderMouse = null;
+            }
         }
 
         public void ShowError(GeofenceEditorNotificationSeverity severity, string message)
@@ -199,6 +344,11 @@ namespace Booyco_HMI_Utility.Geofences
             {
                 shape.OnPolygonClick(item, e);
             }
+        }
+
+        private void OnPolygonClickUiEvent(GMapPolygon item, MouseEventArgs e)
+        {
+            this.mapClickAggregator.AddPolygonClickEvent(item, e);
         }
 
         internal void DeletedSelectedPoint()

@@ -195,5 +195,10 @@ namespace Booyco_HMI_Utility.Geofences
         {
             this.areaType = areaType;
         }
+
+        internal bool HasPolygon(GMapPolygon gMapPolygon)
+        {
+            return ((gMapPolygon != null) && (this.mapPolygonObject != null) && (this.mapPolygonObject.Name == gMapPolygon.Name));
+        }
     }
 }

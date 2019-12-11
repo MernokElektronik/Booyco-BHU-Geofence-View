@@ -107,6 +107,7 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             if (m != null)
             {
                 overlay.Markers.Remove(m);
+                m.Dispose();
             }
         }
 
@@ -145,7 +146,8 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
                 }
                 else if ((this.type == EditableShapePointType.PolygonPoint) || (this.type == EditableShapePointType.CircleRadius) || (this.type == EditableShapePointType.RectangleCorner)) // movable points can be clicked
                 {
-                    ((GMarkerMovablePoint)marker).SetSelected(this.selected);
+                    marker.IsVisible = this.shapeSelected;
+                    //((GMarkerMovablePoint)marker).SetSelected(this.selected);
                 }
                 else if ((this.type == EditableShapePointType.ShapeCenter) ) 
                 {

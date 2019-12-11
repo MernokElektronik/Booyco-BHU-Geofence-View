@@ -32,7 +32,7 @@ namespace Booyco_HMI_Utility
         }
 
         // n+1 because b/a tends to 1 with n leading digits
-        public static double DoubleEpsilon { get; } = Math.Pow(10, -(12 + 1));
+        public static double DoubleEpsilon { get; } = Math.Pow(10, -(10 + 1));
 
         public static bool DoubleEqual(double a, double b)
         {
