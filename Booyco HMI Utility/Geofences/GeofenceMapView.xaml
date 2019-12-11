@@ -59,10 +59,9 @@
             <Button Content="Back" Click="ButtonBack_Click" Grid.Column="6" Grid.Row="8" Margin="10,10,10,10" RenderTransformOrigin="1.967,4.088" />
             <TextBlock x:Name="LabelNotification" Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,10,10" Grid.Row="8" Foreground="#FF575757" Grid.ColumnSpan="5" Width="830" TextWrapping="WrapWithOverflow"/>
             <ComboBox x:Name="DropdownType" Grid.ColumnSpan="2" Grid.Column="6" Margin="10,10,10,10" Grid.Row="7" Background="#FF8C0909" Foreground="#FF4D4D4D" FontFamily="Arial Black" FontSize="30" FontWeight="Bold" SelectedIndex="0" ScrollViewer.CanContentScroll="False" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderThickness="0" Focusable="False" SelectionChanged="DropdownType_SelectionChanged">
-                <ComboBoxItem Content="None" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Tag="0" />
                 <ComboBoxItem Content="Low Speed" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"  Tag="1" />
-                <ComboBoxItem Content="Medium Speed" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Tag="2" />
-                <ComboBoxItem Content="High Speed" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Tag="3" />
+                <ComboBoxItem Content="Medium Speed" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Tag="3" />
+                <ComboBoxItem Content="High Speed" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Tag="2" />
                 <ComboBoxItem Content="No Go Zone" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Tag="6" />
                 <ComboBoxItem Content="Geo fence active" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Tag="255" />
             </ComboBox>

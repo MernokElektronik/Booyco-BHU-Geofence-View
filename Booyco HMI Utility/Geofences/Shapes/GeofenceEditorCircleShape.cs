@@ -57,6 +57,7 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             var coord = center;
             shapeCenterPoint = new EditableShapePoint(EditableShapePoint.EditableShapePointType.ShapeCenter, coord, overlay);
             shapeCenterPoint.OnPositionChanged += OnVertexPositionChanged;
+            shapeCenterPoint.SetBearing(this.bearing);
             result.Add(shapeCenterPoint);
             // add the radius
             coord = LatLonCoord.FindPointAtDistanceFrom(center, 0, radiusMeters);

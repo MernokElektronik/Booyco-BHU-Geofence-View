@@ -158,5 +158,20 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
         {
             return this.selected;
         }
+
+        internal void SetBearing(int bearing)
+        {
+            if (this.type == EditableShapePointType.ShapeCenter)
+            {
+                if (marker != null)
+                {
+                    ((GMarkerShapeCenter)marker).SetBearing(bearing);
+                }
+                else
+                {
+                    throw new Exception("Can not set bearing of this type of shape");
+                }
+            }
+        }
     }
 }

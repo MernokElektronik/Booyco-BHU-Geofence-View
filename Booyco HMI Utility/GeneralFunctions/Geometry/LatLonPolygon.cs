@@ -20,6 +20,8 @@ namespace Booyco_HMI_Utility
 
         public LatLonPolygon(List<LatLonLineSegment> cpLines, int bearing, GeoFenceAreaType areaType)
         {
+            this.areaType = areaType;
+            this.Bearing = bearing;
             this.cpLines = new List<LatLonLineSegment>();
             foreach (LatLonLineSegment line in cpLines)
             {

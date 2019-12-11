@@ -164,6 +164,8 @@ namespace Booyco_HMI_Utility
             {
                 // convert to list
                 List<LatLonTriangle> tls = new List<LatLonTriangle>();
+                List<GeoFenceAreaType> tlsTypes = new List<GeoFenceAreaType>();
+                List<int> tlsBearing = new List<int>();
                 for (int ti=0; ti<geoFenceTriangleArray.Length; ti++)
                 {
                     if (((GeoFenceAreaType)geoFenceTriangleArray[ti].Type) != GeoFenceAreaType.None)
@@ -173,6 +175,8 @@ namespace Booyco_HMI_Utility
                            new LatLonVertex(new LatLonCoord(LatLonPartFromUInt32(geoFenceTriangleArray[ti].LatitudePoint2), LatLonPartFromUInt32(geoFenceTriangleArray[ti].LongitudePoint2)), 1),
                            new LatLonVertex(new LatLonCoord(LatLonPartFromUInt32(geoFenceTriangleArray[ti].LatitudePoint3), LatLonPartFromUInt32(geoFenceTriangleArray[ti].LongitudePoint3)), 2)
                         ));
+                        tlsTypes.Add((GeoFenceAreaType)geoFenceTriangleArray[ti].Type);
+                        tlsBearing.Add((int)geoFenceTriangleArray[ti].Heading);
                     }
                 }
                 
@@ -184,11 +188,12 @@ namespace Booyco_HMI_Utility
                 polyLines = new List<LatLonLineSegment>();
                 if (L > 0)
                 {
+                    // init on first
                     for (int n = 0; n < L; n++)// Walk the Triangle List...
                     {
                         triangleLines = TriangleToLines(tls, n);
-                        newPolyHeading = (int)geoFenceTriangleArray[n].Heading;
-                        newPolyAreaType = (GeoFenceAreaType)geoFenceTriangleArray[n].Type;
+                        newPolyHeading = tlsBearing[n];
+                        newPolyAreaType = tlsTypes[n];
                         if (!AddTriangleToPolyLines(ref polyLines, triangleLines)) {  // If the adder return false, we should start a new Polygon...
                             if (polyLines.Count > 0) {  // If there are any valid lines added,
                                 polygons.Add(new LatLonPolygon(polyLines, newPolyHeading, newPolyAreaType));       // Create a new Polygon from the lines and push it onto the list.

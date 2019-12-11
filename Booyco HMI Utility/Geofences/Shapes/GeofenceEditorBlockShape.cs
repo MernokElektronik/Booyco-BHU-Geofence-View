@@ -59,6 +59,7 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             LatLonCoord coord = center;
             shapeCenterPoint = new EditableShapePoint(EditableShapePoint.EditableShapePointType.ShapeCenter, coord, overlay);
             shapeCenterPoint.OnPositionChanged += OnVertexPositionChanged;
+            shapeCenterPoint.SetBearing(this.bearing);
             result.Add(shapeCenterPoint);
             // add the edge point
             coord = LatLonCoord.FindPointAtOffSet(center, this.blockWidth / 2, this.blockHeight / 2);

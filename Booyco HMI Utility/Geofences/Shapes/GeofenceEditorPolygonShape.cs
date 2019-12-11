@@ -138,6 +138,7 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             LatLonCoord centerCoord = GetPolygonCenter();
             centerPoint = new EditableShapePoint(EditableShapePoint.EditableShapePointType.ShapeCenter, centerCoord, overlay);
             centerPoint.OnPositionChanged += OnVertexPositionChanged;
+            centerPoint.SetBearing(this.bearing);
             result.Add(centerPoint);
 
             return result;

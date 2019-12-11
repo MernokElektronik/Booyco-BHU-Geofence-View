@@ -118,7 +118,15 @@ namespace Booyco_HMI_Utility
             {
                 SliderBearing.Value = item.GetBearing();
                 LabelBearing.Content = "Bearing: " + item.GetBearing();
-                DropdownType.SelectedIndex = this.GetAreaTypeIndex(item);
+                ComboBoxItem selectedItem = this.GetAreaTypeObject(item);
+                if (selectedItem != null)
+                {
+                    DropdownType.SelectedItem = selectedItem;
+                }
+                else
+                {
+                    DropdownType.SelectedIndex = 0;
+                }
                 LabelBearing.Visibility = Visibility.Visible;
                 SliderBearing.Visibility = Visibility.Visible;
                 RemoveShapeButton.Visibility = Visibility.Visible;
@@ -134,10 +142,11 @@ namespace Booyco_HMI_Utility
                 SliderBearing.Visibility = Visibility.Collapsed;
                 RemoveShapeButton.Visibility = Visibility.Collapsed;
                 RemovePointButton.Visibility = Visibility.Collapsed;
+                DropdownType.Visibility = Visibility.Collapsed;
             }
         }
 
-        private int GetAreaTypeIndex(GeofenceEditorShape item)
+        private ComboBoxItem GetAreaTypeObject(GeofenceEditorShape item)
         {
             int areaTypeInt = (int)item.GetAreaType();
             int l = DropdownType.Items.Count;
@@ -146,10 +155,10 @@ namespace Booyco_HMI_Utility
                 ComboBoxItem dropdownItem = (ComboBoxItem)DropdownType.Items.GetItemAt(i);
                 if (int.Parse((string)dropdownItem.Tag) == areaTypeInt)
                 {
-                    return i;
+                    return dropdownItem;
                 }
             }
-            return 0; // default to index 0
+            return null; // default to index 0
         }
 
         #pragma warning disable IDE0060 // Remove unused parameter
@@ -185,8 +194,10 @@ namespace Booyco_HMI_Utility
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
+            geoFenceEditor.SetSelectedShape(null);
             ProgramFlow.ProgramWindow = (int)ProgramFlowE.Startup;
             this.Visibility = Visibility.Collapsed;
+
         }
 
         private void RemovePointButton_Click(object sender, RoutedEventArgs e)
