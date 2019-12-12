@@ -161,5 +161,102 @@ namespace Booyco_HMI_Utility
         {
             return (MathHelper.DoubleEqual(this.Longitude, pointToCheck.Longitude) && MathHelper.DoubleEqual(this.Latitude, pointToCheck.Latitude));
         }
+
+        public static double LatitudeMetersPerDegree(double ElevationMetersAboveSeaLevel = 0)
+        {
+            long EarthEquatorialRadius = 6378137; // m
+            long EarthPolarRadius = 6356752; // m
+            return ((EarthPolarRadius + ElevationMetersAboveSeaLevel) * Math.PI) / 180; // Half PolarCircumference + Elevation div Latitude degrees
+        }
+
+        public static double CircumferenceAtLatitude(double cLat, double ElevationMetersAboveSeaLevel = 0)
+        {
+            long EarthEquatorialRadius = 6378137; // m
+            long EarthPolarRadius = 6356752; // m
+            double r1, r2, lr;
+            if (cLat < -90) cLat = -90;
+            if (cLat > +90) cLat = +90;
+            lr = Math.Abs(cLat) / 90;
+            r1 = EarthEquatorialRadius + ElevationMetersAboveSeaLevel;
+            r2 = EarthPolarRadius + ElevationMetersAboveSeaLevel;
+            r1 = (r1 * 2 * Math.PI);                       // Circumference of Earth at Equator (Larger Diameter, more accurate at Equator)
+            r2 = (r2 * 2 * Math.PI);                      // Circumference of Earth at Poles (Smaller Diameter, more accurate at high Latitudes)
+            r1 = (r1 * (1 - lr)) + (r2 * lr);       // Circumference Base correction (decide which circumference to use more)
+            return r1 * Math.Cos(cLat * (Math.PI / 180));    // Corrected Circumference at given Latitude
+        }
+
+        public static double LongitudeMetersPerDegree(double cLat, double ElevationMetersAboveSeaLevel = 0)
+        {
+            return (CircumferenceAtLatitude(cLat, ElevationMetersAboveSeaLevel) / 360); // Meters per Degree of Longitude at this Latitude
+        }
+
+        public static double LatitudeDeltaToMeters(double cLat1, double cLat2, double ElevationMetersAboveSeaLevel = 0)
+        {
+            double r, res;
+            if (cLat1 < -90) cLat1 = -90;
+            if (cLat1 > +90) cLat1 = +90;
+            if (cLat2 < -90) cLat2 = -90;
+            if (cLat2 > +90) cLat2 = +90;
+            res = 0;
+            if (cLat2 != cLat1)
+            {
+                r = LatitudeMetersPerDegree(ElevationMetersAboveSeaLevel);
+                res = (cLat2 * r) - (cLat1 * r);      // Distance Delta in Meters
+            }
+            return res;
+        }
+
+        public static double LongitudeDeltaToMeters(double cLon1, double cLon2, double AtLattitude = 0, double ElevationMetersAboveSeaLevel = 0)
+        {
+            double r = 0;
+            if (AtLattitude < -90) AtLattitude = -90;
+            if (AtLattitude > +90) AtLattitude = +90;
+            r = LongitudeMetersPerDegree(AtLattitude, ElevationMetersAboveSeaLevel);
+            return (cLon2 * r) - (cLon1 * r);      // Distance Delta in Meters
+        }
+
+        public static LatLonCoord RotatePoint(LatLonCoord cPointToRotate, LatLonCoord cAroundThisPoint, double fRotateDegrees)
+        {
+            double pOriginLat, pOriginLon;
+            double sina, cosa;
+            sina = Math.Sin(fRotateDegrees * (Math.PI / 180));
+            cosa = Math.Cos(fRotateDegrees * (Math.PI / 180));
+            // Translate PointToRotate to the same offset from the 0,0 Origin
+            pOriginLon = (cPointToRotate.Longitude - cAroundThisPoint.Longitude);
+            pOriginLat = (cPointToRotate.Latitude - cAroundThisPoint.Latitude);
+            // Rotate to a new Point rotated by fRotateDegrees around the Origin
+            double newPOriginLon = ((pOriginLon * cosa) - (pOriginLat * sina));
+            double newPOriginLat = ((pOriginLon * sina) + (pOriginLat * cosa));
+            // Translate the new Origin offset back to the real map points
+            return new LatLonCoord(newPOriginLat + cAroundThisPoint.Latitude, newPOriginLon + cAroundThisPoint.Longitude);
+        }
+
+        public static void CalcUnrotatedSquareCorners(LatLonCoord fCentre, LatLonCoord oldHandlePosition, double iRotateDegrees, out LatLonCoord c1, out LatLonCoord c2, out LatLonCoord c3, out LatLonCoord c4)
+        {
+            double halfLat, halfLon;
+            // Unrotate the handle here... Is this even needed? Do we draw the handle with rotation or is the rotation independent of the handle sizing?
+            LatLonCoord fHandle = RotatePoint(oldHandlePosition, fCentre, -iRotateDegrees); // Rotate by minus the rotation degrees to find the original unrotated box points
+
+            halfLat = Math.Abs(fCentre.Latitude - fHandle.Latitude);
+            halfLon = Math.Abs(fCentre.Longitude - fHandle.Longitude);
+            //         ---->           Pos
+            c1.Latitude = (fCentre.Latitude + halfLat);     //   1  ___________  2
+            c1.Longitude = (fCentre.Longitude - halfLon);   //     |           |       /|
+            c2.Latitude = (fCentre.Latitude + halfLat);     //     |           |        |
+            c2.Longitude = (fCentre.Longitude + halfLon);   //     |     c     |        |
+            c3.Latitude = (fCentre.Latitude - halfLat);     //     |           |
+            c3.Longitude = (fCentre.Longitude + halfLon);   //     |___________|h
+            c4.Latitude = (fCentre.Latitude - halfLat);     //   4               3
+            c4.Longitude = (fCentre.Longitude - halfLon);   //  Neg
+        }
+
+        public static void CalcWidthHeightFromRotatedSquare(LatLonCoord cCentre, LatLonCoord cHandle, double iRotateDegrees, out double fWidth, out double fHeight)
+        {
+            int metersAboveSeaLevel = 1000;
+            LatLonCoord c1, c2, c3, c4;
+            CalcUnrotatedSquareCorners(cCentre, cHandle, iRotateDegrees, out c1, out c2, out c3, out c4);
+            fWidth = Math.Abs(LongitudeDeltaToMeters(c1.Longitude, c2.Longitude, c1.Latitude, metersAboveSeaLevel));
+            fHeight = Math.Abs(LatitudeDeltaToMeters(c2.Latitude, c3.Latitude, metersAboveSeaLevel));
+        }
     }
 }

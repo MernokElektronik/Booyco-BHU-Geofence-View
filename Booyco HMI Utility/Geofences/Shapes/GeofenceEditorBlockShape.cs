@@ -25,9 +25,19 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             this.blockHeight = blockHeight;
             this.polygonOverlay = this.map.Overlays.Where((o) => { return o.Id == "polygons"; }).FirstOrDefault();
             this.SetBearing(bearing);
+            this.OnBearingChanged += GeofenceEditorBlockShape_OnBearingChanged;
             this.SetAreaType(areaType);
             // build
             this.editableShapePoints = this.BuildEditableShapePoints();
+            RedrawPolygon();
+        }
+
+        private void GeofenceEditorBlockShape_OnBearingChanged(int bearing)
+        {
+            this.bearing = bearing;
+            LatLonCoord unrotatedHandleCoord = LatLonCoord.FindPointAtOffSet(center, this.blockWidth / 2, this.blockHeight / 2);
+            LatLonCoord newCornerCoord = LatLonCoord.RotatePoint(unrotatedHandleCoord, this.center, -this.bearing);
+            shapeCornerPoint.SetPosition(newCornerCoord, false);
             RedrawPolygon();
         }
 
@@ -74,16 +84,14 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
         {
             if (thisPoint.GetShapePointType() == EditableShapePoint.EditableShapePointType.RectangleCorner) // thing we can move
             {
-                var movingPoint = thisPoint.GetCoordinate();
-                LatLonCoord xCoord = new LatLonCoord(center.GetLatitude(), movingPoint.GetLongitude());
-                this.blockWidth = LatLonCoord.Distance(center, xCoord) * 2;
-                this.blockHeight = LatLonCoord.Distance(movingPoint, xCoord) * 2;
+                LatLonCoord.CalcWidthHeightFromRotatedSquare(center, thisPoint.GetCoordinate(), -this.bearing, out this.blockWidth, out this.blockHeight);
                 RedrawPolygon();
             }
             else if (thisPoint.GetShapePointType() == EditableShapePoint.EditableShapePointType.ShapeCenter) // thing we can move
             {
                 this.center = thisPoint.GetCoordinate();
-                LatLonCoord newCornerCoord = LatLonCoord.FindPointAtOffSet(center, this.blockWidth / 2, this.blockHeight / 2);
+                LatLonCoord unrotatedHandleCoord = LatLonCoord.FindPointAtOffSet(center, this.blockWidth / 2, this.blockHeight / 2);
+                LatLonCoord newCornerCoord = LatLonCoord.RotatePoint(unrotatedHandleCoord, this.center, -this.bearing);
                 shapeCornerPoint.SetPosition(newCornerCoord, false);
                 RedrawPolygon();
             }
@@ -93,10 +101,10 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
         {
             List<PointLatLng> points = new List<PointLatLng>
             {
-                LatLonCoord.FindPointAtOffSet(center, this.blockWidth / 2, this.blockHeight / 2).ToPointLatLng(),
-                LatLonCoord.FindPointAtOffSet(center, -this.blockWidth / 2, this.blockHeight / 2).ToPointLatLng(),
-                LatLonCoord.FindPointAtOffSet(center, -this.blockWidth / 2, -this.blockHeight / 2).ToPointLatLng(),
-                LatLonCoord.FindPointAtOffSet(center, this.blockWidth / 2, -this.blockHeight / 2).ToPointLatLng()
+                LatLonCoord.RotatePoint(LatLonCoord.FindPointAtOffSet(center, this.blockWidth / 2, this.blockHeight / 2), center, -this.bearing).ToPointLatLng(),
+                LatLonCoord.RotatePoint(LatLonCoord.FindPointAtOffSet(center, -this.blockWidth / 2, this.blockHeight / 2), center, -this.bearing).ToPointLatLng(),
+                LatLonCoord.RotatePoint(LatLonCoord.FindPointAtOffSet(center, -this.blockWidth / 2, -this.blockHeight / 2), center, -this.bearing).ToPointLatLng(),
+                LatLonCoord.RotatePoint(LatLonCoord.FindPointAtOffSet(center, this.blockWidth / 2, -this.blockHeight / 2), center, -this.bearing).ToPointLatLng()
             };
 
             // set maps object, new or existing

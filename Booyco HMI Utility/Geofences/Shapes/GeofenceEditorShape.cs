@@ -13,6 +13,8 @@ using static Booyco_HMI_Utility.Geofences.GeoFenceEditor;
 namespace Booyco_HMI_Utility.Geofences
 {
     public delegate void GeofenceEditorShapeClick(GeofenceEditorShape item, MouseEventArgs e);
+    public delegate void BearingChanged(int bearing);
+
     interface IGeofenceEditorShapeInterface
     {
         List<EditableShapePoint> BuildEditableShapePoints();
@@ -31,6 +33,7 @@ namespace Booyco_HMI_Utility.Geofences
         protected GMapPolygon mapPolygonObject = null;
         protected List<GMapPolygon> mapDebugPolygonObject = new List<GMapPolygon>();
         public event GeofenceEditorShapeClick OnShapeClick;
+        public event BearingChanged OnBearingChanged;
         protected int bearing = 0;
 
         private static Random random;
@@ -125,6 +128,10 @@ namespace Booyco_HMI_Utility.Geofences
                         }
                     }
                 }
+            }
+            if(OnBearingChanged != null)
+            {
+                OnBearingChanged.Invoke(this.bearing);
             }
         }
 
