@@ -428,6 +428,83 @@
       <TypeName>Visitor Vehicle</TypeName>
       <IsLicensable>true</IsLicensable>
     </MernokAsset>
+    <MernokAsset>
+      <Type>61</Type>
+      <Group>6</Group>
+      <GroupName>Versatile</GroupName>
+      <TypeName>Bus</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>62</Type>
+      <Group>4</Group>
+      <GroupName>Surface Forming</GroupName>
+      <TypeName>Compact Track Loader</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>63</Type>
+      <Group>2</Group>
+      <GroupName>Excavate</GroupName>
+      <TypeName>Dragline Excavator</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>64</Type>
+      <Group>6</Group>
+      <GroupName>Versatile</GroupName>
+      <TypeName>Generator Trailer</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>65</Type>
+      <Group>7</Group>
+      <GroupName>Purpose-Built</GroupName>
+      <TypeName>Hydraulic Hammer</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>66</Type>
+      <Group>6</Group>
+      <GroupName>Versatile</GroupName>
+      <TypeName>Minibus</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>67</Type>
+      <Group>7</Group>
+      <GroupName>Purpose-Built</GroupName>
+      <TypeName>Scissor Lift</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>68</Type>
+      <Group>7</Group>
+      <GroupName>Purpose-Built</GroupName>
+      <TypeName>Telescopic Handler</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>69</Type>
+      <Group>1</Group>
+      <GroupName>Haul  Transport</GroupName>
+      <TypeName>Truck</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>70</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>Speed_Zone</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
+    <MernokAsset>
+      <Type>71</Type>
+      <Group>9</Group>
+      <GroupName>System Specific</GroupName>
+      <TypeName>ActiveArea</TypeName>
+      <IsLicensable>true</IsLicensable>
+    </MernokAsset>
   </mernokAssetList>
   <version>0</version>
   <dateCreated>2018-11-06T11:16:33.009397+02:00</dateCreated>

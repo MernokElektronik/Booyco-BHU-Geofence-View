@@ -37,6 +37,20 @@ namespace Booyco_HMI_Utility
             }
         }
 
+        private int _TotalEntries;
+        public int TotalEntries
+        {
+            get
+            {
+                return _TotalEntries;
+            }
+            set
+            {
+                _TotalEntries = value;
+                OnPropertyChanged("TotalEntries");
+            }
+        }
+
         private List<LPDDataLookupEntry> _data;
         public List<LPDDataLookupEntry> Data
         {
@@ -90,6 +104,8 @@ namespace Booyco_HMI_Utility
 
             }
         }
+              
+
         private int _numberBytes;
         public int NumberBytes
         {

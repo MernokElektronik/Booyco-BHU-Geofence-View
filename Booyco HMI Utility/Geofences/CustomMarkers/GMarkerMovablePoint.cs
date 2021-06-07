@@ -37,6 +37,8 @@ namespace Booyco_HMI_Utility.Geofences
            : base(p)
         {
             Scale = 1;
+            ToolTipMode = MarkerTooltipMode.OnMouseOver;
+            ToolTipText = p.Lat.ToString() + "," + p.Lng.ToString();
         }
 
         public void SetSelected(bool selected)

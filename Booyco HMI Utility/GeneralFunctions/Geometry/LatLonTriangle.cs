@@ -125,7 +125,9 @@ namespace Booyco_HMI_Utility
                 LatitudePoint3 = LatLonCoord.LatLonPartToUInt32(this.C.Position.Latitude),
                 LongitudePoint3 = LatLonCoord.LatLonPartToUInt32(this.C.Position.Longitude),
                 Heading = (UInt32)polygon.GetBearing(),
-                Type = (UInt32)polygon.GetAreaType()
+                Type = (UInt32)polygon.GetAreaType(),
+                Overspeed = (UInt32)polygon.GetOverspeed(),
+                WarningSpeed = (UInt32)polygon.GetWarningSpeed()
             };
             return item;
         }

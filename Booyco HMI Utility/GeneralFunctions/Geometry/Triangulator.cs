@@ -166,6 +166,8 @@ namespace Booyco_HMI_Utility
                 List<LatLonTriangle> tls = new List<LatLonTriangle>();
                 List<GeoFenceAreaType> tlsTypes = new List<GeoFenceAreaType>();
                 List<int> tlsBearing = new List<int>();
+                List<int> tlsOverspeed = new List<int>();
+                List<int> tlsWarningSpeed = new List<int>();
                 for (int ti=0; ti<geoFenceTriangleArray.Length; ti++)
                 {
                     if (((GeoFenceAreaType)geoFenceTriangleArray[ti].Type) != GeoFenceAreaType.None)
@@ -177,6 +179,8 @@ namespace Booyco_HMI_Utility
                         ));
                         tlsTypes.Add((GeoFenceAreaType)geoFenceTriangleArray[ti].Type);
                         tlsBearing.Add((int)geoFenceTriangleArray[ti].Heading);
+                        tlsOverspeed.Add((int)geoFenceTriangleArray[ti].Overspeed);
+                        tlsWarningSpeed.Add((int)geoFenceTriangleArray[ti].WarningSpeed);
                     }
                 }
                 
@@ -184,6 +188,8 @@ namespace Booyco_HMI_Utility
                 List<LatLonLineSegment> polyLines, triangleLines;
                 List<LatLonPolygon> polygons = new List<LatLonPolygon>();
                 int newPolyHeading = 0;
+                int newPolyOverspeed = 0;
+                int newPolyWarningSpeed = 0;
                 GeoFenceAreaType newPolyAreaType = GeoFenceAreaType.None;
                 polyLines = new List<LatLonLineSegment>();
                 if (L > 0)
@@ -192,19 +198,26 @@ namespace Booyco_HMI_Utility
                     for (int n = 0; n < L; n++)// Walk the Triangle List...
                     {
                         triangleLines = TriangleToLines(tls, n);
-                        newPolyHeading = tlsBearing[n];
-                        newPolyAreaType = tlsTypes[n];
+           
                         if (!AddTriangleToPolyLines(ref polyLines, triangleLines)) {  // If the adder return false, we should start a new Polygon...
                             if (polyLines.Count > 0) {  // If there are any valid lines added,
-                                polygons.Add(new LatLonPolygon(polyLines, newPolyHeading, newPolyAreaType));       // Create a new Polygon from the lines and push it onto the list.
+                                newPolyHeading = tlsBearing[n-1];
+                                newPolyOverspeed = tlsOverspeed[n-1];
+                                newPolyWarningSpeed = tlsWarningSpeed[n-1];
+                                newPolyAreaType = tlsTypes[n-1];
+                                polygons.Add(new LatLonPolygon(polyLines, newPolyHeading, newPolyOverspeed, newPolyWarningSpeed, newPolyAreaType));       // Create a new Polygon from the lines and push it onto the list.
                                 polyLines.Clear();
                                 AddTriangleToPolyLines(ref polyLines, triangleLines);   // Add the current triangle now to the new Polygon. (Nvm, the return value, this must be new)
                             }
                         }
                     }
+                    newPolyHeading = tlsBearing[L-1];
+                    newPolyOverspeed = tlsOverspeed[L-1];
+                    newPolyWarningSpeed = tlsWarningSpeed[L-1];
+                    newPolyAreaType = tlsTypes[L-1];
                     if (polyLines.Count > 0)
                     {  // If there are any valid lines still, the final Polygon must be closed off...
-                        polygons.Add(new LatLonPolygon(polyLines, newPolyHeading, newPolyAreaType)); // Create a new Polygon from the lines and push it onto the list.
+                        polygons.Add(new LatLonPolygon(polyLines, newPolyHeading, newPolyOverspeed, newPolyWarningSpeed , newPolyAreaType)); // Create a new Polygon from the lines and push it onto the list.
                     }
                 }
                 return polygons;

@@ -190,7 +190,7 @@ namespace Booyco_HMI_Utility.Geofences
             {
                 if (circle.Type != (UInt32)GeoFenceAreaType.None)
                 {
-                    AddShape(new GeofenceEditorCircleShape(this.map, new LatLonCoord(LatLonCoord.LatLonPartFromUInt32(circle.Latitude), LatLonCoord.LatLonPartFromUInt32(circle.Longitude)), circle.Radius, (GeoFenceAreaType)circle.Type, (int)circle.Heading));
+                    AddShape(new GeofenceEditorCircleShape(this.map, new LatLonCoord(LatLonCoord.LatLonPartFromUInt32(circle.Latitude), LatLonCoord.LatLonPartFromUInt32(circle.Longitude)), circle.Radius, (GeoFenceAreaType)circle.Type, (int)circle.Heading, (int)circle.Overspeed, (int)circle.WarningSpeed));
                 }
             }
             foreach (GeofenceBlock block in editableGeoFenceData.geofenceBlocks)
@@ -204,7 +204,7 @@ namespace Booyco_HMI_Utility.Geofences
             List<LatLonPolygon> polygons = LatLonCoord.Triangulator.TrianglesToPolygons(editableGeoFenceData.geofenceTriangles);
             foreach (LatLonPolygon polygon in polygons)
             {
-               AddShape(new GeofenceEditorPolygonShape(this.map, polygon.ToPoints(), polygon.Bearing, polygon.areaType));
+               AddShape(new GeofenceEditorPolygonShape(this.map, polygon.ToPoints(), polygon.Bearing, polygon.Overspeed, polygon.WarningSpeed, polygon.areaType));
             }
         }
 
@@ -378,6 +378,28 @@ namespace Booyco_HMI_Utility.Geofences
                 this.selectedShape.Clear();
                 this.shapes.Remove(this.selectedShape);
                 this.SetSelectedShape(null);
+            }
+        }
+
+        internal void SetSelectedShapeOverspeed(int overspeed)
+        {
+            if (this.selectedShape != null)
+            {
+                this.selectedShape.SetOverspeed(overspeed);
+                // refresh marker overlay
+                this.markerOverlay.IsVisibile = false;
+                this.markerOverlay.IsVisibile = true;
+            }
+        }
+
+        internal void SetSelectedShapeWarningSpeed(int warningSpeed)
+        {
+            if (this.selectedShape != null)
+            {
+                this.selectedShape.SetWarningSpeed(warningSpeed);
+                // refresh marker overlay
+                this.markerOverlay.IsVisibile = false;
+                this.markerOverlay.IsVisibile = true;
             }
         }
 

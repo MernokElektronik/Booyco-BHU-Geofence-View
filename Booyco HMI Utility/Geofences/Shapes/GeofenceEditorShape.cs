@@ -14,6 +14,8 @@ namespace Booyco_HMI_Utility.Geofences
 {
     public delegate void GeofenceEditorShapeClick(GeofenceEditorShape item, MouseEventArgs e);
     public delegate void BearingChanged(int bearing);
+    public delegate void OverspeedChanged(int overspeed);
+    public delegate void WarningSpeedChanged(int warningSpeed);
 
     interface IGeofenceEditorShapeInterface
     {
@@ -34,7 +36,11 @@ namespace Booyco_HMI_Utility.Geofences
         protected List<GMapPolygon> mapDebugPolygonObject = new List<GMapPolygon>();
         public event GeofenceEditorShapeClick OnShapeClick;
         public event BearingChanged OnBearingChanged;
+        public event OverspeedChanged OnOverspeedChanged;
+        public event WarningSpeedChanged OnWarningSpeedChanged;
         protected int bearing = 0;
+        protected int warningSpeed = 0;
+        protected int overspeed = 0;       
 
         private static Random random;
         private static readonly object syncObj = new object();
@@ -135,6 +141,54 @@ namespace Booyco_HMI_Utility.Geofences
             }
         }
 
+        public void SetOverspeed(int overspeed)
+        {
+            this.overspeed = overspeed;
+            // communicate overspeed to a shape center if it exists
+            if (this.editableShapePoints != null)
+            {
+                foreach (EditableShapePoint point in this.editableShapePoints)
+                {
+                    if (point.GetShapePointType() == EditableShapePoint.EditableShapePointType.ShapeCenter)
+                    {
+                        GMapMarker m = point.GetMarker();
+                        if (m != null)
+                        {
+                            ((GMarkerShapeCenter)m).SetOverspeed(this.overspeed);
+                        }
+                    }
+                }
+            }
+            if (OnOverspeedChanged != null)
+            {
+                OnOverspeedChanged.Invoke(this.overspeed);
+            }
+        }
+
+        public void SetWarningSpeed(int warningSpeed)
+        {
+            this.warningSpeed = warningSpeed;
+            // communicate warning speed to a shape center if it exists
+            if (this.editableShapePoints != null)
+            {
+                foreach (EditableShapePoint point in this.editableShapePoints)
+                {
+                    if (point.GetShapePointType() == EditableShapePoint.EditableShapePointType.ShapeCenter)
+                    {
+                        GMapMarker m = point.GetMarker();
+                        if (m != null)
+                        {
+                            ((GMarkerShapeCenter)m).SetWarningSpeed(this.warningSpeed);
+                        }
+                    }
+                }
+            }
+            if (OnWarningSpeedChanged != null)
+            {
+                OnWarningSpeedChanged.Invoke(this.warningSpeed);
+            }
+        }
+
         public void InvokeOnShapeClick(MouseEventArgs e)
         {
             if (OnShapeClick != null)
@@ -158,6 +212,16 @@ namespace Booyco_HMI_Utility.Geofences
         internal int GetBearing()
         {
             return this.bearing;
+        }
+
+        internal int GetOverspeed()
+        {
+            return this.overspeed;
+        }
+
+        internal int GetWarningSpeed()
+        {
+            return this.warningSpeed;
         }
 
         public GeofenceEditorShapeType GetShapeType()

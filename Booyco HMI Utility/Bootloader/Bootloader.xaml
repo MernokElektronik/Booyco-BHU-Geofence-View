@@ -44,10 +44,11 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="0.8*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -62,15 +63,19 @@
             <Label Grid.Column="1" Foreground="DarkRed" Grid.Row="2" Content="{Binding DeviceVID}"/>
             <!--<Label Grid.Column="1" Foreground="DarkRed" Grid.Row="3" Content="{Binding LicenseBool}"/>-->
 
-            <Label Content="Firmware Information:" VerticalAlignment="Center" HorizontalContentAlignment="Center" Grid.ColumnSpan="2" Grid.Row="4" Foreground="WhiteSmoke" FontSize="35" Background="#FF4D4D4D" Height="69"/>
+            <Label Content="Firmware Information:" VerticalAlignment="Center" HorizontalContentAlignment="Center" Grid.ColumnSpan="2" Grid.Row="3" Foreground="WhiteSmoke" FontSize="35" Background="#FF4D4D4D" Height="69"/>
             <!--Firmware info-->
-            <Label Content="Current device firmware:" HorizontalAlignment="Left" Grid.Row="5" VerticalAlignment="Top" Foreground="Gray"/>
-            <Label Content="Selected firmware revision:" HorizontalAlignment="Left" Grid.Row="6" VerticalAlignment="Top" Foreground="Gray"/>
-            <Label Grid.Column="1" Foreground="DarkRed" Grid.Row="5" Content="{Binding FirmwareString}"/>
-            <Label Grid.Column="1" Foreground="DarkRed" Grid.Row="6" Content="{Binding SelectedFirmwareString}"/>
+                <Label Content="Current Firmware:" HorizontalAlignment="Left" Grid.Row="4" VerticalAlignment="Top" Foreground="Gray"/>     
+           
+                <Label Content="Selected firmware revision:" HorizontalAlignment="Left" Grid.Row="6" VerticalAlignment="Top" Foreground="Gray"/>
+                
+               
+             <Label Grid.Column="0" Foreground="DarkRed" Grid.Row="5" Content="{Binding FirmwareString}"/>
+             <Label Grid.Column="1" Foreground="DarkRed" Grid.Row="4" Content="{Binding FirmwareTypeString}"/>
+             <Label Grid.Column="0" Foreground="DarkRed" Grid.Row="7" Content="{Binding SelectedFirmwareString}"/>
+             <Label Grid.Column="1" Foreground="DarkRed" Grid.Row="7" Content="{Binding SelectedFirmwareTypeString}"/>
 
-
-        </Grid>
+            </Grid>
         </Border >
         <Grid Grid.Column="1" Grid.Row="6"  Grid.ColumnSpan="2" Background="Gray">
             <Grid.RowDefinitions>
@@ -103,7 +108,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="150"/>
             </Grid.ColumnDefinitions>
-            <Grid Background="White" Grid.Column="1" Grid.Row="1">
+            <Grid Background="White" Grid.Column="1" Grid.Row="1" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="0.2*"/>

@@ -186,7 +186,7 @@ namespace Booyco_HMI_Utility
 
                         try
                         {
-                            VehicleMarkerList[index].VehicleInfo.ActiveEventString = dataLogManager.ExcelFilemanager.LPDInfoList.ElementAt(ActiveEvent - 1).EventName;
+                            VehicleMarkerList[index].VehicleInfo.ActiveEventString = dataLogManager.ExcelFilemanager.LPDInfoList_V1.ElementAt(ActiveEvent - 1).EventName;
                         }
                         catch
                         {
@@ -225,7 +225,7 @@ namespace Booyco_HMI_Utility
 
                         try
                         {
-                            VehicleMarker.VehicleInfo.ActiveEventString = dataLogManager.ExcelFilemanager.LPDInfoList.ElementAt(ActiveEvent - 1).EventName;
+                            VehicleMarker.VehicleInfo.ActiveEventString = dataLogManager.ExcelFilemanager.LPDInfoList_V1.ElementAt(ActiveEvent - 1).EventName;
                         }
                         catch
                         {

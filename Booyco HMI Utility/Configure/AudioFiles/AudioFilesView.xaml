@@ -38,7 +38,9 @@
         <DataGrid x:Name="DataGridAudioFiles" RowHeaderWidth="0" CanUserAddRows="False" SelectionMode="Extended" CanUserReorderColumns="False"  IsReadOnly="True" VirtualizingPanel.IsVirtualizingWhenGrouping="True" RowDetailsVisibilityMode="Collapsed" FontSize="16" Grid.ColumnSpan="1" Grid.Column="1" Grid.Row="2" Grid.RowSpan="5" Margin="10,10,5,10" AutoGenerateColumns="False" Background="SlateGray" AlternatingRowBackground="#FFA86464"  RowBackground="#FFD89A9A" SelectionChanged="DataGridAudioFiles_SelectionChanged">
             <DataGrid.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" 
-                   Color="#8c0909"/>
+                   Color="#ff630606"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#ff630606"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="white"/>
             </DataGrid.Resources>
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">

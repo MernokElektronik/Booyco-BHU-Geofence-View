@@ -1,4 +1,4 @@
-﻿
+﻿       
 using GMap.NET.WindowsPresentation;
 using GMap.NET;
 using ProximityDetectionSystemInfo;
@@ -68,13 +68,14 @@ namespace Booyco_HMI_Utility
         /// DataLogView: The constructor function
         /// Setup required variables 
         /// </summary>
-        public DataLogView()
+        public DataLogView()        
         {
             InitializeComponent();
             DataLogs = new RangeObservableCollection<LogEntry>();
             DataGridLogs.AutoGenerateColumns = false;
             DataGridLogs.ItemsSource = DataLogs;
             DataGridLogs.IsReadOnly = true;
+            dataLogManager.ExcelFilemanager.StoreLogProtocolInfo();
             dataLogManager.ReportProgressDelegate += backgroundWorkerReadFile.ReportProgress;
             backgroundWorkerReadFile.WorkerReportsProgress = true;
             backgroundWorkerReadFile.DoWork += new DoWorkEventHandler(ProcessLogFile);
@@ -151,50 +152,61 @@ namespace Booyco_HMI_Utility
          
         private void ProcessLogFile(object sender, DoWorkEventArgs e)
         {
+            // === Clear list for GC (Garbage collector) ===
+            EventLogs = null;
+            EventLogs = new RangeObservableCollection<LogEntry>();
+            AnalogLogs = null;
+            AnalogLogs = new RangeObservableCollection<LogEntry>();           
+            dataLogManager.TempList = null;
+            dataLogManager.TempList = new RangeObservableCollection<LogEntry>();
+
             dataLogManager.ReadFile(logFilename, Time_Offset);
             List<string> Combobox_EventsString = new List<string>();
-            foreach (LPDEntry item in dataLogManager.ExcelFilemanager.LPDInfoList)
+            foreach (LPDEntry item in dataLogManager.ExcelFilemanager.LPDInfoList_V1)
             {
                 Combobox_EventsString.Add(item.EventName);
-
             }
-       
-         //   CheckComboBox_Events.ItemsSource = Combobox_EventsString.ToArray();
-         //   Select_All_CheckComboBox(CheckComboBox_Events, true);
+            
+            //   CheckComboBox_Events.ItemsSource = Combobox_EventsString.ToArray();
+            //   Select_All_CheckComboBox(CheckComboBox_Events, true);
         }
 
 
         public void backgroundWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            if (e.ProgressPercentage > 100)
+            if (e.ProgressPercentage >= 100)
             {
-                DataLogs.Clear();
+                DataLogs.Clear();      
+              
                 EventLogs.Clear();
                 AnalogLogs.Clear();
+                
                 try
-                { 
-                foreach (LogEntry item in dataLogManager.TempList)
                 {
-                    if (item.EventID < 500)
+                    foreach (LogEntry item in dataLogManager.TempList)
                     {
-                        EventLogs.Add(item);
+                        if (item.EventID < 500)
+                        {
+                            EventLogs.Add(item);
+
+                        }
+                        else
+                        {
+                            AnalogLogs.Add(item);
+                        }
 
                     }
-                    else
-                    {
-                        AnalogLogs.Add(item);
-                    }
-
+                     DataLogs.AddRange(EventLogs);
+                     DataLogs.AddRange(AnalogLogs);
+                    dataLogManager.TempList = null;
+                    dataLogManager.TempList = new RangeObservableCollection<LogEntry>();
+                    //dataLogManager.TempList.Clear();
+                    ButtonSave.IsEnabled = true;
+                    ProgressbarDataLogs.Visibility = Visibility.Collapsed;
+                    this.ButtonSelectAll.Visibility = Visibility.Visible;
+                    this.ButtonToggleExpand.Visibility = Visibility.Visible;
+                    Grid_ProgressBar.Visibility = Visibility.Collapsed;
                 }
-                DataLogs.AddRange(EventLogs);
-                DataLogs.AddRange(AnalogLogs);
-                dataLogManager.TempList.Clear();
-                ButtonSave.IsEnabled = true;
-                ProgressbarDataLogs.Visibility = Visibility.Collapsed;
-                this.ButtonSelectAll.Visibility = Visibility.Visible;
-                this.ButtonToggleExpand.Visibility = Visibility.Visible;
-                Grid_ProgressBar.Visibility = Visibility.Collapsed;
-            }
                 catch
                 {
 
@@ -263,7 +275,7 @@ namespace Booyco_HMI_Utility
 
 
                         //A workbook must have at least on cell, so lets add one... 
-                        var ws = p.Workbook.Worksheets.Add("MySheet");
+                        var ws = p.Workbook.Worksheets.Add("Logs");
 
                         var dataRange = ws.Cells["A1"].LoadFromCollection
                        (
@@ -273,28 +285,59 @@ namespace Booyco_HMI_Utility
                       true, OfficeOpenXml.Table.TableStyles.Medium2);
 
                         //To set values in the spreadsheet use the Cells indexer.
+                     
+                        var ws2 = p.Workbook.Worksheets.Add("Data");
 
                         // === Header ===
-                        ws.Cells[1, 1].Value = "No.";
-                        ws.Cells[1, 2].Value = "Date";
-                        ws.Cells[1, 3].Value = "Time ";
-                        ws.Cells[1, 4].Value = "Event ID";
-                        ws.Cells[1, 5].Value = "Event Name";
-                        ws.Cells[1, 6].Value = "Event Description";
+                        ws2.Cells[1, 1].Value = "No.";
+                        ws2.Cells[1, 2].Value = "Date";
+                        ws2.Cells[1, 3].Value = "Time ";
+                        ws2.Cells[1, 4].Value = "Event ID";
+                        ws2.Cells[1, 5].Value = "Event Name";
+                        ws2.Cells[1, 6].Value = "Event Description";
               
 
                         int count = 2;
                         foreach (LogEntry _logEntry in DataLogs)
                         {
-                            ws.Cells[count, 1].Value = _logEntry.Number;
-                            ws.Cells[count, 2].Value = _logEntry.DateTime.Date.ToString();
-                            ws.Cells[count, 3].Value = _logEntry.DateTime.TimeOfDay.ToString();
-                            ws.Cells[count, 4].Value = _logEntry.EventID;
-                            ws.Cells[count, 5].Value = _logEntry.EventName;                          
+                            ws2.Cells[count, 1].Value = _logEntry.Number;
+                            ws2.Cells[count, 2].Value = _logEntry.DateTime.Date.ToString();
+                            ws2.Cells[count, 3].Value = _logEntry.DateTime.TimeOfDay.ToString();
+                            ws2.Cells[count, 4].Value = _logEntry.EventID;
+                            ws2.Cells[count, 5].Value = _logEntry.EventName;
+
+                            if(_logEntry.EventID == 301)
+                            {
+                                int test = 0;
+                            }
+                            int index = 0;
+                            foreach (string item in _logEntry.EventInfoList)
+                            {
+
+
+                                //if(index != 0)
+                                //{
+                                //    ws2.Cells[count, ].Value += ", ";
+                                //}
+                                try
+                                {
+                                    ws2.Cells[count, 6 + index].Value = item.Split(':').ElementAt(0);
+                                    ws2.Cells[count, 6 + index + 1].Value = item.Split(':').ElementAt(1);
+
+                                }
+                                catch
+                                {
+
+                                }
+
+                                index+=2;
+                            }
+                                          
                  
                             count++;
                         }
-                        dataRange.AutoFitColumns();
+
+                       dataRange.AutoFitColumns();
 
                         //Save the new workbook. We haven't specified the filename so use the Save as method.
                         p.SaveAs(new FileInfo(_saveFileDialog.FileName));
@@ -308,7 +351,7 @@ namespace Booyco_HMI_Utility
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-
+            //dataLogManager.TempList = null;
             ButtonSave.IsEnabled = false;
             dataLogManager.AbortRequest = true;
 
@@ -420,8 +463,7 @@ namespace Booyco_HMI_Utility
                 {
 
 
-                    if ((item.EventID == 150 || item.EventID == 159) && ((BitConverter.ToInt32(item.RawData, 40)) != 0 && (BitConverter.ToInt32(item.RawData, 44)) != 0))
-
+                    if ((item.EventID == 150 || item.EventID == 159))
                     {
                         // TODO: Fix this two variables
                         TempEvent.DateTimeStamp = item.DateTime;

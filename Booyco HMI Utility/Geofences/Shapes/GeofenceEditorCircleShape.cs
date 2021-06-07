@@ -16,13 +16,15 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
         private EditableShapePoint shapeCenterPoint;
         private EditableShapePoint shapeRadiusPoint;
 
-        public GeofenceEditorCircleShape(GMapControl map, LatLonCoord center, Double radiusMeters, GeoFenceAreaType areaType, int bearing) : base(map, GeofenceEditorShapeType.Circle)
+        public GeofenceEditorCircleShape(GMapControl map, LatLonCoord center, Double radiusMeters, GeoFenceAreaType areaType, int bearing, int overspeed, int warningSpeed) : base(map, GeofenceEditorShapeType.Circle)
         {
             // set vars
             this.center = center;
             this.radiusMeters = radiusMeters;
             this.polygonOverlay = this.map.Overlays.Where((o) => { return o.Id == "polygons"; }).FirstOrDefault();
             this.SetBearing(bearing);
+            this.SetOverspeed(overspeed);
+            this.SetWarningSpeed(warningSpeed);
             this.SetAreaType(areaType);
             // build
             this.editableShapePoints = this.BuildEditableShapePoints();
@@ -157,7 +159,9 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
                 Longitude = LatLonCoord.LatLonPartToUInt32(this.center.Longitude),
                 Heading = (UInt32)this.bearing,
                 Radius = (UInt32)Math.Round(this.radiusMeters),
-                Type = (UInt32)this.areaType
+                Type = (UInt32)this.areaType,
+                Overspeed = (UInt32)this.overspeed,
+                WarningSpeed = (UInt32)this.warningSpeed,
             };
             if (item.Radius < 1) { item.Radius = 1; }
             return item;

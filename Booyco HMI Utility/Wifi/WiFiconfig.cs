@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Management;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
@@ -44,8 +45,8 @@ namespace Booyco_HMI_Utility
                     foreach (UnicastIPAddressInformation ip in item.GetIPProperties().UnicastAddresses)
                     {
                         if (ip.Address.AddressFamily == AddressFamily.InterNetwork)
-                        {
-                            ipAddrList.Add(new NetworkDevice() { DeviceName = item.Name, DeviceTipe = item.NetworkInterfaceType.ToString(), DeviceIP = ip.Address.ToString() });
+                        {                        
+                            ipAddrList.Add(new NetworkDevice() { DeviceName = item.Name, DeviceTipe = item.NetworkInterfaceType.ToString(), DeviceIP = ip.Address.ToString()});                            
                         }
                     }
                 }
@@ -109,6 +110,10 @@ namespace Booyco_HMI_Utility
             if (GlobalSharedData.NetworkDevices.Where(t => t.DeviceTipe.Contains("Wireless")).Count() > 0 && GlobalSharedData.NetworkDevices.Where(t => t.DeviceIP == "192.168.137.1").ToList().Count >= 1)
             {
                 GlobalSharedData.WiFiApStatus = "Wifi Access point created - " + WiFiHotspotSSID;
+            }
+            else if(GlobalSharedData.NetworkDevices.Where(t => t.DeviceTipe.Contains("Ethernet")).Count() > 0 && GlobalSharedData.NetworkDevices.Where(t => t.DeviceIP == "192.168.137.1").ToList().Count >= 1)
+            {
+                GlobalSharedData.WiFiApStatus = "Ethernet External Router - " + WiFiHotspotSSID;
             }
             else if (GlobalSharedData.NetworkDevices.Where(t => t.DeviceTipe.Contains("Wireless")).Count() == 0)
             {
@@ -259,12 +264,40 @@ namespace Booyco_HMI_Utility
             }
         }
 
+
+public string GetMacAddress(string ipAddress)
+{
+    string macAddress = string.Empty;
+    System.Diagnostics.Process pProcess = new System.Diagnostics.Process();
+    pProcess.StartInfo.FileName = "arp";
+    pProcess.StartInfo.Arguments = "-a " + ipAddress;
+    pProcess.StartInfo.UseShellExecute = false;
+    pProcess.StartInfo.RedirectStandardOutput = true;
+      pProcess.StartInfo.CreateNoWindow = true;
+    pProcess.Start();
+    string strOutput = pProcess.StandardOutput.ReadToEnd();
+    string[] substrings = strOutput.Split('-');
+    if (substrings.Length >= 8)
+    {
+       macAddress = substrings[3].Substring(Math.Max(0, substrings[3].Length - 2)) 
+                + "-" + substrings[4] + "-" + substrings[5] + "-" + substrings[6] 
+                + "-" + substrings[7] + "-" 
+                + substrings[8].Substring(0, 2);
+        return macAddress;
+    }
+
+    else
+    {
+        return "not found";
+    }
+}
         private void GetClients()
         {
             int clientslot = 0;
             GlobalSharedData.ServerStatus = " Server running. Waiting for a client...";
 
-   
+           
+
             while (clientnum < 10 && !endAll)
             {
 
@@ -283,8 +316,13 @@ namespace Booyco_HMI_Utility
                     //    //ClientLsitChanged(TCPclients);
                     //    clientnum--;
                     //}
+
+                   
+                  
+
                     if (clients.Count > 0 && clients.Where(t => t.Client.RemoteEndPoint.ToString().Contains(clientel.Address.ToString())).ToList().Count() != 0)
                     {
+                         
                         clients.Where(t => t.Client.RemoteEndPoint.ToString().Contains(clientel.Address.ToString())).ToList().First().Client.Close();
                         clients.Remove(clients.Where(t => t.Client.Connected == false).ToList().First());
                         Debug.WriteLine("********************************************************************************************");
@@ -366,10 +404,11 @@ namespace Booyco_HMI_Utility
             clientR[0].ReceiveTimeout = 10000;
             clientR[0].NoDelay = true;
       
-            NetworkStream stream = clientR[0].GetStream();
+           
           
             while (clientR[0].Connected && !endAll /*&& !clientR[0].Client.Poll(50, SelectMode.SelectRead)*/)
             {
+                NetworkStream stream = clientR[0].GetStream();
                 try
                 {
                     if ((i = stream.Read(data2, 0, data2.Length)) != 0)
@@ -499,8 +538,10 @@ namespace Booyco_HMI_Utility
                       
                            messageReceived = false;
 
+                            
+
                             //GlobalSharedData.ServerStatus = "Received: " + recmeg + " from: " + clientR[0].RemoteEndPoint;
-                            Debug.WriteLine("Process Message - " +totalCount.ToString() + " -Recieved: " + Encoding.UTF8.GetString(Buffer, 0, 10) + "..." + Encoding.UTF8.GetString(Buffer, 512, 10) + "       Time: " + DateTime.Now.ToLongTimeString());
+                            Debug.WriteLine("Process Message - " +totalCount.ToString() + " -Recieved: " + Encoding.UTF8.GetString(Buffer, 0, 5) + "-0x" + Buffer[5].ToString("X2")  + " Time: " + DateTime.Now.ToLongTimeString());
                           
                             if (Buffer[0] == '[' && Buffer[1] == '&' && Buffer[2] == 'B' && Buffer[3] == 'h' /*&& Buffer[521] == ']'*/)
                             {
@@ -561,39 +602,56 @@ namespace Booyco_HMI_Utility
                                     }
 
                                     stream.Write(HeartbeatMessage, 0, HeartbeatMessage.Length); //Send the data to the client  
+                                    if (GlobalSharedData.SelectedVID == (uint)TCPclients.ElementAt(clients.IndexOf(clientR[0])).VID)
+                                    {
+                                        Debug.WriteLine("HeartBeat", clientnumr);
+                                        Heartbeat = true;
+                                        DataExtractorView.Heartbeat = true;                                                            //Console.WriteLine("====================heartbeat recieved ======================:" + ValidMessages.ToString());
 
-                                    Heartbeat = true;
-                                    DataExtractorView.Heartbeat = true;                                                            //Console.WriteLine("====================heartbeat recieved ======================:" + ValidMessages.ToString());
+                                    }
+
+                                    //DataExtractorView.Heartbeat = true;                                                            //Console.WriteLine("====================heartbeat recieved ======================:" + ValidMessages.ToString());
                                 }
                            
                             }
-                            else if (Buffer[2] == 'B')
+
+                            if (GlobalSharedData.SelectedVID == (uint)TCPclients.ElementAt(clients.IndexOf(clientR[0])).VID)
                             {
-                                ValidMessages++;
-                                Bootloader.BootloaderParse(Buffer, clientnumr);
+                                if (Buffer[2] == 'b' || Buffer[2] == 'w')
+                                {
+                                    ValidMessages++;
+                                    UploadFile.FileUploadParse(Buffer, clientnumr);
+                                }
+                                if (Buffer[2] == 'B')
+                                {
+                                    ValidMessages++;
+                                    Bootloader.BootloaderParse(Buffer, clientnumr);
+                                }
+                                else if (Buffer[2] == 'P')
+                                {
+                                    ParametersView.ConfigSendParse(Buffer, clientnumr);
+                                }
+                                else if (Buffer[2] == 'p')
+                                {
+                                    ParametersView.ConfigReceiveParamsParse(Buffer, clientnumr);
+                                }
+                                else if (Buffer[2] == 'A')
+                                {
+                                    AudioFilesView.AudioFileSendParse(Buffer, clientnumr);
+                                }
+                                else if (Buffer[2] == 'I')
+                                {
+                                    ImageFilesView.ImageFileSendParse(Buffer, clientnumr);
+                                }
+                                else if (Buffer[2] == 'L' || Buffer[2] == 'O')
+                                {
+                                    DataExtractorView.DataExtractorParser(Buffer, clientnumr);
+                                }
                             }
-                            else if (Buffer[2] == 'P')
-                            {
-                                ParametersView.ConfigSendParse(Buffer, clientnumr);
-                            }
-                            else if (Buffer[2] == 'p')
-                            {
-                                ParametersView.ConfigReceiveParamsParse(Buffer, clientnumr);
-                            }
-                            else if(Buffer[2] == 'A')
-                            {
-                                AudioFilesView.AudioFileSendParse(Buffer, clientnumr);
-                            }
-                            else if (Buffer[2] == 'I')
-                            {
-                                ImageFilesView.ImageFileSendParse(Buffer, clientnumr);
-                            }
-                            else if (Buffer[2] == 'L' || Buffer[2] == 'O')
-                            {
-                                DataExtractorView.DataExtractorParser(Buffer, clientnumr);
-                            }
-                        
-                            Hearted = " message recieved:" + ValidMessages.ToString() + " of " + messagecount.ToString();
+                            
+                             Hearted = " message recieved:" + ValidMessages.ToString() + " of " + messagecount.ToString();
+                            
+                            
 
                         }
 
@@ -632,19 +690,23 @@ namespace Booyco_HMI_Utility
 
             try
             {
-                if (GlobalSharedData.SelectedVID == TCPclients.ElementAt(clients.IndexOf(clientR[0])).VID)
+                if (clientR[0].Connected)
                 {
-                    GlobalSharedData.WiFiConnectionStatus = false;
-                   
-                }
-                IPEndPoint clientel = (IPEndPoint)clientR[0].Client.RemoteEndPoint;
-                if (clients.Where(t => t.Client.RemoteEndPoint.ToString().Contains(clientel.Address.ToString())).ToList().Count() != 0)
-                {
-                    clientR[0].Close();
-                    ClientLsitChanged(TCPclients);
-                    clients.Remove(clientR[0]);
-                    clientnum--;
-                    Debug.WriteLine("-------------- {0} Client Removed", clientnumr);
+
+                    if (GlobalSharedData.SelectedVID == TCPclients.ElementAt(clients.IndexOf(clientR[0])).VID)
+                    {
+                        GlobalSharedData.WiFiConnectionStatus = false;
+
+                    }
+                    IPEndPoint clientel = (IPEndPoint)clientR[0].Client.RemoteEndPoint;
+                    if (clients.Where(t => t.Client.RemoteEndPoint.ToString().Contains(clientel.Address.ToString())).ToList().Count() != 0)
+                    {
+                        clientR[0].Close();
+                        ClientLsitChanged(TCPclients);
+                        clients.Remove(clientR[0]);
+                        clientnum--;
+                        Debug.WriteLine("-------------- {0} Client Removed", clientnumr);
+                    }
                 }
             }
             catch
@@ -698,9 +760,19 @@ namespace Booyco_HMI_Utility
                                 //ServerStatus = "Sent: " + ServerMessageSend + " to " + clientR[0].RemoteEndPoint;
                                 //GlobalSharedData.ServerStatus = "Message sent";
                                 GlobalSharedData.CommunicationSent = true;
-                                //Console.WriteLine("Sent: {0}", Encoding.UTF8.GetString(GlobalSharedData.ServerMessageSend));
-                                Debug.WriteLine("Sent: " + Encoding.UTF8.GetString(GlobalSharedData.ServerMessageSend, 0, 5) + "       Time: " + DateTime.Now.ToLongTimeString());
-                                GlobalSharedData.ServerMessageSend = null;
+                            //Console.WriteLine("Sent: {0}", Encoding.UTF8.GetString(GlobalSharedData.ServerMessageSend));
+                            string SentString = Encoding.UTF8.GetString(GlobalSharedData.ServerMessageSend, 0, 4);
+                                if (SentString[3] == 'D')
+                            {
+                                //Debug.WriteLine("Sent: " + SentString + "-0x" + GlobalSharedData.ServerMessageSend[6].ToString("X2")  + GlobalSharedData.ServerMessageSend[5].ToString("X2") + GlobalSharedData.ServerMessageSend[8].ToString("X2") + GlobalSharedData.ServerMessageSend[7].ToString("X2")+ "       Time: " + DateTime.Now.ToLongTimeString());
+
+                            }
+                            else
+                            {
+                                //Debug.WriteLine("Sent: " + SentString + "-0x" + GlobalSharedData.ServerMessageSend[5].ToString("X2") + "-0x" + GlobalSharedData.ServerMessageSend[6].ToString("X2") + "-0x" + GlobalSharedData.ServerMessageSend[7].ToString("X2") + "-0x" + GlobalSharedData.ServerMessageSend[8].ToString("X2") + "       Time: " + DateTime.Now.ToLongTimeString());
+
+                            }
+                            GlobalSharedData.ServerMessageSend = null;
                             }                        
                       
                         }
@@ -729,13 +801,15 @@ namespace Booyco_HMI_Utility
                     List<TCPclientR> TCPclientsdumm = new List<TCPclientR>();
                     foreach (var item in clients)
                     {
+                     
                         if (tCPclientR.Where(t => t.IP == item.Client.RemoteEndPoint.ToString()).ToList().Count > 0)
                         {
                             TCPclientsdumm.Add(tCPclientR.Where(t => t.IP == item.Client.RemoteEndPoint.ToString()).First());
                         }
                         else
                         {
-                            TCPclientsdumm.Add(new TCPclientR() { IP = item.Client.RemoteEndPoint.ToString() });
+                            var mac = GetMacAddress(item.Client.RemoteEndPoint.ToString().Split(':').ElementAt(0)).Replace('-',':');
+                            TCPclientsdumm.Add(new TCPclientR() { IP = item.Client.RemoteEndPoint.ToString(), MACAddress = mac});
                         }
                     }
                     TCPclients = TCPclientsdumm;
@@ -945,6 +1019,7 @@ namespace Booyco_HMI_Utility
             }
         }
 
+      
     }
 
     public class TCPclientR : INotifyPropertyChanged
@@ -982,7 +1057,14 @@ namespace Booyco_HMI_Utility
                 char[] NameCahr;
                 try
                 {
-                    NameCahr = _Name.ToCharArray();
+                    if (_Name != null)
+                    {
+                        NameCahr = _Name.ToCharArray();
+                    }
+                    else
+                    {
+                        return "NO NAME";
+                    }
                 }
                 catch
                 {
@@ -1021,6 +1103,19 @@ namespace Booyco_HMI_Utility
             }
         }
 
+        private string _MACAddress;
+        public string MACAddress
+        {
+            get { return _MACAddress; }
+            set
+            {
+                if (_MACAddress != value)
+                {
+                    _MACAddress = value;
+                    OnPropertyChanged("MACAddress");
+                }
+            }
+        }
         private int _FirmRev ;
         public int FirmRev
         {
@@ -1089,25 +1184,33 @@ namespace Booyco_HMI_Utility
             get
             {
                 if (_ApplicationState == 1)
-                    return "Application";
+                    return "BHU App";
                 else if (_ApplicationState == 0)
-                    return "Bootloader";
+                    return "BHU BT";
                 else if (_ApplicationState == 2)
-                    return "ERB Bootloader";
+                    return "ERB BT";
                 else if (_ApplicationState == 10)
-                    return "Bootloader ";
-                else
-                    return "UNKOWN";
+                    return "Comms Bridge BT";
+                else if (_ApplicationState == 11)
+                    return "Comms Bridge App";
+                else if(_ApplicationState == 21)
+                    return "BHU Test Station App";
+
+                return "UNKOWN";
             }
             set
             {
 
-                if (value == "Application")
+                if (value == "BHU App")
                     _ApplicationState = 1;
-                if (value == "ERB Bootloader")
+                else if (value == "ERB BT")
                     _ApplicationState = 2;
-                if (value == "Bootloader ")
+                else if (value == "Comms Bridge BT")
+                    _ApplicationState = 11;
+                else if (value == "Comms Bridge App")
                     _ApplicationState = 10;
+                else if (value == "BHU Test Station App")
+                    _ApplicationState = 21;
                 else
                     _ApplicationState = 0;
 

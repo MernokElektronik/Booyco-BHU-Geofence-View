@@ -15,13 +15,17 @@ namespace Booyco_HMI_Utility
     {
         // public List<LatLonCoord> Points = new List<LatLonCoord>();
         public int Bearing = 0;
+        public int Overspeed = 0;
+        public int WarningSpeed = 0;
         public GeoFenceAreaType areaType = GeoFenceAreaType.None;
         private List<LatLonLineSegment> cpLines;
 
-        public LatLonPolygon(List<LatLonLineSegment> cpLines, int bearing, GeoFenceAreaType areaType)
+        public LatLonPolygon(List<LatLonLineSegment> cpLines, int bearing, int overspeed, int warningSpeed, GeoFenceAreaType areaType)
         {
             this.areaType = areaType;
             this.Bearing = bearing;
+            this.Overspeed = overspeed;
+            this.WarningSpeed = warningSpeed;
             this.cpLines = new List<LatLonLineSegment>();
             foreach (LatLonLineSegment line in cpLines)
             {

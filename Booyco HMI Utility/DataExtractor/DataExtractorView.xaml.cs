@@ -387,12 +387,12 @@ namespace Booyco_HMI_Utility
 
                     }
                     // === Check if received packet number is the same as the total packet count ===
-                    else if (DataIndex == TotalCount)
+                    else if ((DataIndex-1) == TotalCount)
                     {
-                        using (var stream = new FileStream(_newLogFilePath, FileMode.Append))
-                        {
-                            stream.Write(message, 8, DATALOG_RX_SIZE);
-                        }
+                       // using (var stream = new FileStream(_newLogFilePath, FileMode.Append))
+                      //  {
+                       //     stream.Write(message, 8, DATALOG_RX_SIZE);
+                      //  }
                         GlobalSharedData.ServerMessageSend = Encoding.ASCII.GetBytes("[&LDs00]");
                         TransferStatus = (int)TransferStatusEnum.Complete;
                         _fileCreated = false;
@@ -551,7 +551,8 @@ namespace Booyco_HMI_Utility
             if (!_fileCreated)
             {
                 // === Create log file name ===
-                _newLogFilePath = _savedFilesPath + "\\DataLog_Events_BooycoPDS_" + WiFiconfig.TCPclients[GlobalSharedData.SelectedDevice].VID.ToString() + "_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".Mer";
+                String MacAddress = WiFiconfig.TCPclients[GlobalSharedData.SelectedDevice].MACAddress.Replace(":", "");              
+                _newLogFilePath = _savedFilesPath + "\\DataLog_Events_BooycoPDS_" + WiFiconfig.TCPclients[GlobalSharedData.SelectedDevice].VID.ToString() + "_" + MacAddress+ "_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".Mer";
                 int Filecount = 1;
 
                 // === append a number if the log file already exists ===
@@ -602,7 +603,8 @@ namespace Booyco_HMI_Utility
             if (!_fileCreated)
             {
                 // === Create log file name ===
-                _newLogFilePath = _savedFilesPath + "\\DataLog_Analog_BooycoPDS_" + WiFiconfig.TCPclients[GlobalSharedData.SelectedDevice].VID.ToString() + "_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".Mer";
+                String MacAddress = WiFiconfig.TCPclients[GlobalSharedData.SelectedDevice].MACAddress.Replace(":", "");          
+                _newLogFilePath = _savedFilesPath + "\\DataLog_Analog_BooycoPDS_" + WiFiconfig.TCPclients[GlobalSharedData.SelectedDevice].VID.ToString() + "_" + MacAddress + "_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".Mer";
                 int Filecount = 1;
 
                 // === append a number if the log file already exists ===

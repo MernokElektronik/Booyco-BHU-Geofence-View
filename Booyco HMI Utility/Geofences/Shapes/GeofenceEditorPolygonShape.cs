@@ -17,6 +17,8 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
         public double PointBLatitude;
         public double PointBLongitude;
 
+       
+
         public static Line FromPoints(LatLonCoord PointA, LatLonCoord PointB)
         {
             Line line = new Line
@@ -31,16 +33,20 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
     }
     public class GeofenceEditorPolygonShape : GeofenceEditorShape
     {
+        const int PolygonMaxCount = 5;
+
         public List<LatLonCoord> polygonCoordinates;
         private EditableShapePoint centerPoint = null;
         private bool debugTriangles = false;
 
-        public GeofenceEditorPolygonShape(GMapControl map, List<LatLonCoord> polygonCoordinates, int bearing, GeoFenceAreaType areaType) : base(map, GeofenceEditorShapeType.Polygon)
+        public GeofenceEditorPolygonShape(GMapControl map, List<LatLonCoord> polygonCoordinates, int bearing,int overspeed, int warningSpeed , GeoFenceAreaType areaType) : base(map, GeofenceEditorShapeType.Polygon)
         {
             // set vars
             this.polygonCoordinates = polygonCoordinates;
             this.polygonOverlay = this.map.Overlays.Where((o) => { return o.Id == "polygons"; }).FirstOrDefault();
             this.SetBearing(bearing);
+            this.SetOverspeed(overspeed);
+            this.SetWarningSpeed(warningSpeed);
             this.SetAreaType(areaType);
             // build
             this.editableShapePoints = this.BuildEditableShapePoints();
@@ -110,28 +116,32 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
                 vertextPoint.OnPositionChanged += OnVertexPositionChanged;
                 result.Add(vertextPoint);
             }
-            // add the edge buttons            
-            for (var i = 0; i < l; i++)
+            // add the edge buttons      
+
+            if (l < PolygonMaxCount)
             {
-                if (i == 0)
+                for (var i = 0; i < l; i++)
                 {
-                    // last and first
-                    LatLonCoord a = polygonCoordinates[l - 1];
-                    LatLonCoord b = polygonCoordinates[0];
-                    EditableShapePoint edgePoint = new EditableShapePoint(EditableShapePoint.EditableShapePointType.PolygonEdgeButton, a.average(b), overlay); // middle between a and b
-                    edgePoint.OnClicked += OnEdgeButtonClicked;
-                    edgePoint.sourceIndex = i;
-                    result.Add(edgePoint);
-                }
-                else
-                {
-                    // this and previous
-                    LatLonCoord a = polygonCoordinates[i];
-                    LatLonCoord b = polygonCoordinates[i - 1];
-                    EditableShapePoint edgePoint = new EditableShapePoint(EditableShapePoint.EditableShapePointType.PolygonEdgeButton, a.average(b), overlay); // middle between a and b
-                    edgePoint.OnClicked += OnEdgeButtonClicked;
-                    edgePoint.sourceIndex = i;
-                    result.Add(edgePoint);
+                    if (i == 0)
+                    {
+                        // last and first
+                        LatLonCoord a = polygonCoordinates[l - 1];
+                        LatLonCoord b = polygonCoordinates[0];
+                        EditableShapePoint edgePoint = new EditableShapePoint(EditableShapePoint.EditableShapePointType.PolygonEdgeButton, a.average(b), overlay); // middle between a and b
+                        edgePoint.OnClicked += OnEdgeButtonClicked;
+                        edgePoint.sourceIndex = i;
+                        result.Add(edgePoint);
+                    }
+                    else
+                    {
+                        // this and previous
+                        LatLonCoord a = polygonCoordinates[i];
+                        LatLonCoord b = polygonCoordinates[i - 1];
+                        EditableShapePoint edgePoint = new EditableShapePoint(EditableShapePoint.EditableShapePointType.PolygonEdgeButton, a.average(b), overlay); // middle between a and b
+                        edgePoint.OnClicked += OnEdgeButtonClicked;
+                        edgePoint.sourceIndex = i;
+                        result.Add(edgePoint);
+                    }
                 }
             }
             // add the center
@@ -139,6 +149,8 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
             centerPoint = new EditableShapePoint(EditableShapePoint.EditableShapePointType.ShapeCenter, centerCoord, overlay);
             centerPoint.OnPositionChanged += OnVertexPositionChanged;
             centerPoint.SetBearing(this.bearing);
+            centerPoint.SetOverspeed(this.overspeed);
+            centerPoint.SetWarningSpeed(this.warningSpeed);
             result.Add(centerPoint);
 
             return result;

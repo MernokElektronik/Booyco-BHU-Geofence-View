@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Booyco_HMI_Utility"
              xmlns:gmaps="clr-namespace:GMap.NET.WindowsForms;assembly=GMap.NET.WindowsForms"
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="1200" Background="White">
+             d:DesignHeight="800" d:DesignWidth="1200" Background="White" IsVisibleChanged="UserControl_IsVisibleChanged">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -48,11 +48,11 @@
                                           VerticalAlignment="Stretch" Margin="0,0,0,0" >
                 </WindowsFormsHost>
             </DockPanel>
-            <Button Name="AddPolygonButton" Grid.Column="6" Margin="10,10,10,10" Grid.Row="2" Content="Add Polygon" Click="AddPolygonButton_Click" Grid.ColumnSpan="2" />
-            <Button x:Name="RemovePointButton" Grid.Column="6" Margin="10,10,10,10" Grid.Row="5" Content="Delete Point" Click="RemovePointButton_Click" Grid.ColumnSpan="2" />
-            <Button x:Name="AddCircleButton" Grid.Column="6" Margin="10,10,10,10" Grid.Row="1" Content="Add Circle" Click="AddCircleButton_Click" Grid.ColumnSpan="2" />
-            <Button x:Name="AddBlockButton" Grid.Column="6" Margin="10,10,10,10" Grid.Row="3" Content="Add Block"  Click="AddBlockButton_Click" Grid.ColumnSpan="2" />
-            <Button x:Name="RemoveShapeButton" Grid.Column="6" Margin="10,10,10,10" Grid.Row="4" Content="Delete Shape" Grid.ColumnSpan="2" Click="RemoveShapeButton_Click" />
+            <Button Name="AddPolygonButton" Grid.Column="7" Margin="10,10,5,10" Grid.Row="1" Content="Polygon" Click="AddPolygonButton_Click" />
+            <Button x:Name="RemovePointButton" Grid.Column="6" Margin="10" Grid.Row="3" Content="Delete Point" Click="RemovePointButton_Click" Grid.ColumnSpan="2" />
+            <Button x:Name="AddCircleButton" Grid.Column="6" Margin="10,10,10,10" Grid.Row="1" Content="Circle" Click="AddCircleButton_Click" />
+            <Button x:Name="AddBlockButton" Visibility="Hidden" Margin="10" Grid.Row="2" Content="Add Block"  Click="AddBlockButton_Click" Grid.ColumnSpan="2" Grid.Column="6" />
+            <Button x:Name="RemoveShapeButton" Grid.Column="6" Margin="10" Grid.Row="2" Content="Delete Shape" Grid.ColumnSpan="2" Click="RemoveShapeButton_Click" />
             <Slider x:Name="SliderBearing" Grid.Column="6" HorizontalAlignment="Left" Margin="10,62,0,0" Grid.Row="6" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="33" Width="320" TickFrequency="10" TickPlacement="TopLeft" Maximum="360" Foreground="#FF5F5F5F" ValueChanged="SliderBearing_ValueChanged"/>
             <Label x:Name="LabelBearing" Content="Bearing" Grid.Column="6" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="6" VerticalAlignment="Top" Height="41" Width="320" Grid.ColumnSpan="2" Foreground="#FF3E3E3E"/>
             <Button Content="Save" Grid.Column="7" Grid.Row="8" Margin="10,10,10,10" RenderTransformOrigin="1.967,4.088" Click="Button_Click" />
@@ -63,8 +63,14 @@
                 <ComboBoxItem Content="Medium Speed" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Tag="3" />
                 <ComboBoxItem Content="High Speed" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Tag="2" />
                 <ComboBoxItem Content="No Go Zone" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Tag="6" />
-                <ComboBoxItem Content="Geo fence active" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Tag="255" />
+                <ComboBoxItem Content="Speed Zone" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Tag="70" />
+                <ComboBoxItem Content="Active Area" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Tag="71" />
             </ComboBox>
+            <Slider x:Name="SliderWarningSpeed" Grid.Column="6" HorizontalAlignment="Left" Margin="10,72,0,0" Grid.Row="4" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="33" Width="320" TickFrequency="10" TickPlacement="TopLeft" Maximum="250" Foreground="#FF5F5F5F" ValueChanged="SliderWarningSpeed_ValueChanged" Grid.RowSpan="2"/>
+            <Label x:Name="LabelWarningSpeed" Content="Warning Speed" Grid.Column="6" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="4" VerticalAlignment="Top" Height="41" Width="320" Grid.ColumnSpan="2" Foreground="#FF3E3E3E"/>
+            <Slider x:Name="SliderOverspeed" Grid.Column="6" HorizontalAlignment="Left" Margin="10,72,0,0" Grid.Row="5" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="33" Width="320" TickFrequency="10" TickPlacement="TopLeft" Maximum="250" Foreground="#FF5F5F5F" ValueChanged="SliderOverspeed_ValueChanged" Grid.RowSpan="2"/>
+            <Label x:Name="LabelOverspeed" Content="Overspeed" Grid.Column="6" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="5" VerticalAlignment="Top" Height="41" Width="320" Grid.ColumnSpan="2" Foreground="#FF3E3E3E"/>
+         
         </Grid>
     </Grid>
 </UserControl>

@@ -27,7 +27,9 @@ namespace Booyco_HMI_Utility
     /// </summary>
     public partial class Bootloader : UserControl, INotifyPropertyChanged
     {
-        
+
+        Int32 Bootloader3_size = 38176;
+        Int32 Bootloader2_size = 512;
         #region OnProperty Changed
         /////////////////////////////////////////////////////////////
         public event PropertyChangedEventHandler PropertyChanged;
@@ -105,11 +107,11 @@ namespace Booyco_HMI_Utility
                 FirmSub = WiFiconfig.TCPclients[GlobalSharedData.SelectedDevice].FirmSubRev;
                 LicenseBool = WiFiconfig.TCPclients[GlobalSharedData.SelectedDevice].Licensed;
                 SelectedApplication = WiFiconfig.TCPclients[GlobalSharedData.SelectedDevice].ApplicationState;
-                if(SelectedApplication == "ERB Bootloader")
+                if(SelectedApplication == "ERB BT")
                 {
                     FirmwareApp = 57;
                 }
-                if (SelectedApplication == "Bootloader")
+                else if (SelectedApplication == "BHU BT")
                 {
                     FirmwareApp = 56;
                 }
@@ -122,6 +124,14 @@ namespace Booyco_HMI_Utility
                     ((FirmwareRev < 10) ? "0" + FirmwareRev.ToString() : FirmwareRev.ToString()) + "-" +
                     ((FirmSub < 10) ? "0" + FirmSub.ToString() : FirmSub.ToString());
 
+                if (FirmwareApp == 56)
+                {
+                    _FirmwareTypeString = "BHU";
+                }
+                else if (FirmwareApp == 69)
+                {
+                    _FirmwareTypeString = "Communication Bridge";
+                }
 
                 WiFiconfig.SelectedIP = WiFiconfig.TCPclients[GlobalSharedData.SelectedDevice].IP;
 
@@ -173,7 +183,7 @@ namespace Booyco_HMI_Utility
 
             if (bootchunks > 0 && !BootDone && BootFlashPersentage>0)
             {
-                BootloadingProgress.Value = (BootSentIndex+ BootFlashPersentage) / ((double)bootchunks+100) * 1000;
+                BootloadingProgress.Value = (BootSentIndex+ BootFlashPersentage/10) / ((double)bootchunks+10) * 1000;
                 if(BootSentIndex>0)
                     BootFlashPersentage = 100;
             }                
@@ -264,7 +274,10 @@ namespace Booyco_HMI_Utility
             
             while (!WiFiconfig.endAll && !BootStop)
             {
-                //Thread.Sleep(100);
+                if (SelectedFirm != 69 && WiFiconfig.TCPclients[GlobalSharedData.SelectedDevice].BootloaderFirmRev >= 3)
+                {
+                    Thread.Sleep(100);
+                }
                 if (BootReady)
                 {
 
@@ -287,6 +300,7 @@ namespace Booyco_HMI_Utility
                         //BootReady = false;
                         break;
                     }
+                    
                 }
 
             }
@@ -423,7 +437,7 @@ namespace Booyco_HMI_Utility
                         ((SelectedFirmRev < 10) ? "0" + SelectedFirmRev.ToString() : SelectedFirmRev.ToString()) + "-" +
                         ((SelectedFirmSubRev < 10) ? "0" + SelectedFirmSubRev.ToString() : SelectedFirmSubRev.ToString());
 
-                        if ((SelectedFirm == 56 || SelectedFirm == 58) && SelectedApplication == "Bootloader"  || (SelectedFirm == 69) && SelectedApplication == "Bootloader ")
+                        if ((SelectedFirm == 56 || SelectedFirm == 58 || SelectedFirm == 93 || SelectedFirm == 94) && SelectedApplication == "BHU BT"  || (SelectedFirm == 69) && SelectedApplication == "Comms Bridge BT")
                         {
                             if (SelectedFirmRev == FirmwareRev && SelectedFirmSubRev == FirmSub && SelectedFirm == FirmwareApp)
                             {
@@ -437,14 +451,20 @@ namespace Booyco_HMI_Utility
                             //enable bootloading
                             int bytesleft = 0;
                             int bootfileSize = 0;
-                            int fileChunck = 512;
+                            int fileChunck = Bootloader2_size;
+
+                            if(SelectedFirm != 69 && WiFiconfig.TCPclients[GlobalSharedData.SelectedDevice].BootloaderFirmRev >= 3)
+                            {
+                                fileChunck = Bootloader3_size;
+                            }
+                        
                             BootFileList = new List<byte[]>();
                             bytesleft = bootfileSize = bootfilebytes.Length;
                             bootchunks = (int)Math.Round(bootfileSize / (double)fileChunck);
                             int shifter = 0;
                             for (int i = 0; i <= bootchunks; i++)
                             {
-                                byte[] bootchunk = Enumerable.Repeat((byte)0xFF, 522).ToArray();
+                                byte[] bootchunk = Enumerable.Repeat((byte)0xFF, fileChunck+10).ToArray();
                                 byte[] bytes = BitConverter.GetBytes(i);
                                 byte[] bytes2 = BitConverter.GetBytes(bootchunks);
                                 bootchunk[0] = (byte)'[';
@@ -461,8 +481,8 @@ namespace Booyco_HMI_Utility
                                 else if (bytesleft > 0)
                                     Array.Copy(bootfilebytes, shifter, bootchunk, 8, bytesleft);
 
-                                bootchunk[520] = 0;
-                                bootchunk[521] = (byte)']';
+                                bootchunk[fileChunck+8] = 0;
+                                bootchunk[fileChunck+9] = (byte)']';
                                 BootFileList.Add(bootchunk);
                                 shifter += fileChunck;
                                 bytesleft -= fileChunck;
@@ -473,7 +493,7 @@ namespace Booyco_HMI_Utility
                             
 
                         }
-                        else if ((SelectedFirm == 57) && SelectedApplication == "ERB Bootloader")
+                        else if ((SelectedFirm == 57) && SelectedApplication == "ERB BT")
                         {
                             if (SelectedFirmRev == FirmwareRev && SelectedFirmSubRev == FirmSub)
                             {
@@ -540,7 +560,14 @@ namespace Booyco_HMI_Utility
                         if (!bootfile.Contains("M-PFW-") || !bootfile.Contains(".binary"))
                         {
                             //Please select a M-PFW-056-xx-yy.binary file to bootload
-                            FileErrorMessage = "Please select a M-PFW-056-xx-yy.binary file to bootload.";
+                            if (SelectedFirm == 69)
+                            {
+                                FileErrorMessage = "Please select a M-PFW-069-xx-yy.binary file to bootload.";
+                            }
+                            else
+                            {
+                                FileErrorMessage = "Please select a M-PFW-056-xx-yy.binary file to bootload.";
+                            }
                             FileError = true;
                             BootBtnEnabled = false;
                             SelectedFirmwareString = "";
@@ -560,8 +587,15 @@ namespace Booyco_HMI_Utility
                 }
                 catch
                 {
-                    //Please select a M-PFW-056-xx-yy.binary file to bootload
-                    FileErrorMessage = "Please select a M-PFW-056-xx-yy.binary file to bootload.";
+                    if (SelectedFirm == 69)
+                    {
+                        FileErrorMessage = "Please select a M-PFW-069-xx-yy.binary file to bootload.";
+                    }
+                    else
+                    {
+                        FileErrorMessage = "Please select a M-PFW-056-xx-yy.binary file to bootload.";
+                    }
+               
                     FileError = true;
                     BootBtnEnabled = false;
                     SelectedFirmwareString = "";
@@ -665,6 +699,23 @@ namespace Booyco_HMI_Utility
         }
 
 
+        private string _FirmwareTypeString;
+
+        public string FirmwareTypeString
+        {
+            get { return _FirmwareTypeString; }
+            set { _FirmwareTypeString = value; OnPropertyChanged("FirmwareTypeString"); }
+        }
+
+        private string _SelectedFirmwareTypeString;
+
+        public string SelectedFirmwareTypeString
+        {
+            get { return _SelectedFirmwareTypeString; }
+            set { _SelectedFirmwareTypeString = value; OnPropertyChanged("SelectedFirmwareTypeString"); }
+        }
+
+        
         private int _FirmSub;
 
         public int FirmSub

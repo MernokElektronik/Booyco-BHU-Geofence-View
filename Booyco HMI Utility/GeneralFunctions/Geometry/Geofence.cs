@@ -23,6 +23,8 @@ namespace Booyco_HMI_Utility
         MedSpeed = 3,
         [Description("No Go Zone")]
         NoGo = 6,
+        [Description("Speed Zone")]
+        SpeedZone = 70,
         [Description("Geofence Active")]
         GeofenceActive = 255
     }
@@ -36,6 +38,8 @@ namespace Booyco_HMI_Utility
         public UInt32 Radius;
         public UInt32 Heading;
         public UInt32 Type;
+        public UInt32 WarningSpeed;
+        public UInt32 Overspeed;
 
         internal static GeofenceCircle GetEmpty()
         {
@@ -45,7 +49,11 @@ namespace Booyco_HMI_Utility
                 Longitude = 0,
                 Radius = 0,
                 Heading = 0,
-                Type = (UInt32)GeoFenceAreaType.None
+                Type = (UInt32)GeoFenceAreaType.None,
+                WarningSpeed = 0,
+                Overspeed = 0
+
+
             };
         }
     }
@@ -60,6 +68,9 @@ namespace Booyco_HMI_Utility
         public UInt32 LongitudePoint3;
         public UInt32 Heading;
         public UInt32 Type;
+        public UInt32 WarningSpeed;
+        public UInt32 Overspeed;
+
         internal static GeofenceTriangle GetEmpty()
         {
             return new GeofenceTriangle
@@ -71,7 +82,10 @@ namespace Booyco_HMI_Utility
                 LatitudePoint3 = 0,
                 LongitudePoint3 = 0,
                 Heading = 0,
-                Type = (UInt32)GeoFenceAreaType.None
+                Type = (UInt32)GeoFenceAreaType.None,
+                WarningSpeed = 0,
+                Overspeed = 0
+
             };
         }
     }
@@ -109,8 +123,8 @@ namespace Booyco_HMI_Utility
 
     public class GeoFenceObject
     {
-        public GeofenceCircle[] geofenceCircles = new GeofenceCircle[30]; // 30 Circles
-        public GeofenceTriangle[] geofenceTriangles = new GeofenceTriangle[20]; // 20 Triangles
+        public GeofenceCircle[] geofenceCircles = new GeofenceCircle[100]; // 100 Circles
+        public GeofenceTriangle[] geofenceTriangles = new GeofenceTriangle[33]; // 33 Triangles
         public GeofenceBlock[] geofenceBlocks = new GeofenceBlock[1]; // 1 Block
         public double StartLatitude;
         public double StartLongitude;

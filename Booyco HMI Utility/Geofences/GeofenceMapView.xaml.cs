@@ -52,6 +52,10 @@ namespace Booyco_HMI_Utility
                 // init buttons
                 LabelBearing.Visibility = Visibility.Collapsed;
                 SliderBearing.Visibility = Visibility.Collapsed;
+                LabelWarningSpeed.Visibility = Visibility.Collapsed;
+                SliderWarningSpeed.Visibility = Visibility.Collapsed;
+                LabelOverspeed.Visibility = Visibility.Collapsed;
+                SliderOverspeed.Visibility = Visibility.Collapsed;
                 RemoveShapeButton.Visibility = Visibility.Collapsed;
                 RemovePointButton.Visibility = Visibility.Collapsed;
                 DropdownType.Visibility = Visibility.Collapsed;
@@ -76,6 +80,7 @@ namespace Booyco_HMI_Utility
             MainMap.DragButton = System.Windows.Forms.MouseButtons.Left;
             MainMap.Position = new GMap.NET.PointLatLng(editableGeoFenceData.StartLatitude, editableGeoFenceData.StartLongitude);
             MainMap.ShowCenter = false;
+            this.geoFenceEditor.TrySave();
         }
 
         private void ShowMessage(GeofenceEditorNotificationSeverity severity, string message)
@@ -115,11 +120,75 @@ namespace Booyco_HMI_Utility
         {
             shapeSelected = (item != null);
             if (shapeSelected)
-            {
-                SliderBearing.Value = item.GetBearing();
-                LabelBearing.Content = "Bearing: " + item.GetBearing();
+            {                
                 ComboBoxItem selectedItem = this.GetAreaTypeObject(item);
-                if (selectedItem != null)
+
+                if (item.GetAreaType() == GeoFenceAreaType.SpeedZone)
+                        {
+                            LabelBearing.Content = "Bearing: " + item.GetBearing();
+                            SliderBearing.Value = item.GetBearing();
+                            SliderWarningSpeed.Value = item.GetWarningSpeed();
+                            LabelWarningSpeed.Content = "Warning Speed: " + item.GetWarningSpeed();
+                            SliderOverspeed.Value = item.GetOverspeed();
+                            LabelOverspeed.Content = "Overspeed: " + item.GetOverspeed();
+
+                            LabelWarningSpeed.Visibility = Visibility.Visible;
+                            SliderWarningSpeed.Visibility = Visibility.Visible;
+                            SliderOverspeed.Visibility = Visibility.Visible;
+                            LabelBearing.Visibility = Visibility.Visible;
+                            SliderBearing.Visibility = Visibility.Visible;
+                            LabelOverspeed.Visibility = Visibility.Visible;
+                            SliderOverspeed.Visibility = Visibility.Visible;
+
+                        }
+                        else if (item.GetAreaType() == GeoFenceAreaType.MedSpeed)
+                        {
+                            LabelWarningSpeed.Content = "Warning Speed: " + GlobalSharedData.MediumSpeed_WarningSpeed;
+                            LabelOverspeed.Content = "Overspeed: " + GlobalSharedData.MediumSpeed_Overspeed;
+                            LabelWarningSpeed.Visibility = Visibility.Visible;
+                            SliderWarningSpeed.Visibility = Visibility.Hidden;
+                            SliderOverspeed.Visibility = Visibility.Hidden;
+                            LabelBearing.Visibility = Visibility.Hidden;
+                            SliderBearing.Visibility = Visibility.Hidden;
+                            LabelOverspeed.Visibility = Visibility.Visible;
+                            SliderOverspeed.Visibility = Visibility.Hidden;
+                        }
+                        else if (item.GetAreaType() == GeoFenceAreaType.HighSpeed)
+                        {
+                            LabelWarningSpeed.Content = "Warning Speed: " + GlobalSharedData.HighSpeed_WarningSpeed;
+                            LabelOverspeed.Content = "Overspeed: " + GlobalSharedData.HighSpeed_Overspeed;
+                            LabelWarningSpeed.Visibility = Visibility.Visible;
+                            SliderWarningSpeed.Visibility = Visibility.Hidden;
+                            SliderOverspeed.Visibility = Visibility.Hidden;
+                            LabelBearing.Visibility = Visibility.Hidden;
+                            SliderBearing.Visibility = Visibility.Hidden;
+                            LabelOverspeed.Visibility = Visibility.Visible;
+                            SliderOverspeed.Visibility = Visibility.Hidden;
+                        }
+                        else if (item.GetAreaType() == GeoFenceAreaType.LowSpeed)
+                        {
+                            LabelWarningSpeed.Content = "Warning Speed: " + GlobalSharedData.LowSpeed_WarningSpeed;
+                            LabelOverspeed.Content = "Overspeed: " + GlobalSharedData.LowSpeed_Overspeed;
+                            LabelWarningSpeed.Visibility = Visibility.Visible;
+                            SliderWarningSpeed.Visibility = Visibility.Hidden;
+                            SliderOverspeed.Visibility = Visibility.Hidden;
+                            LabelBearing.Visibility = Visibility.Hidden;
+                            SliderBearing.Visibility = Visibility.Hidden;
+                            LabelOverspeed.Visibility = Visibility.Visible;
+                            SliderOverspeed.Visibility = Visibility.Hidden;
+                        }
+                        else
+                        {                           
+                            LabelWarningSpeed.Visibility = Visibility.Hidden;
+                            SliderWarningSpeed.Visibility = Visibility.Hidden;
+                            SliderOverspeed.Visibility = Visibility.Hidden;
+                            LabelBearing.Visibility = Visibility.Hidden;
+                            SliderBearing.Visibility = Visibility.Hidden;
+                            LabelOverspeed.Visibility = Visibility.Hidden;
+                            SliderOverspeed.Visibility = Visibility.Hidden;
+                        }
+
+                        if (selectedItem != null)
                 {
                     DropdownType.SelectedItem = selectedItem;
                 }
@@ -127,8 +196,7 @@ namespace Booyco_HMI_Utility
                 {
                     DropdownType.SelectedIndex = 0;
                 }
-                LabelBearing.Visibility = Visibility.Visible;
-                SliderBearing.Visibility = Visibility.Visible;
+              
                 RemoveShapeButton.Visibility = Visibility.Visible;
                 RemovePointButton.Visibility = Visibility.Visible;
                 DropdownType.Visibility = Visibility.Visible;
@@ -137,9 +205,18 @@ namespace Booyco_HMI_Utility
             {
                 SliderBearing.Value = 0;
                 LabelBearing.Content = "Bearing";
+                SliderWarningSpeed.Value = 0;
+                LabelWarningSpeed.Content = "Warning Speed";
+                SliderOverspeed.Value = 0;
+                LabelOverspeed.Content = "Overspeed";
+         
                 DropdownType.SelectedIndex = 0;
                 LabelBearing.Visibility = Visibility.Collapsed;
                 SliderBearing.Visibility = Visibility.Collapsed;
+                LabelWarningSpeed.Visibility = Visibility.Collapsed;
+                SliderWarningSpeed.Visibility = Visibility.Collapsed;
+                LabelOverspeed.Visibility = Visibility.Collapsed;
+                SliderOverspeed.Visibility = Visibility.Collapsed;
                 RemoveShapeButton.Visibility = Visibility.Collapsed;
                 RemovePointButton.Visibility = Visibility.Collapsed;
                 DropdownType.Visibility = Visibility.Collapsed;
@@ -195,9 +272,7 @@ namespace Booyco_HMI_Utility
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
             geoFenceEditor.SetSelectedShape(null);
-            ProgramFlow.ProgramWindow = (int)ProgramFlowE.Startup;
-            this.Visibility = Visibility.Collapsed;
-
+            ProgramFlow.ProgramWindow = (int)ProgramFlowE.ParametersView;
         }
 
         private void RemovePointButton_Click(object sender, RoutedEventArgs e)
@@ -222,7 +297,7 @@ namespace Booyco_HMI_Utility
                     new LatLonCoord(m.Lat-(h/6), m.Lng),
                     new LatLonCoord(m.Lat+(h/6), m.Lng+(h/6)),
                     new LatLonCoord(m.Lat+(h/6), m.Lng-(h/6))
-                }, 0, GeoFenceAreaType.MedSpeed)
+                }, 0, 0, 0, GeoFenceAreaType.SpeedZone)
             );
         }
 
@@ -231,7 +306,7 @@ namespace Booyco_HMI_Utility
             double diagonalMeters = LatLonCoord.Distance(LatLonCoord.FromPointLatLng(MainMap.ViewArea.LocationRightBottom), LatLonCoord.FromPointLatLng(MainMap.ViewArea.LocationTopLeft));
             LatLonCoord center = new LatLonCoord(MainMap.Position.Lat, MainMap.Position.Lng);
             this.geoFenceEditor.AddShape(
-                new GeofenceEditorCircleShape(MainMap, center, diagonalMeters/8, GeoFenceAreaType.MedSpeed, 0)
+                new GeofenceEditorCircleShape(MainMap, center, diagonalMeters/8, GeoFenceAreaType.SpeedZone, 0, 0, 0)
             );
         }
 
@@ -240,7 +315,7 @@ namespace Booyco_HMI_Utility
             double diagonalMeters = LatLonCoord.Distance(LatLonCoord.FromPointLatLng(MainMap.ViewArea.LocationRightBottom), LatLonCoord.FromPointLatLng(MainMap.ViewArea.LocationTopLeft));
             LatLonCoord center = new LatLonCoord(MainMap.Position.Lat, MainMap.Position.Lng);
             this.geoFenceEditor.AddShape(
-                new GeofenceEditorBlockShape(MainMap, center, diagonalMeters/4, diagonalMeters / 4, 0, GeoFenceAreaType.MedSpeed)
+                new GeofenceEditorBlockShape(MainMap, center, diagonalMeters/4, diagonalMeters / 4, 0, GeoFenceAreaType.SpeedZone)
             );
         }
 
@@ -254,6 +329,20 @@ namespace Booyco_HMI_Utility
             int bearing = (int)Math.Round(SliderBearing.Value);
             this.geoFenceEditor.SetSelectedShapeBearing(bearing);
             LabelBearing.Content = "Bearing: " + bearing;
+        }
+
+        private void SliderOverspeed_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            int overspeed = (int)Math.Round(SliderOverspeed.Value);
+            this.geoFenceEditor.SetSelectedShapeOverspeed(overspeed);
+            LabelOverspeed.Content = "Overspeed: " + overspeed;
+        }
+
+        private void SliderWarningSpeed_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            int warningSpeed = (int)Math.Round(SliderWarningSpeed.Value);
+            this.geoFenceEditor.SetSelectedShapeWarningSpeed(warningSpeed);
+            LabelWarningSpeed.Content = "Warning Speed: " + warningSpeed;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -270,7 +359,74 @@ namespace Booyco_HMI_Utility
             if (geoFenceEditor != null)
             {
                 geoFenceEditor.SetSelectedShapeAreaType(areaType);
+
+                if (areaType == GeoFenceAreaType.SpeedZone)
+                { 
+                    LabelWarningSpeed.Visibility = Visibility.Visible;
+                    SliderWarningSpeed.Visibility = Visibility.Visible;
+                    SliderOverspeed.Visibility = Visibility.Visible;
+                    LabelBearing.Visibility = Visibility.Visible;
+                    SliderBearing.Visibility = Visibility.Visible;
+                    LabelOverspeed.Visibility = Visibility.Visible;
+                    SliderOverspeed.Visibility = Visibility.Visible;
+                }
+                else if (areaType == GeoFenceAreaType.MedSpeed)
+                {
+                    LabelWarningSpeed.Content = "Warning Speed: " + GlobalSharedData.MediumSpeed_WarningSpeed;
+                    LabelOverspeed.Content = "Overspeed: " + GlobalSharedData.MediumSpeed_Overspeed;
+                    LabelWarningSpeed.Visibility = Visibility.Visible;
+                    SliderWarningSpeed.Visibility = Visibility.Hidden;
+                    SliderOverspeed.Visibility = Visibility.Hidden;
+                    LabelBearing.Visibility = Visibility.Hidden;
+                    SliderBearing.Visibility = Visibility.Hidden;
+                    LabelOverspeed.Visibility = Visibility.Visible;
+                    SliderOverspeed.Visibility = Visibility.Hidden;
+                }
+                else if (areaType == GeoFenceAreaType.HighSpeed)
+                {
+                    LabelWarningSpeed.Content = "Warning Speed: " + GlobalSharedData.HighSpeed_WarningSpeed;
+                    LabelOverspeed.Content = "Overspeed: " + GlobalSharedData.HighSpeed_Overspeed;
+                    LabelWarningSpeed.Visibility = Visibility.Visible;
+                    SliderWarningSpeed.Visibility = Visibility.Hidden;
+                    SliderOverspeed.Visibility = Visibility.Hidden;
+                    LabelBearing.Visibility = Visibility.Hidden;
+                    SliderBearing.Visibility = Visibility.Hidden;
+                    LabelOverspeed.Visibility = Visibility.Visible;
+                    SliderOverspeed.Visibility = Visibility.Hidden;
+                }
+                else if (areaType == GeoFenceAreaType.LowSpeed)
+                {
+                    LabelWarningSpeed.Content = "Warning Speed: " + GlobalSharedData.LowSpeed_WarningSpeed;
+                    LabelOverspeed.Content = "Overspeed: " + GlobalSharedData.LowSpeed_Overspeed;
+                    LabelWarningSpeed.Visibility = Visibility.Visible;
+                    SliderWarningSpeed.Visibility = Visibility.Hidden;
+                    SliderOverspeed.Visibility = Visibility.Hidden;
+                    LabelBearing.Visibility = Visibility.Hidden;
+                    SliderBearing.Visibility = Visibility.Hidden;
+                    LabelOverspeed.Visibility = Visibility.Visible;
+                    SliderOverspeed.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    LabelWarningSpeed.Visibility = Visibility.Hidden;
+                    SliderWarningSpeed.Visibility = Visibility.Hidden;
+                    SliderOverspeed.Visibility = Visibility.Hidden;
+                    LabelBearing.Visibility = Visibility.Hidden;
+                    SliderBearing.Visibility = Visibility.Hidden;
+                    LabelOverspeed.Visibility = Visibility.Hidden;
+                    SliderOverspeed.Visibility = Visibility.Hidden;
+                }
             }
         }
+
+        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.Visibility == Visibility.Visible)
+            {
+                //this.geoFenceEditor.TrySave();
+            }
+        }
+
+  
     }
 }

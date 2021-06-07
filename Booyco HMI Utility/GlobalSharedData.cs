@@ -21,6 +21,7 @@ namespace Booyco_HMI_Utility
         Bluetooth,
         GPRS,
         Bootload,
+        UploadFile,
         ConfigureMenuView,
         ParametersView,
         DataLogView,
@@ -50,6 +51,20 @@ namespace Booyco_HMI_Utility
         ERB_Bootloader,
         Application
     }
+
+    public enum ApplicationState
+    {
+
+        AppState_BHU_BT = 0,
+        AppState_BHU_App = 1,
+        AppState_ERB_BT = 2,    //=== boot bootloader ===
+        AppState_Comms_Bridge_BT = 10,
+        AppState_Comms_Bridge_App = 11,
+
+    }
+
+  
+
     public static class ProgramFlow
     {
         public static int ProgramWindow { get; set; }
@@ -57,7 +72,7 @@ namespace Booyco_HMI_Utility
     }
 
     public static class GlobalSharedData
-    { 
+    {
         public static int AccessLevel = (int)AccessLevelEnum.Limited;
         public static int ConnectedDeviceApplicationState = (int)ApplicationEnum.None;
         public static bool CommunicationSent = false;
@@ -68,12 +83,12 @@ namespace Booyco_HMI_Utility
         public static int SelectedDevice { get; set; }
         public static uint SelectedVID = 0;
         public static bool ActiveDevice { get; set; }
-
+        public static int Firmware { get; set; }
         public static string WiFiApStatus;
         public static bool WiFiConnectionStatus;
 
-        
-        public static bool  ViewMode = false;
+
+        public static bool ViewMode = false;
         public static string FilePath = "";
         public static List<MarkerEntry> PDSMapMarkers = new List<MarkerEntry>();
         public static List<HMIDisplayEntry> HMIDisplayList = new List<HMIDisplayEntry>();
@@ -82,7 +97,13 @@ namespace Booyco_HMI_Utility
         public static DateTime StartDateTimeDatalog = new DateTime();
         public static DateTime EndDateTimeDatalog = new DateTime();
 
-        public static GeoFenceObject GeoFenceData = null; 
+        public static GeoFenceObject GeoFenceData = null;
+        public static int LowSpeed_Overspeed;
+        public static int HighSpeed_Overspeed;
+        public static int MediumSpeed_Overspeed;
+        public static int LowSpeed_WarningSpeed;
+        public static int HighSpeed_WarningSpeed;
+        public static int MediumSpeed_WarningSpeed;
     }
 
     public class GeneralFunctions

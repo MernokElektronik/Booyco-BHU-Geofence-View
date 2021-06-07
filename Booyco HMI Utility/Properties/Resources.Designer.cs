@@ -63,9 +63,9 @@ namespace Booyco_HMI_Utility.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] BHUParametersFile {
+        internal static byte[] BHUEvents_V1 {
             get {
-                object obj = ResourceManager.GetObject("BHUParametersFile", resourceCulture);
+                object obj = ResourceManager.GetObject("BHUEvents_V1", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -73,9 +73,19 @@ namespace Booyco_HMI_Utility.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] LPD {
+        internal static byte[] BHUEvents_V2 {
             get {
-                object obj = ResourceManager.GetObject("LPD", resourceCulture);
+                object obj = ResourceManager.GetObject("BHUEvents_V2", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] BHUParametersFile {
+            get {
+                object obj = ResourceManager.GetObject("BHUParametersFile", resourceCulture);
                 return ((byte[])(obj));
             }
         }

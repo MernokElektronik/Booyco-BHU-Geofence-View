@@ -4,7 +4,7 @@
 
     <Style TargetType="{x:Type Button}">
         <Setter Property="FontSize" Value="30" />
-        <Setter Property="FontFamily" Value="Arial Black"/>
+        <Setter Property="FontFamily" Value="Arial Black"/>        
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="Background" Value="#8c0909"/>
         <Setter Property="Template">
@@ -25,4 +25,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    
+
 </ResourceDictionary>

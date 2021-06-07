@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"        
         xmlns:local="clr-namespace:Booyco_HMI_Utility"
         mc:Ignorable="d"
-         Height="800" Width="1200" Title="Booyco BHU Utility - 99.1 - TEST SOFTWARE" FontSize="30" FontFamily="Arial Black" WindowState="Maximized" Closing="Window_Closing">
+        Height="800" Width="1200" Title="Booyco BHU Utility - 113.00v" FontSize="30" FontFamily="Arial Black" WindowState="Maximized" Closing="Window_Closing">
+         <!--Height="800" Width="1200" Title="Booyco BHU Utility - 99.02v - Booyco Internal test for V11" FontSize="30" FontFamily="Arial Black" WindowState="Maximized" Closing="Window_Closing">-->
+    
     <!--FontSize="30"-->
     <Window.Resources>
 
@@ -75,10 +77,12 @@
                 <local:LoginView x:Name="LoginView"  Grid.Row="1" Grid.Column="1" Visibility="Collapsed" Grid.ColumnSpan="2"/>
                 <local:BluetoothView x:Name="BluetoothView"  Grid.Row="1" Grid.Column="1" Visibility="Collapsed" Grid.ColumnSpan="2"/>
 
+                
                 <local:FileMenuView x:Name="FileMenuView" Grid.Row="1" Grid.Column="1"  Visibility="Collapsed" Grid.ColumnSpan="2"/>
                 <local:USBView x:Name="USBView"  Grid.Row="1" Grid.Column="1"  Visibility="Collapsed" Grid.ColumnSpan="2"/>
                 <local:WiFiView x:Name="WiFiView"  Grid.Row="1" Grid.Column="1"  Visibility="Collapsed" Grid.ColumnSpan="2"/>
                 <local:Bootloader x:Name="BootView"  Grid.Row="1" Grid.Column="1" Visibility="Collapsed" Grid.ColumnSpan="2" />
+                <local:UploadFile x:Name="UploadFileView"  Grid.Row="1" Grid.Column="1" Visibility="Collapsed" Grid.ColumnSpan="2"/>
                 <local:FileView x:Name="FileView"  Grid.Row="1" Grid.Column="1"  Visibility="Collapsed" Grid.ColumnSpan="2"/>
                 <local:DataLogFileView x:Name="DataLogFileView" Grid.Row="1" Grid.Column="1"  Visibility="Collapsed" Grid.ColumnSpan="2"/>
                 <local:ParameterFileView x:Name="ParameterFileView" Grid.Row="1" Grid.Column="1"  Visibility="Collapsed" Grid.ColumnSpan="2"/>
@@ -97,7 +101,7 @@
                 <local:ServerView x:Name="ServerView" Grid.Row="1" Grid.Column="1"  Visibility="Collapsed" Grid.ColumnSpan="2"/>
 
                 <Image Source="/Images/Booyco Logo.png" Grid.Column="2" Margin="0,0,20,10" Grid.Row="2" HorizontalAlignment="Right"/>
-                <Label Content="Booyco BHU Utility - Rifin Test" FontSize="40" FontFamily="Arial Bold" HorizontalContentAlignment="Left" Margin="20,0,0,0" Grid.Column="1" Grid.Row="2" Foreground="Black" VerticalContentAlignment="Center" Grid.ColumnSpan="2" />
+                <Label Content="Booyco BHU Utility" FontSize="40" FontFamily="Arial Bold" HorizontalContentAlignment="Left" Margin="20,0,0,0" Grid.Column="1" Grid.Row="2" Foreground="Black" VerticalContentAlignment="Center" Grid.ColumnSpan="2" />
                 <Label Content="{Binding HeartbeatCount, FallbackValue=0}" HorizontalContentAlignment="Center" Margin="80,0,0,0" Grid.Column="1" Grid.Row="2" FontSize="12" Foreground="Black" VerticalContentAlignment="Top" Grid.ColumnSpan="2" />
                 <Grid Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="578,22,84.577,22">
                     <Grid.ColumnDefinitions>

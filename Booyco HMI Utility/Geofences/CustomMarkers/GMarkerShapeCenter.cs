@@ -16,6 +16,8 @@ namespace Booyco_HMI_Utility.Geofences
         public Brush FillForeground = new SolidBrush(Color.FromArgb(255, Color.White));
 
         public float Bearing = 0;
+        public float Overspeed = 0;
+        public float WarningSpeed = 0;
         private float _scale = 1;
         private bool selected = false;
 
@@ -113,6 +115,15 @@ namespace Booyco_HMI_Utility.Geofences
             this.Bearing = bearing;
         }
 
+        internal void SetOverspeed(int overspeed)
+        {
+            this.Overspeed = overspeed;
+        }
+
+        internal void SetWarningSpeed(int warningSpeed)
+        {
+            this.WarningSpeed = warningSpeed;
+        }
         #endregion
     }
 }

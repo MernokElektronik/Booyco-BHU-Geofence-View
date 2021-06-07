@@ -49,8 +49,7 @@
                 <Rectangle x:Name="RectangleArrowRight"  HorizontalAlignment="Left" Fill="#8c0909" Height="84.5" Margin="43.833,4.5,0,0"  VerticalAlignment="Top" Width="45.667" Clip="M13.333999,3.3330003 L6.5000008,12.833006 L26.166998,42.500026 L7.5003334,71.166712 L13.500334,81.332998 L39.667002,42.333334 z"/>
             </Grid>
         </Button>
-
-        <Button x:Name= "ButtonPrevious"  Click="ButtonPrevious_Click" ToolTip="Audio Files" Grid.Column="1" Grid.Row="1" Margin="10,21,831,21" BorderThickness="0" Background="Transparent" MouseEnter="ButtonPrevious_MouseEnter" MouseLeave="ButtonPrevious_MouseLeave">
+         <Button x:Name= "ButtonPrevious"  Click="ButtonPrevious_Click" ToolTip="Audio Files" Grid.Column="1" Grid.Row="1" Margin="10,21,831,21" BorderThickness="0" Background="Transparent" MouseEnter="ButtonPrevious_MouseEnter" MouseLeave="ButtonPrevious_MouseLeave">
             <Grid>
                 <Image x:Name="ImagePicture" HorizontalAlignment="Left" Height="39" VerticalAlignment="Top" Width="36" Source="/Images/ButtonImages/Audio.png" Margin="24,27,-8,0"/>
                 <Rectangle x:Name="RectangleArrowLeft"  HorizontalAlignment="Left" Fill="#8c0909" Height="84.5"  VerticalAlignment="Top" Width="45.667" Clip="M13.333999,3.3330003 L6.5000008,12.833006 L26.166998,42.500026 L7.5003334,71.166712 L13.500334,81.332998 L39.667002,42.333334 z" RenderTransformOrigin="0.5,0.5" Margin="-31,0,0,0">
@@ -83,7 +82,9 @@
                                         <Expander IsExpanded="False" >
                                             <Expander.Header>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="#8c0909" FontSize="30"  Margin="5" VerticalAlignment="Center" />
+                                                    <!--<TextBlock Text="*" VerticalAlignment="Center" Foreground="Red"/>-->
+                                                    <TextBlock Text="{Binding Name.Changed}" VerticalAlignment="Center" Foreground="Red"/>
+                                                    <TextBlock Text="{Binding Name.GroupName}" FontWeight="Bold" Foreground="#8c0909" FontSize="30"  Margin="5" VerticalAlignment="Center" />
                                                     <!--<TextBlock Text="{Binding ItemCount}" FontSize="22" Foreground="Green" FontWeight="Bold" FontStyle="Italic"   />
                                                     <TextBlock Text=" item(s)" FontSize="22" Foreground="Silver" FontStyle="Italic"  />-->
                                                 </StackPanel>
@@ -104,7 +105,7 @@
                                     <ControlTemplate>
                                         <Expander IsExpanded="False">
                                             <Expander.Header>
-                                                <StackPanel Orientation="Horizontal">
+                                                <StackPanel Orientation="Horizontal" >
                                                     <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="Black"  FontSize="22" Margin="5" VerticalAlignment="Center" />
                                                     <TextBlock Text="{Binding ItemCount}" FontSize="18" Foreground="Gray"  FontWeight="Bold" FontStyle="Italic" Margin="10,0,0,0" VerticalAlignment="Center" />
                                                     <TextBlock Text=" item(s)" FontSize="18" Foreground="Gray" FontStyle="Italic" VerticalAlignment="Center" />
@@ -132,11 +133,25 @@
             </DataGrid.GroupStyle>
 
             <DataGrid.Columns>
-                <DataGridTemplateColumn Width="400" MinWidth="400" Header="Parameter">
+                <DataGridTemplateColumn Width="400" MinWidth="400" Header="Parameter" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid MouseDown="Grid_MouseDown" >
-                                <TextBlock Grid.Row="3" Grid.Column="1"  Text="{Binding Name}" VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Changed}" VerticalAlignment="Center" Foreground="Red"/>
+                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Unit}" VerticalAlignment="Center" FontSize="10" Margin="5,5,0,0" Foreground="Gray"/>
+                                </StackPanel>
+                                <!--<TextBlock VerticalAlignment="Center">
+                                    
+                                        <TextBlock.Text>                                  
+                                        <MultiBinding StringFormat="{}{0} ({1})">
+                                            <Binding Path="Name" />
+                                            <Binding Path="Unit" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>-->
+                                <!--<TextBlock Grid.Row="3" Grid.Column="0"  Text="{Binding Name}" VerticalAlignment="Center"/>-->
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -154,11 +169,15 @@
                                     <ColumnDefinition Width="5*"/>
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
-                                <Button x:Name="BtnMinDatagrid"  Grid.Row="3" Grid.Column="0" Content="&lt;" Click="min_Button_Click" Visibility="{Binding BtnVisibility}">
+                                
+                                <Button x:Name="BtnMinDatagrid"  Grid.Row="0" Grid.Column="0" Content="&lt;" Click="min_Button_Click" Visibility="{Binding BtnVisibility}">
                                 </Button>
                                 <TextBox Grid.Row="3" Grid.Column="1"  Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="{Binding LablEdit}" LostFocus="TextBox_LostFocus"/>
                                 <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding parameterEnums}" Visibility="{Binding dropDownVisibility}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" SelectedIndex="{Binding EnumIndx}" DropDownClosed="ComboBox_DropDownClosed" />
                                 <Button  Grid.Row="3" Grid.Column="2"  Content="&gt;" Click="max_Button_Click" Visibility="{Binding BtnVisibility}"></Button>
+                                
+                                <Button x:Name="BtnEditGeofence"  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Content="Open" Click="Button_GeofenceEditor_Click" Visibility="{Binding BtnFullVisibility}"></Button>
+
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -233,6 +252,7 @@
                 <Button x:Name="ButtonOpen" Content="Open" Grid.Column="1" Grid.Row="3" Margin="15" Click="ButtonOpen_Click" />
                 <Button x:Name="ButtonClose" Content="X" Grid.Column="4" Grid.Row="0" Margin="100,0,0,30" Click="ButtonClose_Click" />
             </Grid>
+
         </Grid>
     </Grid>
 </UserControl>

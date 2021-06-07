@@ -34,7 +34,6 @@ namespace Booyco_HMI_Utility
         public MainWindow()
         {
             // Check if user is NOT admin
-            /* Davey: Commented out for easier testing
             if (!IsRunningAsAdministrator())
             {
                 // Setting up start info of the new process of the same application
@@ -50,7 +49,6 @@ namespace Booyco_HMI_Utility
                 // Shut down the current (old) process
                 Environment.Exit(Environment.ExitCode);
             }
-            */
             InitializeComponent();
 
                 DataContext = this;
@@ -158,9 +156,10 @@ namespace Booyco_HMI_Utility
             }
             else if (ProgramFlow.ProgramWindow == (int)ProgramFlowE.GeofenceMapView)
             {
-                WiFiView.Visibility = USBView.Visibility = DataLogView.Visibility = FileView.Visibility =  BluetoothView.Visibility = Visibility.Collapsed;
+               // WiFiView.Visibility = USBView.Visibility = DataLogView.Visibility = FileView.Visibility =  BluetoothView.Visibility = Visibility.Collapsed;
                 GeofenceMapView.Visibility = Visibility.Visible;
-                ProgramFlow.SourseWindow = (int)ProgramFlowE.GeofenceMapView;
+               // ParametersView.Visibility = Visibility.Collapsed;
+               // ProgramFlow.SourseWindow = (int)ProgramFlowE.GeofenceMapView;
             }
             else if (ProgramFlow.ProgramWindow == (int)ProgramFlowE.ServerView)
             {
@@ -176,8 +175,13 @@ namespace Booyco_HMI_Utility
             }
             else if (ProgramFlow.ProgramWindow == (int)ProgramFlowE.Bootload)
             {
-                DataLogView.Visibility = ParametersView.Visibility = Visibility.Collapsed;
+                DataLogView.Visibility = ParametersView.Visibility = UploadFileView.Visibility = Visibility.Collapsed;
                 BootView.Visibility = Visibility.Visible;
+            }
+            else if(ProgramFlow.ProgramWindow == (int)ProgramFlowE.UploadFile)
+            {
+                DataLogView.Visibility = ParametersView.Visibility = BootView.Visibility = Visibility.Collapsed;
+                UploadFileView.Visibility = Visibility.Visible;                
             }
             else if (ProgramFlow.ProgramWindow == (int)ProgramFlowE.ConfigureMenuView)
             {
@@ -190,6 +194,7 @@ namespace Booyco_HMI_Utility
             else if(ProgramFlow.ProgramWindow == (int)ProgramFlowE.ParametersView)
             {                
                 ParametersView.Visibility = Visibility.Visible;
+                GeofenceMapView.Visibility = Visibility.Collapsed;
                 ParameterFileView.Visibility = Visibility.Collapsed;
                 AudioFilesView.Visibility = Visibility.Collapsed;
                 ConfigureMenuView.Visibility = Visibility.Collapsed;
@@ -240,6 +245,7 @@ namespace Booyco_HMI_Utility
                 ProgrammingDone.Visibility = Visibility.Visible;
                 Bootloader.BootDone = false;
             }
+
 
             if(Bootloader.FileError)
             {

@@ -46,7 +46,8 @@ namespace Booyco_HMI_Utility
 
         private void ButtonOpen_Click(object sender, RoutedEventArgs e)
         {
-            GlobalSharedData.FilePath = FileList.ElementAt(DataGridFiles.SelectedIndex).Path;
+            FileEntry _selectedItem = (FileEntry)DataGridFiles.SelectedItem;
+            GlobalSharedData.FilePath = FileList.ElementAt((int)_selectedItem.Number - 1).Path;
             ProgramFlow.ProgramWindow = (int)ProgramFlowE.ParametersView;
         }
 

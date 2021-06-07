@@ -17,6 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
+
 namespace Booyco_HMI_Utility
 {
     /// <summary>
@@ -47,6 +48,20 @@ namespace Booyco_HMI_Utility
             HBReceiveColour = new SolidColorBrush(Color.FromArgb(100, 0, 102, 0));
             HBConnectingColour = new SolidColorBrush(Color.FromArgb(100, 255, 183, 0));    
             HBLostColour = new SolidColorBrush(Color.FromArgb(100, 188, 0, 0));
+            if(DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
+             {      
+            TCPclients = new List<TCPclientR>();
+                TCPclients.Add(new TCPclientR
+                {
+                    VID = 1000,
+                    FirmRev = 1,
+                    FirmSubRev = 1,
+                    Name = "123456789ABCDEF",
+
+
+                }) ;
+
+            }
             //WiFiconfig = new WiFiconfig();
         }
 
@@ -130,18 +145,16 @@ namespace Booyco_HMI_Utility
         private void BtnBootload_Click(object sender, RoutedEventArgs e)
         {
             TCPclientR _selectedItem = (TCPclientR)DGTCPclientList.SelectedItem;
-           
-            if (_selectedItem.ApplicationState == "Application")
-            {
 
-                Grid_BootloaderPopup.Visibility = Visibility.Visible;
-                RequestMessageLabel.Text = "Press and hold Button 2 and 3 on the unit (VID" + GlobalSharedData.SelectedVID +") and press the Restart button.";
+            if (BtnBootload.Content.ToString() == "Bootload")
+            {
+                ProgramFlow.ProgramWindow = (int)ProgramFlowE.Bootload;
             }
             else
             {
-              
-                ProgramFlow.ProgramWindow = (int)ProgramFlowE.Bootload;
+                ProgramFlow.ProgramWindow = (int)ProgramFlowE.UploadFile;
             }
+            
          
            
         }
@@ -150,10 +163,11 @@ namespace Booyco_HMI_Utility
         {
             ProgramFlow.ProgramWindow = (int)ProgramFlowE.DataExtractorView;
            
-    }
+        }
 
         private void BtnConfig_Click(object sender, RoutedEventArgs e)
         {
+          
             ProgramFlow.ProgramWindow = (int)ProgramFlowE.ConfigureMenuView;
 
         }
@@ -213,13 +227,16 @@ namespace Booyco_HMI_Utility
             {
                 BtnConfig.IsEnabled = false;
                 BtnDatView.IsEnabled = false;
-                BtnBootload.IsEnabled = false;             
+                BtnBootload.IsEnabled = false;
+                BtnRestart.IsEnabled = false;
             }
         }
 
         void SelectionUpdate()
         {
             TCPclientR _selectedItem = (TCPclientR)DGTCPclientList.SelectedItem;
+
+            
             GlobalSharedData.SelectedDevice = DGTCPclientList.SelectedIndex;
             GlobalSharedData.SelectedVID = _selectedItem.VID;
 
@@ -230,22 +247,38 @@ namespace Booyco_HMI_Utility
                 BtnBootload.IsEnabled = false;
                 BtnConfig.IsEnabled = false;
                 BtnDatView.IsEnabled = false;
+                BtnRestart.IsEnabled = false;
             }
-            else if (_selectedItem.ApplicationState == "Bootloader" || _selectedItem.ApplicationState == "Bootloader ")
+            else if (_selectedItem.ApplicationState == "BHU BT" || _selectedItem.ApplicationState == "Comms Bridge BT")
             {
                 BtnBootload.IsEnabled = true;
                 BtnConfig.IsEnabled = false;
                 BtnDatView.IsEnabled = false;
+                BtnRestart.IsEnabled = false;
                 GlobalSharedData.ConnectedDeviceApplicationState = (int)ApplicationEnum.bootloader;
+                BtnBootload.Content = "Bootload";
             }
-            else if ((_selectedItem.ApplicationState == "Application"))
+            else if ((_selectedItem.ApplicationState == "BHU App") || (_selectedItem.ApplicationState == "Comms Bridge App") || (_selectedItem.ApplicationState == "BHU Test Station App") )
             {
-            
+                if(_selectedItem.ApplicationState == "Comms Bridge App")
+                {
+                    GlobalSharedData.Firmware = 45;
+                }
+                else if(_selectedItem.ApplicationState == "BHU Test Station App")
+                {
+                    GlobalSharedData.Firmware = 94;
+                }
+                else
+                {
+                    GlobalSharedData.Firmware = 56;
+                }
                 BtnConfig.IsEnabled = true;
                 BtnDatView.IsEnabled = true;
+                BtnRestart.IsEnabled = true;
+                BtnBootload.Content = "Upload File";
                 GlobalSharedData.ConnectedDeviceApplicationState = (int)ApplicationEnum.Application;
 
-                if (WiFiconfig.TCPclients[GlobalSharedData.SelectedDevice].FirmRev != 1)
+                if (WiFiconfig.TCPclients[GlobalSharedData.SelectedDevice].FirmRev != 1 || (_selectedItem.ApplicationState == "Comms Bridge App"))
                 {
                     BtnBootload.IsEnabled = true;
                 }
@@ -255,11 +288,13 @@ namespace Booyco_HMI_Utility
                 }
 
             }
-            else if ((_selectedItem.ApplicationState == "ERB Bootloader"))
+            else if ((_selectedItem.ApplicationState == "ERB BT"))
             {
                 BtnBootload.IsEnabled = true;
                 BtnConfig.IsEnabled = false;
                 BtnDatView.IsEnabled = false;
+                BtnRestart.IsEnabled = false;
+                BtnBootload.Content = "Bootload";
                 GlobalSharedData.ConnectedDeviceApplicationState = (int)ApplicationEnum.ERB_Bootloader;
             }
 }
@@ -304,19 +339,23 @@ private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChang
                 GlobalSharedData.SelectedDevice = DGTCPclientList.SelectedIndex;
         }
 
-        private void ButtonRestart_Click(object sender, RoutedEventArgs e)
+ 
+        private void Label_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            Label t = (Label)sender;
+            if(t.Content.ToString() == "1")
+            {
+
+            }
+        }
+
+        private void BtnRestart_Click(object sender, RoutedEventArgs e)
         {
             if (WiFiconfig.clients.Count > 0 && GlobalSharedData.SelectedDevice != -1)
             {
                 WiFiconfig.SelectedIP = WiFiconfig.TCPclients[GlobalSharedData.SelectedDevice].IP;
                 GlobalSharedData.ServerMessageSend = Encoding.ASCII.GetBytes("[&BB00]");
             }
-            Grid_BootloaderPopup.Visibility = Visibility.Collapsed;
-        }
-
-        private void ButtonClose_Click(object sender, RoutedEventArgs e)
-        {
-            Grid_BootloaderPopup.Visibility = Visibility.Collapsed;
         }
     }
 

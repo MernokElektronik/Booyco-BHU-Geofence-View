@@ -175,5 +175,35 @@ namespace Booyco_HMI_Utility.Geofences.Shapes
                 }
             }
         }
+
+        internal void SetOverspeed(int overspeed)
+        {
+            if (this.type == EditableShapePointType.ShapeCenter || this.type == EditableShapePointType.PolygonPoint)
+            {
+                if (marker != null)
+                {
+                    ((GMarkerShapeCenter)marker).SetOverspeed(overspeed);
+                }
+                else
+                {
+                    throw new Exception("Can not set overspeed of this type of shape");
+                }
+            }
+        }
+
+        internal void SetWarningSpeed(int warningSpeed)
+        {
+            if (this.type == EditableShapePointType.ShapeCenter || this.type == EditableShapePointType.PolygonPoint)
+            {
+                if (marker != null)
+                {
+                    ((GMarkerShapeCenter)marker).SetWarningSpeed(warningSpeed);
+                }
+                else
+                {
+                    throw new Exception("Can not set warning speed of this type of shape");
+                }
+            }
+        }
     }
 }

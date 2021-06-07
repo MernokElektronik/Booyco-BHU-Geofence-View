@@ -125,9 +125,35 @@ namespace Booyco_HMI_Utility
                 {
                     ButtonOpen.IsEnabled = true;
                     GlobalSharedData.FilePath = FileList.ElementAt(_dataGrid.SelectedIndex).Path;
+
+
+                    BinaryReader _breader = new BinaryReader(File.OpenRead(FileList.ElementAt(_dataGrid.SelectedIndex).Path));
+                    int _fileLength = (int)(new FileInfo(FileList.ElementAt(_dataGrid.SelectedIndex).Path).Length);
+                    byte[] _parameters = _breader.ReadBytes(_fileLength);
+
+                    bool is_DatalogFile = true;
+
+                    for (int k = 0; k < 16; k++)
+                    {
+                        if (_parameters[k] != '*')
+                        {
+                            is_DatalogFile = false;
+                            break;
+                        }
+                    }
+
+                    if(is_DatalogFile)
+                    {
+                        ButtonParameter.IsEnabled = true;
+                    }
+                    else
+                    {
+                        ButtonParameter.IsEnabled = false;
+                    }
                 }
                 else
                 {
+                    ButtonParameter.IsEnabled = false;
                     ButtonOpen.IsEnabled = false;
                 }
 
@@ -225,6 +251,12 @@ namespace Booyco_HMI_Utility
             {
                 ReadSavedFolder();
             }
+        }
+
+        private void ButtonParameter_Click(object sender, RoutedEventArgs e)
+        {
+            GlobalSharedData.FilePath = FileList.ElementAt(DataGridFiles.SelectedIndex).Path;
+            ProgramFlow.ProgramWindow = (int)ProgramFlowE.ParametersView;
         }
     }
 }
